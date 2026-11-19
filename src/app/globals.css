@@ -72,8 +72,10 @@
 @theme inline {
   --bg-background: var(--background);
 
-  --font-heading: var(--font-sans);
-  --font-sans: var(--font-sans);
+  --font-heading: var(--font-dm-serif);
+  --font-sans: var(--font-lato);
+  --font-serif: var(--font-dm-serif);
+  --font-script: var(--font-dancing-script);
 
   /* Custom section and text colors */
   --color-section: var(--section);
