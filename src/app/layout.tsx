@@ -3,6 +3,7 @@ import {
   Dancing_Script,
   Lato,
 } from "next/font/google";
+import { Toaster } from "@/components/ui/toast"
 
 import "./globals.css";
 import { Metadata } from "next";
@@ -38,7 +39,10 @@ export default function RootLayout({
       lang="en"
       className={`${dmSerif.variable} ${dancingScript.variable} ${lato.variable}`}
     >
-      <body className={lato.className}>{children}</body>
+      <body className={lato.className}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }
