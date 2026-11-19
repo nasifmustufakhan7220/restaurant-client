@@ -1,11 +1,11 @@
 "use client"
 import Link from "next/link";
-import { ArrowRight, ChefHat, X } from "lucide-react";
+import { ArrowRight, Pizza, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-// import { Role } from "@/lib/types/role";
+import { Role } from "@/lib/types/role";
 import {
   Select,
   SelectContent,
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "@/components/ui/toast";
+import { useRouter } from "next/navigation";
 
 const roleOptions = [
   { value: "customer", label: "A hungry customer" },
@@ -22,6 +23,7 @@ const roleOptions = [
 ];
 
 export default function SignUpPage() {
+  const router = useRouter();
   const handelSignUp = async(e: React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
 
@@ -32,6 +34,7 @@ export default function SignUpPage() {
       name: objectData.fullName,
       email: objectData.email,
       password: objectData.password,
+      role:objectData.role as Role,
     }); 
 
     console.log("Sign Up Response:", { data, error });
@@ -41,6 +44,7 @@ export default function SignUpPage() {
         description: "Your account has been created successfully.",
         type: "success",
       });      
+      router.push('/')
     }else{
       toast.add({
         title: "Error",
@@ -60,7 +64,7 @@ export default function SignUpPage() {
             aria-label="Restan home"
             className="flex size-12 items-center justify-center rounded-[14px] bg-primary text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
           >
-            <ChefHat className="size-6" strokeWidth={1.8} aria-hidden="true" />
+            <Pizza className="size-6" strokeWidth={1.8} aria-hidden="true" />
           </Link>
 
           <Link

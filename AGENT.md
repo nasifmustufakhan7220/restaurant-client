@@ -1,7 +1,7 @@
 # AGENT.md — Project Audit & Instructions for AI Agents
 
 > **Audit date:** 2026-11-19
-> **Last implementation update:** 2026-11-19 (responsive sign-up UI cloned with shadcn Field/Input/Select; navbar auth links; placeholder sign-in page)
+> **Last implementation update:** 2026-11-19 (responsive sign-in UI added; sign-up UI now wired to `authClient`; shared shadcn form primitives)
 > **Audit scope:** Full repository review (structure, config, source, Git history, dependencies, build/lint/type-check).
 > **Rule for future agents:** Read this file first. Only inspect files relevant to your task. Update this file after meaningful changes.
 >
@@ -113,14 +113,14 @@ Browser request
        -> <Navbar />          (client: fixed header, mobile menu state)
        -> <Banner />          (client: 5-image carousel, autoplay, arrows)
   -> /api/auth/[...all]       (Better Auth GET/POST handler -> MongoDB via mongodbAdapter)
-  -> /sign-in, /sign-up       (/sign-up: UI-only shadcn form; /sign-in: placeholder)
+  -> /sign-in, /sign-up       (auth card UI; sign-up calls authClient, sign-in is UI-only)
 ```
 
 - `Navbar` and `Banner` are client components (`"use client"`) because they use state/effects and click handlers. **[Verified]**
 - `Button` wraps `@base-ui/react/button`, whose package code includes its own `"use client"` directive; it is used by the sign-up page. The `field` and `select` primitives are client components. **[Verified]**
 - The homepage is otherwise static/self-contained: no product data fetching and no shared state. Carousel slide and mobile-menu state are local `useState`. **[Verified]**
 - The only API route is the Better Auth catch-all handler. There are no product/cart/order APIs, server actions, middleware, or protected routes. **[Verified]**
-- `/sign-up` is a static UI page built with shadcn `Field`, `Input`, `Select`, and `Button`; it has no state, validation, or submit handling. `/sign-in` remains a minimal placeholder. **[Verified]**
+- `/sign-in` and `/sign-up` are static auth pages built with shadcn `Field`, `Input`, `Select`, and `Button`. Sign-in is UI-only (no submit handler); sign-up is a client component that calls `authClient.signUp.email` and shows a toast. Neither has validation yet. **[Verified]**
 - No global state management, data-fetching library, form library, or validation library is installed. **[Verified]**
 
 ---
@@ -147,8 +147,8 @@ pizza-odering-client/
     │   ├── layout.tsx         # Root layout, 3 Google fonts (CSS variables), metadata
     │   ├── page.tsx           # "/" -> Navbar + Banner
     │   ├── (auth)/
-    │   │   ├── sign-in/page.tsx   # Placeholder page (heading + home link)
-    │   │   ├── sign-up/page.tsx   # Responsive sign-up UI (shadcn fields, no logic)
+    │   │   ├── sign-in/page.tsx   # Responsive sign-in UI (shadcn fields, no logic)
+    │   │   ├── sign-up/page.tsx   # Responsive sign-up UI + authClient signUp call
     │   │   └── _components/       # Empty directory
     │   └── api/auth/[...all]/
     │       └── route.ts       # Better Auth Next.js handler
@@ -181,7 +181,7 @@ pizza-odering-client/
 - A MongoDB client is configured in `src/lib/auth.ts` using `mongodb` + `@better-auth/mongo-adapter`; the database name is `"users"`. **[Verified]**
 - Better Auth owns/manages its own auth collections; no models, migrations, seed files, or SQL are present. **[Verified]**
 - No product, cart, order, or payment collections/schema exist. **[Verified]**
-- Runtime DB connectivity and auth collections were **not** verified; the sign-up page is UI-only and the sign-in page is a placeholder. **[Verified]**
+- Runtime DB connectivity and auth collections were **not** verified; both auth pages render UI, and sign-up calls `authClient` but no full flow was tested. **[Verified]**
 - Therefore there are **no documented entity relationships**.
 
 ---
@@ -193,8 +193,8 @@ pizza-odering-client/
 - `src/lib/auth.ts`: Better Auth with email/password, GitHub social provider, and MongoDB adapter (database `"users"`).
 - `src/app/api/auth/[...all]/route.ts`: exports Better Auth `GET`/`POST` via `toNextJsHandler`.
 - `src/lib/auth-client.ts`: creates a React auth client and exports `signIn`, `signUp`, `useSession`. Note it calls `createAuthClient()` twice — the exported helpers come from a second, unconfigured client (potential bug).
-- `src/app/(auth)/sign-up/page.tsx` is a **UI-only sign-up page** (brand card, logo, close link, serif heading, Full name / Email / Password inputs, "I'm here as" select, red "Create my account" button, sign-in link, admin note). It imports shadcn `Field`, `Input`, `Select`, and `Button` but has no state, validation, or submit handler.
-- `src/app/(auth)/sign-in/page.tsx` is still a minimal placeholder (heading, note, "Back to Home" link).
+- `src/app/(auth)/sign-up/page.tsx` is a **client component** with the responsive brand card (logo, close link, serif "Let's make it official" heading, Full name / Email / Password inputs, "I'm here as" select, red "Create my account" button, sign-in link, admin note). It calls `authClient.signUp.email` on submit and shows a toast; the selected role is not sent yet and there is no validation.
+- `src/app/(auth)/sign-in/page.tsx` is a **UI-only** responsive auth card (logo, close link, serif "Welcome back" heading, Email address / Password inputs, red "Sign in" button with arrow, "Create an account" link). It has no submit handler or auth logic by request.
 - No middleware, protected routes, session checks, role checks, or authorization rules exist.
 - Navbar exposes Sign In/Sign Up links: visible on desktop (`lg+`) and inside the mobile hamburger menu.
 - `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` are referenced by `auth.ts` but are not in `.env`; `next build` warns that the GitHub provider is missing credentials, so GitHub sign-in is unverified/misconfigured.
@@ -224,10 +224,11 @@ pizza-odering-client/
 4. **Brand design tokens** (`src/app/globals.css`) **[Verified]**
    - Tailwind v4 CSS-first setup with `tw-animate-css` and `shadcn/tailwind.css`.
    - Light/dark palettes with `#e7272d` primary; font utilities now map to the real font variables (`font-sans`, `font-serif`, `font-script`).
-5. **Auth foundation** (partial) — Better Auth server/client config, Mongo adapter, catch-all API route; UI-only sign-up page and placeholder sign-in page. See Sections 5–6.
-6. **shadcn UI primitives** — `button`, `field`, `input`, `label`, `select`, and `separator` in `src/components/ui/`. `Button`, `Field`, `Input`, and `Select` are used by the sign-up page; the rest are registry dependencies.
-7. **Sign-up page UI** (`src/app/(auth)/sign-up/page.tsx`) — server-rendered, responsive cream card matching the reference: red rounded logo, close link, serif "Let's make it official" heading, four form fields, red CTA with arrow, sign-in link, and admin note. No client-side behavior. **[Verified]**
-8. **Utility** (`src/lib/utils.ts`) — re-exports `cn`; not currently imported (components import `cn` from the `cn` package directly).
+5. **Auth foundation** (partial) — Better Auth server/client config, Mongo adapter, catch-all API route; sign-in UI and sign-up UI with an `authClient` call. See Sections 5–6.
+6. **shadcn UI primitives** — `button`, `field`, `input`, `label`, `select`, `separator`, and `toast` in `src/components/ui/`. The auth pages use `Button`, `Field`, `Input`, and `Select`.
+7. **Sign-up page UI** (`src/app/(auth)/sign-up/page.tsx`) — responsive cream card matching the reference: red rounded logo, close link, serif heading, four fields, red CTA with arrow, sign-in link, admin note; submits to `authClient.signUp.email` with a success/error toast. **[Verified]**
+8. **Sign-in page UI** (`src/app/(auth)/sign-in/page.tsx`) — responsive cream card matching the reference: pizza logo, close link, serif "Welcome back" heading, Email address and Password fields, red "Sign in" button with arrow, and a "New to PizzaHub? Create an account" link. UI only. **[Verified]**
+9. **Utility** (`src/lib/utils.ts`) — re-exports `cn`; not currently imported (components import `cn` from the `cn` package directly).
 
 ---
 
@@ -242,7 +243,8 @@ pizza-odering-client/
 - [x] Banner hero with 5-image autoplay carousel, arrow controls, overlays, and reference-style typography. **[Verified]**
 - [x] Home page imports and renders both components. **[Verified]**
 - [x] Desktop Sign In/Sign Up visible in navbar; mobile/tablet versions inside the hamburger menu. **[Verified]**
-- [x] `/sign-in` and `/sign-up` return 200; `/sign-up` renders the designed card UI and `/sign-in` is a placeholder. **[Verified]**
+- [x] `/sign-in` and `/sign-up` return 200 and render their designed responsive auth cards. **[Verified]**
+- [x] Sign-in UI built with shadcn form primitives, matching the supplied reference and responsive at 320px, 390px, 768px, 1440px. **[Verified]**
 - [x] Sign-up UI built with shadcn form primitives, matching the supplied reference and responsive at 320px, 390px, 768px, 1440px. **[Verified]**
 - [x] shadcn `field`, `input`, `label`, `select`, and `separator` components added. **[Verified]**
 - [x] Verified in-browser rendering at 390px, 768px, and 1440px widths; images load (HTTP 200) and no console errors were observed. Sign-up additionally checked at 320px; no horizontal overflow; select opens with both options. **[Verified]**
@@ -254,10 +256,10 @@ pizza-odering-client/
 
 ## 9. Partially Completed Features
 
-1. **Authentication** — Backend config/route exist; sign-up has a UI-only form, sign-in is a placeholder, GitHub env keys are missing, client config has a likely duplicate-client bug, and no runtime auth flow was verified.
+1. **Authentication** — Backend config/route exist; sign-in is UI-only, sign-up calls `authClient.signUp.email` without validation, GitHub env keys are missing, client config has a likely duplicate-client bug, and no runtime auth flow was verified.
 2. **Theme system** — Light/dark token values exist, but dark mode is never activated (no `next-themes` provider, toggle, or `dark` class strategy in use). Some referenced tokens are still undefined (Section 11).
-3. **UI component library** — Several shadcn primitives exist; only those used by the sign-up page are exercised.
-4. **Navbar interactions** — Home/Browse use real routes; Sign In/Sign Up link to the sign-up UI and sign-in placeholder. The cart button/badge still has no behavior. No dropdowns exist.
+3. **UI component library** — Several shadcn primitives exist; only those used by the auth pages are exercised.
+4. **Navbar interactions** — Home/Browse use real routes; Sign In/Sign Up link to the auth pages. The cart button/badge still has no behavior. No dropdowns exist.
 5. **Sticky behavior** — The header uses `position: fixed`, so it stays at the top. Because the homepage currently contains only the full-height hero, there is no additional content to scroll yet; behavior with real page content is untested.
 6. **Documentation** — `README.md` is still the create-next-app boilerplate and refers to `app/page.tsx` instead of `src/app/page.tsx`.
 
@@ -270,7 +272,7 @@ pizza-odering-client/
 - Menu/catalog pages, product listing, pizza customization.
 - Cart logic, quantities, pricing, checkout, delivery details (only a visual badge exists).
 - Order placement, order history, order tracking.
-- Working user accounts/auth UI (sign-up is a non-functional form UI; sign-in is a placeholder; backend config only).
+- Working user accounts/auth UI (sign-up calls `authClient` but is unvalidated; sign-in is UI-only; backend config only).
 - Auth logic, validation, error states, and session-aware UI.
 - Authorization rules, protected routes, session-aware UI.
 - Payment integration.
@@ -296,7 +298,7 @@ pizza-odering-client/
 ### Verified issues
 
 1. **Auth client likely misconfigured:** `src/lib/auth-client.ts` creates `authClient` with a `baseURL`, then exports `signIn`/`signUp`/`useSession` from a second bare `createAuthClient()`. Use one configured client.
-2. **Auth is UI-only:** `/sign-up` renders a styled form but has no state, validation, or submit handler; `/sign-in` is still a placeholder. Neither is a functional auth flow.
+2. **Auth is incomplete:** `/sign-up` calls `authClient.signUp.email` but has no validation, error mapping, or role submission; `/sign-in` has no submit handler (intentional UI-only step). Neither flow is runtime-verified.
 3. **Missing auth env names:** `auth.ts` reads `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`, which are absent from `.env` (names checked only). `next build` warns that the GitHub provider is missing credentials.
 4. **Unsafe env assertions:** `process.env.MONGO_URL as string` and similar casts hide missing config. Add validation/guards before using Better Auth.
 5. **Undefined theme variables:** `@theme inline` still references `--destructive`, `--chart-1`…`--chart-5`, `--sidebar`, `--sidebar-*`, and `--sidebar-ring`, which are not defined in `:root`/`.dark`. The `Button` `destructive` variant depends on `--destructive` and is unused.
@@ -305,10 +307,11 @@ pizza-odering-client/
 8. **Responsive hamburger difference:** the reference screenshot shows the hamburger on desktop; this implementation hides it at `lg+` because desktop already displays full links and auth actions. Deliberate responsive choice.
 9. **Uncommitted work:** `Navbar.tsx`, both auth pages, the new `src/components/ui/*` files, and `AGENT.md` are modified/untracked. Commit only after review.
 10. **`shadcn` CLI in production dependencies:** listed under `dependencies` rather than `devDependencies`.
-11. **Unused dependencies/assets:** `framer-motion` and `next-themes` are unused; `@base-ui/react` is used by the shadcn `button`, `input`, and `select` primitives. Lucide is used by the navbar, sign-up page, and select. `pizza5.webp` actually contains AVIF bytes (confirmed via `sharp`); Next's image optimizer serves it successfully as WebP, but re-encoding/renaming is advisable.
-12. **Naming drift and stale docs:** package name `pizza-odering-client` (typo), branding `PizzaHub`/hero `DIXOR`, and Git remote `restaurant-client` disagree. `README.md` is default boilerplate.
-13. **Formatting inconsistency:** mixed semicolons/quotes; no formatter config.
-14. **No tests or CI.** Auth, navbar, and carousel behavior rely on manual verification.
+11. **Unused dependencies/assets:** `framer-motion` and `next-themes` are unused; `@base-ui/react` is used by the shadcn `button`, `input`, and `select` primitives. Lucide is used by the navbar, both auth pages, and select. `pizza5.webp` actually contains AVIF bytes (confirmed via `sharp`); Next's image optimizer serves it successfully as WebP, but re-encoding/renaming is advisable.
+12. **Sign-up role is not submitted:** the "I'm here as" select value is not included in the `authClient.signUp.email` payload; role handling still needs an owner decision.
+13. **Naming drift and stale docs:** package name `pizza-odering-client` (typo), branding `PizzaHub`/hero `DIXOR`, and Git remote `restaurant-client` disagree. `README.md` is default boilerplate.
+14. **Formatting inconsistency:** mixed semicolons/quotes; no formatter config.
+15. **No tests or CI.** Auth, navbar, and carousel behavior rely on manual verification.
 
 ### Improvements (not bugs)
 
@@ -326,6 +329,7 @@ pizza-odering-client/
 - `npm.cmd run build` — **passes**; `/`, `/sign-in`, `/sign-up` are static; `/api/auth/[...all]` is dynamic. Warns that GitHub auth credentials are missing. **[Verified]**
 - Browser verification (dev server on port 3000): 390×844, 768×1024, and 1440×900; no console errors; all five carousel images return HTTP 200; mobile menu, auth links, autoplay, arrows, and fixed header verified. `Sign In`/`Sign Up` are visible on desktop and inside the mobile/tablet menu.
 - Sign-up page verified at 320×700, 390×844, 768×1024, and 1440×900: no horizontal overflow, card fits the viewport, heading wraps cleanly on narrow screens, and the role select opens with both options. No console errors or exceptions. **[Verified]**
+- Sign-in page verified at 320×700, 390×844, 768×1024, and 1440×900: no horizontal overflow, card fits the viewport, and no console errors or exceptions. **[Verified]**
 
 > PowerShell note for this environment: `npm`/`npx` `.ps1` shims are blocked by execution policy. Use `npm.cmd` and `npx.cmd`.
 
@@ -360,17 +364,18 @@ Observed conventions (follow unless the owner directs otherwise):
 | `src/app/globals.css` | Tailwind v4 imports, theme tokens, dark palette, base layer | Font vars wired; some color tokens undefined |
 | `src/components/Navbar/Navbar.tsx` | Fixed responsive navbar, auth links, mobile menu, cart badge | Client component; desktop auth actions + mobile menu auth |
 | `src/components/Banner/Banner.tsx` | 5-image autoplay carousel hero | Client component; uses `next/image` |
-| `src/components/ui/button.tsx` | Base UI button with CVA variants/sizes | Used by the sign-up CTA; destructive variant depends on missing token |
-| `src/components/ui/field.tsx` | shadcn Field layout primitives | Used by the sign-up form |
-| `src/components/ui/input.tsx` | shadcn/Base UI input | Used by the sign-up form |
+| `src/components/ui/button.tsx` | Base UI button with CVA variants/sizes | Used by both auth pages; destructive variant depends on missing token |
+| `src/components/ui/field.tsx` | shadcn Field layout primitives | Used by both auth forms |
+| `src/components/ui/input.tsx` | shadcn/Base UI input | Used by both auth forms |
 | `src/components/ui/label.tsx` | shadcn label primitive | Used by Field |
-| `src/components/ui/select.tsx` | shadcn/Base UI select | Used for "I'm here as" |
+| `src/components/ui/select.tsx` | shadcn/Base UI select | Used for "I'm here as" on sign-up |
 | `src/components/ui/separator.tsx` | shadcn separator primitive | Used by Field |
+| `src/components/ui/toast.tsx` | Toast UI used by sign-up feedback | Added with the sign-up auth call |
 | `src/lib/auth.ts` | Better Auth server config + MongoDB adapter | Requires env; runtime untested |
 | `src/lib/auth-client.ts` | Better Auth React client helpers | Likely duplicate `createAuthClient` bug |
 | `src/app/api/auth/[...all]/route.ts` | Better Auth GET/POST handler | Only API route |
-| `src/app/(auth)/sign-in/page.tsx` | Sign-in placeholder route | No form; heading + home link |
-| `src/app/(auth)/sign-up/page.tsx` | Responsive sign-up UI | shadcn form primitives; no logic |
+| `src/app/(auth)/sign-in/page.tsx` | Responsive sign-in UI | shadcn form primitives; no logic |
+| `src/app/(auth)/sign-up/page.tsx` | Responsive sign-up UI | shadcn form primitives; calls `authClient.signUp.email` |
 | `src/lib/utils.ts` | Re-exports `cn` | Unused |
 | `public/pizza1.webp`…`pizza5.webp` | Hero carousel images | Used by Banner; pizza5 is AVIF content |
 | `.env` | Local secrets | Git-ignored; never read values into docs |
@@ -391,7 +396,7 @@ Observed conventions (follow unless the owner directs otherwise):
 - Responsive fixed navbar and 5-image hero carousel are implemented and browser-verified.
 - Sign In/Sign Up links are visible on desktop and inside the mobile/tablet hamburger menu.
 - Fonts/theme tokens are wired; dark mode and some secondary tokens remain incomplete.
-- Better Auth backend foundation exists; sign-up is UI-only and sign-in remains a placeholder, with env/config issues outstanding.
+- Better Auth backend foundation exists; both auth pages render, sign-up calls `authClient.signUp.email`, and sign-in is UI-only. Env/config issues remain outstanding.
 - `eslint`, `tsc`, and `next build` pass; the build warns about missing GitHub auth credentials.
 - No catalog, cart, checkout, orders, or product data layer exists.
 - Working tree contains uncommitted navbar, auth UI, and shadcn primitive changes.
@@ -404,7 +409,7 @@ Observed conventions (follow unless the owner directs otherwise):
 
 These are recommendations, not owner-confirmed requirements. Confirm scope before building:
 
-1. **Finish auth:** wire the sign-up form to Better Auth (state, validation, errors), build the sign-in UI, fix `auth-client.ts` duplicate client creation, add missing GitHub env names, validate env values, and test the flow against MongoDB.
+1. **Finish auth:** add validation/error handling and role submission to sign-up, wire the sign-in form to Better Auth, fix `auth-client.ts` duplicate client creation, add missing GitHub env names, validate env values, and test the flow against MongoDB.
 2. **Review/commit the current work:** `Navbar.tsx`, both auth pages, `src/components/ui/*`, and `AGENT.md`.
 3. **Add the remaining page sections and routes** (menu/catalog, cart, checkout, orders) after product scope is confirmed.
 4. **Connect cart UI:** the navbar badge is visual-only; add real cart state when cart requirements exist.
@@ -418,7 +423,7 @@ These are recommendations, not owner-confirmed requirements. Confirm scope befor
 ## 16. Important Notes for Future AI Agents
 
 - **Read this file first** and trust verified sections to avoid re-auditing. Open only task-relevant files.
-- **Do not assume features exist.** There is a homepage shell, a UI-only sign-up page, a sign-in placeholder, and a partial Better Auth foundation — no catalog, cart, checkout, orders, or product database.
+- **Do not assume features exist.** There is a homepage shell, styled sign-in/sign-up pages (sign-in UI-only; sign-up calls `authClient`), and a partial Better Auth foundation — no catalog, cart, checkout, orders, or product database.
 - **Build is green** (`eslint`, `tsc`, `next build`) but warns about missing GitHub auth credentials. Do not confuse the warning with a failure.
 - **Do not invent product requirements.** The repo contains no spec beyond "Pizza Ordering & Delivery Platform".
 - **Keep the uncommitted changes** (`Navbar.tsx`, both auth pages, `src/components/ui/*`, `AGENT.md`). Do not reset them.

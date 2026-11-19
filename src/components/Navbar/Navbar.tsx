@@ -1,14 +1,10 @@
 "use client";
 import { useState } from "react";
-import {
-  ChefHat,
-  Menu,
-  ShoppingCart,
-  X,
-} from "lucide-react";
+import { ChefHat, Menu, ShoppingCart, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
+import { useSession } from "@/lib/auth-client";
+import { DropdownMenuProfile } from "./DropDownProfile";
 const navLinks = [
   { name: "Home", src: "/", alt: "Home" },
   { name: "Browse", src: "/browse", alt: "Browse" },
@@ -17,6 +13,7 @@ const navLinks = [
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { data: session, isPending } = useSession();
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -61,34 +58,50 @@ export default function Navbar() {
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             {/* Desktop account links */}
             <div className="hidden items-center gap-2 lg:flex">
-              <Link
-                href="/sign-in"
-                className="rounded-full px-4 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:text-primary"
+              <button
+                type="button"
+                aria-label="Open cart"
+                className="relative flex h-8 w-8 items-center justify-center rounded-full bg-neutral-900 text-white transition-colors hover:bg-primary"
               >
-                Sign In
-              </Link>
-              <Link
-                href="/sign-up"
-                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary/90"
-              >
-                Join Free
-              </Link>
-            </div>
+                <ShoppingCart
+                  className="h-5 w-5"
+                  strokeWidth={1.8}
+                  aria-hidden="true"
+                />
 
-            <button
-              type="button"
-              aria-label="Open cart"
-              className="relative flex h-10 w-10 items-center justify-center rounded-full bg-neutral-900 text-white transition-colors hover:bg-primary sm:h-12 sm:w-12"
-            >
-              <ShoppingCart
-                className="h-4 w-4 sm:h-5 sm:w-5"
-                strokeWidth={1.8}
-                aria-hidden="true"
-              />
-              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-white">
-                0
-              </span>
-            </button>
+                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-white">
+                  0
+                </span>
+              </button>
+              {isPending ? (
+                <div className="flex items-center gap-7 animate-pulse">
+                  {/* Sign In Skeleton */}
+                  <div className="h-4 w-12 rounded bg-neutral-200" />
+
+                  {/* Join Free Button Skeleton */}
+                  <div className="h-11 w-28 rounded-full bg-neutral-200" />
+                </div>
+              ) : session?.user ? (
+                <>
+                  <DropdownMenuProfile data={session.user} />
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/sign-in"
+                    className="rounded-full px-4 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:text-primary"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/sign-up"
+                    className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary/90"
+                  >
+                    Join Free
+                  </Link>
+                </>
+              )}
+            </div>
 
             <button
               type="button"
@@ -125,20 +138,34 @@ export default function Navbar() {
 
             {/* Sign In / Sign Up only inside the mobile menu */}
             <div className="grid grid-cols-2 gap-2 px-2 pb-2 pt-1">
-              <Link
-                href="/sign-in"
-                onClick={closeMenu}
-                className="rounded-full border border-neutral-300 px-4 py-2.5 text-center text-sm font-semibold text-neutral-800 transition-colors hover:border-primary hover:text-primary"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/sign-up"
-                onClick={closeMenu}
-                className="rounded-full bg-primary px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-primary/90"
-              >
-                Join Free
-              </Link>
+              {isPending ? (
+                <div className="flex items-center gap-7 animate-pulse">
+                  {/* Sign In Skeleton */}
+                  <div className="h-4 w-12 rounded bg-neutral-200" />
+
+                  {/* Join Free Button Skeleton */}
+                  <div className="h-11 w-28 rounded-full bg-neutral-200" />
+                </div>
+              ) : session?.user ? (
+                <>
+                  <DropdownMenuProfile data={session.user} />
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/sign-in"
+                    className="rounded-full px-4 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:text-primary"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/sign-up"
+                    className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary/90"
+                  >
+                    Join Free
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}
