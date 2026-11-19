@@ -56,6 +56,30 @@ export default function Navbar() {
 
           {/* Account links, cart, and mobile menu */}
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            {/* Mobile cart and profile */}
+            <div className="flex items-center gap-2 sm:gap-3 lg:hidden">
+              <button
+                type="button"
+                aria-label="Open cart"
+                className="relative flex h-8 w-8 items-center justify-center rounded-full bg-neutral-900 text-white transition-colors hover:bg-primary"
+              >
+                <ShoppingCart
+                  className="h-5 w-5"
+                  strokeWidth={1.8}
+                  aria-hidden="true"
+                />
+
+                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-white">
+                  0
+                </span>
+              </button>
+              {!isPending && session?.user && (
+                <div className="flex items-center">
+                  <DropdownMenuProfile data={session.user} />
+                </div>
+              )}
+            </div>
+
             {/* Desktop account links */}
             <div className="hidden items-center gap-2 lg:flex">
               <button
@@ -146,11 +170,7 @@ export default function Navbar() {
                   {/* Join Free Button Skeleton */}
                   <div className="h-11 w-28 rounded-full bg-neutral-200" />
                 </div>
-              ) : session?.user ? (
-                <>
-                  <DropdownMenuProfile data={session.user} />
-                </>
-              ) : (
+              ) : !session?.user ? (
                 <>
                   <Link
                     href="/sign-in"
@@ -165,7 +185,7 @@ export default function Navbar() {
                     Join Free
                   </Link>
                 </>
-              )}
+              ) : null}
             </div>
           </div>
         )}

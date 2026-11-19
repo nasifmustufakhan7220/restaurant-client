@@ -7,3 +7,10 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Project-specific responsive navbar note
+
+- On mobile and tablet widths below `lg`, the existing cart control and authenticated `DropDownProfile` remain in the navbar header beside the hamburger button.
+- `DropDownProfile` is intentionally not rendered inside the expandable mobile navigation menu.
+- The mobile menu continues to control the existing navigation and unauthenticated sign-in/join links.
+- The responsive layout change is implemented in `src/components/Navbar/Navbar.tsx`; `src/components/Navbar/DropDownProfile.tsx` was inspected and unchanged.
