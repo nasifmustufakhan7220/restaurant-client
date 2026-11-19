@@ -8,16 +8,29 @@
 
 ---
 
-## 0. How Future Agents Must Use This Document
+## 0. Mandatory Project Context Instructions
 
-1. Read this `AGENT.md` before exploring the codebase.
-2. Trust verified sections; do not re-analyze features already documented here.
-3. Open only the files relevant to the current task.
-4. If this document looks outdated, verify the implementation before acting.
-5. After a task, update the relevant sections (features, status, bugs, pending tasks, architecture).
-6. Do not modify application code during audit-only requests.
-7. Never write secret values into this file. If environment variables are added, list **names only**.
-8. Preserve the auto-generated block in `AGENTS.md`; `next dev` re-adds it. `AGENT.md` and `AGENTS.md` are different files and both currently exist.
+> **These instructions are mandatory before performing any task in this project.**
+
+1. **Read** the root-level `AGENT.md` file first.
+2. **Understand** the current project status, architecture, coding conventions, and pending tasks.
+3. **Use** the existing implementation and project patterns instead of making unnecessary assumptions.
+4. **Inspect only** the files relevant to the requested task.
+5. **Avoid** unnecessary codebase exploration to reduce token consumption.
+6. **Never modify** unrelated code.
+7. **After completing a task**, update `AGENT.md` if any meaningful project changes occurred.
+
+Treat `AGENT.md` as the primary project context document, but **always verify actual source code when accuracy matters**.
+
+**Do not assume that the documentation is always up to date.**
+
+### Additional Operating Rules
+
+- Do not modify application code during audit-only requests.
+- Never write secret values into this file. If environment variables are added, list **names only**.
+- Preserve the auto-generated block in `AGENTS.md`; `next dev` re-adds it. `AGENT.md` and `AGENTS.md` are different files and both currently exist.
+- Trust verified sections to avoid re-analysis, but re-check any section marked **[Assumption]** before relying on it.
+- Keep this section at the top of the file so every future agent sees it first.
 
 ---
 
