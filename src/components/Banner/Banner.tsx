@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { playfair } from "@/app/layout";
 
 const slides = [
   { src: "/pizza1.webp", alt: "Freshly baked pizza on a wooden board" },
@@ -20,9 +21,7 @@ export default function Banner() {
   };
 
   const showPreviousSlide = () => {
-    setCurrentSlide(
-      (current) => (current - 1 + slides.length) % slides.length
-    );
+    setCurrentSlide((current) => (current - 1 + slides.length) % slides.length);
   };
 
   // Move to the next image automatically every 6 seconds.
@@ -93,13 +92,13 @@ export default function Banner() {
 
       {/* Banner text */}
       <div className="relative z-10 flex flex-col items-center text-center">
-        <h1 className="font-serif text-[5.5rem] leading-[0.82] tracking-[-0.02em] text-white sm:text-[9rem] md:text-[11rem] lg:text-[13rem] xl:text-[15rem]">
-          DIXOR
+        <h1 className={`font-serif text-[5.5rem] leading-[0.82] tracking-[-0.02em] text-white sm:text-[9rem] md:text-[11rem] lg:text-[13rem] xl:text-[15rem] ${playfair.className}`}>
+          Pizza
         </h1>
 
         <div className="mt-3 bg-primary px-5 py-2 sm:mt-4 sm:px-8 sm:py-2.5 lg:px-10 lg:py-3">
           <p className="font-serif text-xl uppercase tracking-[0.16em] text-white sm:text-3xl lg:text-4xl xl:text-5xl">
-            Restaurant
+            Good pizza. Good people. Right on time.
           </p>
         </div>
 
@@ -110,7 +109,7 @@ export default function Banner() {
             </span>
             <span className="h-px w-6 bg-white/80 sm:w-10" />
             <span className="text-sm uppercase tracking-[0.18em] sm:text-lg lg:text-xl">
-              1759
+              2026
             </span>
           </div>
           <div className="mt-2 h-0.5 w-full bg-primary" />

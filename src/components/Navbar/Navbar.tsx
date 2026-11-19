@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { ChefHat, Menu, ShoppingCart, X } from "lucide-react";
+import { Menu, Pizza, ShoppingCart, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
@@ -25,16 +25,16 @@ export default function Navbar() {
           <Link
             href="/"
             onClick={closeMenu}
-            className="flex shrink-0 flex-col items-center text-neutral-900"
+            className="flex shrink-0 flex-col items-center text-neutral-900 transition-colors sm:flex-row sm:gap-1.5"
             aria-label="Restan home"
           >
-            <ChefHat
+            <Pizza
               className="h-6 w-6 text-primary sm:h-7 sm:w-7"
               strokeWidth={1.5}
               aria-hidden="true"
             />
             <span className="mt-0.5 text-lg font-bold uppercase leading-none tracking-[0.14em] sm:text-2xl">
-              Pizza Hub
+              Pizza <span className="text-primary">Hub</span>
             </span>
           </Link>
 

@@ -1,35 +1,43 @@
+
 import {
   DM_Serif_Display,
+  Cinzel,
   Dancing_Script,
   Lato,
+  Playfair_Display,
 } from "next/font/google";
 import { Toaster } from "@/components/ui/toast"
 
 import "./globals.css";
-import { Metadata } from "next";
+
 
 const dmSerif = DM_Serif_Display({
   subsets: ["latin"],
   weight: "400",
-  variable: "--font-dm-serif",
+});
+
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const dancingScript = Dancing_Script({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-dancing-script",
+  weight: ["400", "500", "600", "700"],
 });
 
 const lato = Lato({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-lato",
+  weight: ["400", "700", "900"],
 });
 
-export const metadata: Metadata = {
-  title: "PizzaHub",
-  description: "Pizza Ordering & Delivery Platform",
-};
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+
+
 
 export default function RootLayout({
   children,
@@ -37,7 +45,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSerif.variable} ${dancingScript.variable} ${lato.variable}`}
+      className={`${lato.className} `}
     >
       <body className={lato.className}>
         {children}
@@ -46,3 +54,12 @@ export default function RootLayout({
     </html>
   );
 }
+
+
+export {
+  dmSerif,
+  cinzel,
+  dancingScript,
+  lato,
+  playfair,
+};
