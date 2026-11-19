@@ -137,6 +137,12 @@ There are no server actions, middleware, protected routes, global state store, d
 - **How it works:** These are Base UI/shadcn-style wrappers with Tailwind classes, CVA variants, and shared toast management.
 - **Status:** The auth pages use button, field, input, label, select, and toast primitives. Avatar and most dropdown variants are present for future use.
 
+### Dashboard sidebar UI - Completed
+
+- **Files:** `src/app/dashboard/layout.tsx`, `src/app/dashboard/_components/DashboardSideBar.tsx`, `src/app/dashboard/_components/SidebarLink.tsx`, `src/app/dashboard/_components/DashboardSideFooter.tsx`, and `src/app/dashboard/_components/dashboard-menu-config.ts`.
+- **How it works:** The dashboard layout renders the existing responsive shadcn sidebar beside the page content. Menu links are selected from a role-based configuration for vendor, customer, or admin, and the active link follows the current pathname. The sidebar primitive provides the desktop sidebar and mobile Sheet drawer with overlay and close behavior.
+- **Status:** UI-only preview is implemented. Links are presentational navigation targets; role selection is not connected to authentication and the linked feature pages do not exist yet.
+
 ## 5. UI/UX Documentation
 
 - **Home:** Full-height darkened food-image hero. The fixed, rounded white navbar floats over it. Hero typography uses DM Serif Display and presents “DIXOR”, a red “RESTAURANT” label, and “ESTD - 1759”.
@@ -193,6 +199,7 @@ The `.env*` pattern is ignored by Git. There is no `.env.example`.
 - [x] Better Auth route handler and Mongo adapter configuration.
 - [x] Responsive sign-in and sign-up UI.
 - [x] Sign-in and sign-up client calls, success/error toasts, and redirect handling.
+- [x] Responsive role-based dashboard sidebar UI with active-link styling and profile footer.
 - [x] ESLint and TypeScript validation.
 - [x] Production build for the current route set.
 
@@ -203,6 +210,7 @@ The `.env*` pattern is ignored by Git. There is no `.env.example`.
 - [~] Role-based registration (role casing and policy are unresolved).
 - [~] Theme tokens without an active dark-mode UX.
 - [~] UI primitive library; several primitives are unused.
+- [~] Dashboard sidebar preview; role wiring and dashboard feature routes are unresolved.
 - [~] Documentation/README; this document is current, but README remains scaffold text.
 
 ### Not Started
@@ -221,6 +229,7 @@ The `.env*` pattern is ignored by Git. There is no `.env.example`.
 - [!] Vendor role option uses `Vendor` while the declared role is lowercase `vendor`.
 - [!] Profile dropdown logs user data to the console and uses a remote avatar image.
 - [!] Cart button and profile menu items are visual/no-op actions.
+- [!] Dashboard sidebar uses a `currentRole` preview constant and must not be treated as authorization.
 - [!] Secondary CSS variables referenced by the theme (`destructive`, chart, and sidebar tokens) are not defined.
 
 ## 8. Known Issues & Technical Debt
@@ -283,9 +292,10 @@ Recommended order; these are not owner-confirmed requirements:
 ## 12. Latest Development Session
 
 - **Last reviewed:** 2026-11-20.
-- **Latest completed work:** Adjusted the mobile navbar layout so the existing cart and authenticated profile dropdown stay in the header row outside the expandable hamburger menu. Preserved the existing icons, menu toggle, session logic, routes, and dropdown behavior.
-- **Application files modified:** `src/components/Navbar/Navbar.tsx`. `src/components/Navbar/DropDownProfile.tsx` was inspected and required no change. `AGENT.md` was updated; generated `AGENTS.md` was preserved unchanged.
-- **Validation performed:** `npm.cmd run lint`, `npx.cmd tsc --noEmit`, and `npm.cmd run build` passed. Browser checks at 320px, 480px, 768px, 1024px, and 1280px found no horizontal overflow; mobile/tablet showed the cart and hamburger, desktop showed the desktop navigation, and the mobile menu still opened with its existing links. The build emitted the expected missing-GitHub-credentials warning.
-- **Current project status:** Early UI foundation with partial, unverified runtime authentication. Home, sign-in, and sign-up pages compile and build; no ordering domain exists.
-- **Remaining work:** Authentication hardening/runtime verification, product scope/schema, catalog/cart/checkout/orders, tests/CI, and project documentation cleanup.
-- **Recommended next step:** Verify the navbar visually at 320px-480px, 481px-768px, 769px-1024px, and 1025px+ widths, then confirm authentication requirements and product scope before implementing the next feature.
+- **Latest completed work:** Added the UI-only role-based dashboard sidebar with responsive drawer behavior, active links, profile footer, and CSS token mappings for the sidebar primitive. The existing navbar responsive work remains intact.
+- **Application files modified:** `src/app/dashboard/layout.tsx`, `src/app/dashboard/_components/DashboardSideBar.tsx`, `src/app/dashboard/_components/SidebarLink.tsx`, `src/app/dashboard/_components/DashboardSideFooter.tsx`, `src/app/dashboard/_components/dashboard-menu-config.ts`, `src/app/globals.css`, and `AGENT.md`.
+- **Important dashboard notes:** Change `currentRole` near the top of `DashboardSideBar.tsx` to `vendor`, `customer`, or `admin` to preview each menu. Replace it with the authenticated session role only after authorization is designed. Menu labels and routes live in `dashboard-menu-config.ts`.
+- **Validation performed:** `npx.cmd tsc --noEmit` and `npm.cmd run build` passed. `npm.cmd run lint` still reports the pre-existing `setState`-in-effect error in `src/hooks/use-mobile.ts`; no dashboard-specific lint error was reported. The build emitted the expected missing-GitHub-credentials warning.
+- **Current project status:** Home, auth entry pages, and the dashboard sidebar UI compile and build; authentication is still partial/unverified, role wiring is not connected, and no ordering domain exists.
+- **Remaining work:** Authentication hardening/runtime verification, role wiring and authorization, dashboard feature routes, product scope/schema, catalog/cart/checkout/orders, tests/CI, and project documentation cleanup.
+- **Recommended next step:** Connect the sidebar role to a verified session only after protected routes and authorization rules are defined, then add dashboard feature pages incrementally.
