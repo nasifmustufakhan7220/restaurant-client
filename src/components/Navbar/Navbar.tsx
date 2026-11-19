@@ -37,7 +37,7 @@ export default function Navbar() {
               aria-hidden="true"
             />
             <span className="mt-0.5 text-lg font-bold uppercase leading-none tracking-[0.14em] sm:text-2xl">
-              Restan
+              Pizza Hub
             </span>
           </Link>
 
@@ -47,17 +47,34 @@ export default function Navbar() {
               <li key={link.name}>
                 <Link
                   href={link.src}
-                  className={`${pathname === link.src ? "text-primary" : "text-neutral-700"} flex items-center gap-1.5 text-[15px] text-neutral-700 transition-colors hover:text-primary`}
+                  className={`flex items-center gap-1.5 text-[15px] transition-colors hover:text-primary ${
+                    pathname === link.src ? "text-primary" : "text-neutral-700"
+                  }`}
                 >
                   {link.name}
-                  
                 </Link>
               </li>
             ))}
           </ul>
 
-          {/* Cart and mobile menu buttons */}
-          <div className="flex shrink-0 items-center gap-3 sm:gap-4">
+          {/* Account links, cart, and mobile menu */}
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            {/* Desktop account links */}
+            <div className="hidden items-center gap-2 lg:flex">
+              <Link
+                href="/sign-in"
+                className="rounded-full px-4 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:text-primary"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/sign-up"
+                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary/90"
+              >
+                Join Free
+              </Link>
+            </div>
+
             <button
               type="button"
               aria-label="Open cart"
@@ -72,12 +89,6 @@ export default function Navbar() {
                 0
               </span>
             </button>
-
-            <button>
-              Sign In
-            </button>
-
-            <button>Sign Up</button>
 
             <button
               type="button"
@@ -97,20 +108,39 @@ export default function Navbar() {
 
         {/* Mobile navigation */}
         {isMenuOpen && (
-          <ul className="border-t border-neutral-200 py-2 lg:hidden">
-            {navLinks.map((link) => (
-              <li key={link.name}>
-                <Link
-                  href={link.src}
-                  onClick={closeMenu}
-                  className="flex items-center justify-between px-2 py-3 text-base text-neutral-800 transition-colors hover:text-primary"
-                >
-                  {link.name}
-                
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className="border-t border-neutral-200 py-2 lg:hidden">
+            <ul>
+              {navLinks.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.src}
+                    onClick={closeMenu}
+                    className="flex items-center justify-between px-2 py-3 text-base text-neutral-800 transition-colors hover:text-primary"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            {/* Sign In / Sign Up only inside the mobile menu */}
+            <div className="grid grid-cols-2 gap-2 px-2 pb-2 pt-1">
+              <Link
+                href="/sign-in"
+                onClick={closeMenu}
+                className="rounded-full border border-neutral-300 px-4 py-2.5 text-center text-sm font-semibold text-neutral-800 transition-colors hover:border-primary hover:text-primary"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/sign-up"
+                onClick={closeMenu}
+                className="rounded-full bg-primary px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-primary/90"
+              >
+                Join Free
+              </Link>
+            </div>
+          </div>
         )}
       </nav>
     </header>

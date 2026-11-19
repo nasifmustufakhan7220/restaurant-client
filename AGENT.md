@@ -1,7 +1,7 @@
 # AGENT.md — Project Audit & Instructions for AI Agents
 
 > **Audit date:** 2026-11-19
-> **Last implementation update:** 2026-11-19 (responsive fixed navbar + banner image carousel; auth foundation added separately)
+> **Last implementation update:** 2026-11-19 (navbar Sign In/Sign Up links for desktop + mobile menu; placeholder auth pages; build unblocked)
 > **Audit scope:** Full repository review (structure, config, source, Git history, dependencies, build/lint/type-check).
 > **Rule for future agents:** Read this file first. Only inspect files relevant to your task. Update this file after meaningful changes.
 >
@@ -43,7 +43,7 @@ Treat `AGENT.md` as the primary project context document, but **always verify ac
 - **Purpose:** Customer-facing pizza ordering web app. **[Assumption]** based on the project name and metadata; no ordering functionality exists yet.
 - **Actual state:** An early-stage Next.js app with a responsive homepage shell (fixed navbar + pizza hero carousel) and a partially configured Better Auth backend. Product catalog, cart, checkout, and orders do not exist. **[Verified]**
 - **Current home page:** Imports `Navbar` and `Banner`; renders the hero carousel with a fixed navbar overlaid. **[Verified]**
-- **Build health:** `next build` currently **fails** because two committed auth page files are empty (0 bytes) and fail Next's route type validation. `eslint` passes. **[Verified 2026-11-19]**
+- **Build health:** `next build`, `tsc`, and `eslint` pass. Build emits a Better Auth warning because the GitHub provider credentials are missing. **[Verified 2026-11-19]**
 
 ---
 
@@ -78,7 +78,7 @@ Treat `AGENT.md` as the primary project context document, but **always verify ac
 | Script | Command | Status |
 |---|---|---|
 | `dev` | `next dev` | Works (homepage renders; a dev server was already running on port 3000 during the audit) |
-| `build` | `next build` | **Fails** — empty auth page files fail route type validation |
+| `build` | `next build` | Passes; warns that GitHub auth credentials are missing |
 | `start` | `next start` | Available |
 | `lint` | `eslint` | Passes |
 | test / format / typecheck | — | Not defined |
@@ -113,14 +113,14 @@ Browser request
        -> <Navbar />          (client: fixed header, mobile menu state)
        -> <Banner />          (client: 5-image carousel, autoplay, arrows)
   -> /api/auth/[...all]       (Better Auth GET/POST handler -> MongoDB via mongodbAdapter)
-  -> /sign-in, /sign-up       (route files exist but are EMPTY placeholders)
+  -> /sign-in, /sign-up       (minimal placeholder pages with "Back to Home")
 ```
 
 - `Navbar` and `Banner` are client components (`"use client"`) because they use state/effects and click handlers. **[Verified]**
 - `Button` wraps `@base-ui/react/button`, whose package code includes its own `"use client"` directive. It is still unused by the app. **[Verified]**
 - The homepage is otherwise static/self-contained: no product data fetching and no shared state. Carousel slide and mobile-menu state are local `useState`. **[Verified]**
 - The only API route is the Better Auth catch-all handler. There are no product/cart/order APIs, server actions, middleware, or protected routes. **[Verified]**
-- Auth UI pages are committed as 0-byte files, which currently breaks route type validation. **[Verified]**
+- Auth pages are minimal placeholders (heading + link home); they have no forms or auth logic. **[Verified]**
 - No global state management, data-fetching library, form library, or validation library is installed. **[Verified]**
 
 ---
@@ -147,8 +147,8 @@ pizza-odering-client/
     │   ├── layout.tsx         # Root layout, 3 Google fonts (CSS variables), metadata
     │   ├── page.tsx           # "/" -> Navbar + Banner
     │   ├── (auth)/
-    │   │   ├── sign-in/page.tsx   # EMPTY (0 bytes) — build blocker
-    │   │   ├── sign-up/page.tsx   # EMPTY (0 bytes) — build blocker
+    │   │   ├── sign-in/page.tsx   # Placeholder page (heading + home link)
+    │   │   ├── sign-up/page.tsx   # Placeholder page (heading + home link)
     │   │   └── _components/       # Empty directory
     │   └── api/auth/[...all]/
     │       └── route.ts       # Better Auth Next.js handler
@@ -176,7 +176,7 @@ pizza-odering-client/
 - A MongoDB client is configured in `src/lib/auth.ts` using `mongodb` + `@better-auth/mongo-adapter`; the database name is `"users"`. **[Verified]**
 - Better Auth owns/manages its own auth collections; no models, migrations, seed files, or SQL are present. **[Verified]**
 - No product, cart, order, or payment collections/schema exist. **[Verified]**
-- Runtime DB connectivity and auth collections were **not** verified; auth pages exist only as empty placeholders. **[Verified]**
+- Runtime DB connectivity and auth collections were **not** verified; auth pages are placeholders with no forms. **[Verified]**
 - Therefore there are **no documented entity relationships**.
 
 ---
@@ -188,10 +188,11 @@ pizza-odering-client/
 - `src/lib/auth.ts`: Better Auth with email/password, GitHub social provider, and MongoDB adapter (database `"users"`).
 - `src/app/api/auth/[...all]/route.ts`: exports Better Auth `GET`/`POST` via `toNextJsHandler`.
 - `src/lib/auth-client.ts`: creates a React auth client and exports `signIn`, `signUp`, `useSession`. Note it calls `createAuthClient()` twice — the exported helpers come from a second, unconfigured client (potential bug).
-- `src/app/(auth)/sign-in/page.tsx` and `sign-up/page.tsx` exist but are **0-byte files** with no UI and no default export. They currently break the production build.
+- `src/app/(auth)/sign-in/page.tsx` and `sign-up/page.tsx` are **minimal placeholder pages**: heading, "form will be added" note, and a "Back to Home" link. There are no auth forms or session logic.
 - No middleware, protected routes, session checks, role checks, or authorization rules exist.
-- `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` are referenced by `auth.ts` but are not in `.env`; GitHub sign-in is therefore unverified/likely misconfigured.
-- Do not assume auth works. It requires UI, env configuration, and runtime testing.
+- Navbar exposes Sign In/Sign Up links: visible on desktop (`lg+`) and inside the mobile hamburger menu.
+- `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` are referenced by `auth.ts` but are not in `.env`; `next build` warns that the GitHub provider is missing credentials, so GitHub sign-in is unverified/misconfigured.
+- Do not assume auth works. It requires forms, env configuration, and runtime testing.
 
 ---
 
@@ -201,9 +202,10 @@ pizza-odering-client/
    - Client component, `position: fixed` at the top (`z-50`), so it stays visible while scrolling.
    - White rounded bar floating over the banner, matching the reference screenshot.
    - Stacked logo: red `ChefHat` icon + "RESTAN" text.
-   - Desktop nav links: Home, Pages, Menu, Blog, Shop with decorative `ChevronDown` icons. **No dropdown menus are implemented (by request).**
+   - Desktop nav links: Home and Browse (active route highlighted); no dropdown menus are implemented.
    - Cart button with black circle and red "0" badge (visual only, no cart logic).
-   - Mobile/tablet hamburger toggles a stacked link panel; closes on link click. Hidden at `lg` and above.
+   - **Sign In / Sign Up:** desktop shows a text "Sign In" link plus a red "Sign Up" button (`lg+`); on mobile/tablet both appear inside the hamburger menu as a two-column row.
+   - Mobile/tablet hamburger toggles a panel with nav links and auth buttons; closes on link click. Hidden at `lg` and above.
 2. **Banner image carousel** (`src/components/Banner/Banner.tsx`) **[Verified]**
    - Client component using `next/image` and local `/public/pizza1.webp`…`pizza5.webp`.
    - 5 slides with fade transition, autoplay every 6 seconds, previous/next arrow buttons.
@@ -216,7 +218,7 @@ pizza-odering-client/
 4. **Brand design tokens** (`src/app/globals.css`) **[Verified]**
    - Tailwind v4 CSS-first setup with `tw-animate-css` and `shadcn/tailwind.css`.
    - Light/dark palettes with `#e7272d` primary; font utilities now map to the real font variables (`font-sans`, `font-serif`, `font-script`).
-5. **Auth foundation** (partial) — Better Auth server/client config, Mongo adapter, catch-all API route; empty auth pages. See Sections 5–6.
+5. **Auth foundation** (partial) — Better Auth server/client config, Mongo adapter, catch-all API route; placeholder auth pages. See Sections 5–6.
 6. **UI primitive** (`src/components/ui/button.tsx`) — Base UI button with CVA variants/sizes; still not imported by app code.
 7. **Utility** (`src/lib/utils.ts`) — re-exports `cn`; not currently imported.
 
@@ -229,11 +231,13 @@ pizza-odering-client/
 - [x] ESLint flat config; `npm.cmd run lint` passes. **[Verified]**
 - [x] Brand color palette and dark-palette values written in CSS. **[Verified]**
 - [x] Fonts wired through `next/font` CSS variables; `font-serif` used by the hero. **[Verified]**
-- [x] Responsive fixed navbar with desktop links, cart badge, and mobile menu. **[Verified]**
+- [x] Responsive fixed navbar with desktop links, auth links, cart badge, and mobile menu. **[Verified]**
 - [x] Banner hero with 5-image autoplay carousel, arrow controls, overlays, and reference-style typography. **[Verified]**
 - [x] Home page imports and renders both components. **[Verified]**
+- [x] Desktop Sign In/Sign Up visible in navbar; mobile/tablet versions inside the hamburger menu. **[Verified]**
+- [x] Minimal `/sign-in` and `/sign-up` placeholder pages return 200 and unblock the build. **[Verified]**
 - [x] Verified in-browser rendering at 390px, 768px, and 1440px widths; images load (HTTP 200) and no console errors were observed. **[Verified]**
-- [x] Better Auth server/client configuration and catch-all API route exist. **[Verified]** (not runtime-tested)
+- [x] `next build` passes (`/`, `/sign-in`, `/sign-up` static; auth API dynamic). Warns about missing GitHub credentials. **[Verified]**
 
 > The app is **not** a functioning ordering platform. Some auth code exists, but its UI and runtime behavior are incomplete.
 
@@ -241,10 +245,10 @@ pizza-odering-client/
 
 ## 9. Partially Completed Features
 
-1. **Authentication** — Backend config/route exist; sign-in and sign-up pages are empty, GitHub env keys are missing, client config has a likely duplicate-client bug, and no runtime auth flow was verified.
+1. **Authentication** — Backend config/route exist; sign-in and sign-up pages are placeholders with no forms, GitHub env keys are missing, client config has a likely duplicate-client bug, and no runtime auth flow was verified.
 2. **Theme system** — Light/dark token values exist, but dark mode is never activated (no `next-themes` provider, toggle, or `dark` class strategy in use). Some referenced tokens are still undefined (Section 11).
 3. **UI component library** — One `Button` exists with variants, but it is unused and untested.
-4. **Navbar interactions** — Desktop links and chevrons are visual placeholders (`href="#"`); the cart button/badge has no behavior. No dropdowns were requested.
+4. **Navbar interactions** — Home/Browse use real routes; Sign In/Sign Up link to placeholder pages. The cart button/badge still has no behavior. No dropdowns exist.
 5. **Sticky behavior** — The header uses `position: fixed`, so it stays at the top. Because the homepage currently contains only the full-height hero, there is no additional content to scroll yet; behavior with real page content is untested.
 6. **Documentation** — `README.md` is still the create-next-app boilerplate and refers to `app/page.tsx` instead of `src/app/page.tsx`.
 
@@ -257,7 +261,8 @@ pizza-odering-client/
 - Menu/catalog pages, product listing, pizza customization.
 - Cart logic, quantities, pricing, checkout, delivery details (only a visual badge exists).
 - Order placement, order history, order tracking.
-- Working user accounts/auth UI (pages are empty; backend config only).
+- Working user accounts/auth UI (pages are placeholders; backend config only).
+- Auth forms, validation, error states, and session-aware UI.
 - Authorization rules, protected routes, session-aware UI.
 - Payment integration.
 - Product/cart/order backend APIs or server actions (only the auth API exists).
@@ -281,20 +286,20 @@ pizza-odering-client/
 
 ### Verified issues
 
-1. **Build blocker (pre-existing auth work):** `src/app/(auth)/sign-in/page.tsx` and `sign-up/page.tsx` are committed as 0-byte files. Next's generated validator reports "File ... is not a module" and `next build` fails. Fix belongs to the auth task; do not attribute it to the navbar/banner implementation.
-2. **Auth client likely misconfigured:** `src/lib/auth-client.ts` creates `authClient` with a `baseURL`, then exports `signIn`/`signUp`/`useSession` from a second bare `createAuthClient()`. Use one configured client.
-3. **Missing auth env names:** `auth.ts` reads `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`, which are absent from `.env` (names checked only). GitHub auth is unverified.
+1. **Auth client likely misconfigured:** `src/lib/auth-client.ts` creates `authClient` with a `baseURL`, then exports `signIn`/`signUp`/`useSession` from a second bare `createAuthClient()`. Use one configured client.
+2. **Auth pages are placeholders only:** `/sign-in` and `/sign-up` return 200 but contain no forms or auth logic; they are not functional sign-in flows.
+3. **Missing auth env names:** `auth.ts` reads `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`, which are absent from `.env` (names checked only). `next build` warns that the GitHub provider is missing credentials.
 4. **Unsafe env assertions:** `process.env.MONGO_URL as string` and similar casts hide missing config. Add validation/guards before using Better Auth.
 5. **Undefined theme variables:** `@theme inline` still references `--destructive`, `--chart-1`…`--chart-5`, `--sidebar`, `--sidebar-*`, and `--sidebar-ring`, which are not defined in `:root`/`.dark`. The unused `Button` `destructive` variant depends on `--destructive`.
 6. **No-op custom property:** `--bg-background: var(--background)` is not a Tailwind color namespace (`--color-*`); `bg-background` works through `--color-background`.
-7. **Placeholder navigation:** Navbar links other than Home use `href="#"`; chevrons are decorative and cart has no action. Intentional for this UI-only task, but not production-ready.
-8. **Responsive hamburger difference:** The reference screenshot shows the hamburger on desktop; this implementation hides it at `lg+` because desktop already displays full links. This is a deliberate responsive choice.
-9. **Uncommitted UI work:** `layout.tsx`, `page.tsx`, `globals.css`, and `Banner.tsx` are modified; `Navabr.tsx` was renamed to `Navbar.tsx`. Commit only after review.
+7. **Cart is visual only:** the navbar cart button/badge has no behavior yet.
+8. **Responsive hamburger difference:** the reference screenshot shows the hamburger on desktop; this implementation hides it at `lg+` because desktop already displays full links and auth actions. Deliberate responsive choice.
+9. **Uncommitted work:** `Navbar.tsx`, the two auth placeholder pages, and `AGENT.md` are modified. Commit only after review.
 10. **`shadcn` CLI in production dependencies:** listed under `dependencies` rather than `devDependencies`.
-11. **Unused dependencies/assets:** `framer-motion` and `next-themes` are unused; `@base-ui/react` is only used by the unused button. Lucide is now used. `pizza5.webp` actually contains AVIF bytes (confirmed via `sharp`); Next's image optimizer serves it successfully as WebP, but re-encoding/renaming is advisable.
+11. **Unused dependencies/assets:** `framer-motion` and `next-themes` are unused; `@base-ui/react` is only used by the unused button. Lucide is used by the navbar. `pizza5.webp` actually contains AVIF bytes (confirmed via `sharp`); Next's image optimizer serves it successfully as WebP, but re-encoding/renaming is advisable.
 12. **Naming drift and stale docs:** package name `pizza-odering-client` (typo), branding `PizzaHub`/hero `DIXOR`, and Git remote `restaurant-client` disagree. `README.md` is default boilerplate.
-13. **Formatting inconsistency:** mixed semicolons/quotes; no formatter config. `page.tsx` is now formatted.
-14. **No tests or CI.** Auth and carousel behavior rely on manual verification.
+13. **Formatting inconsistency:** mixed semicolons/quotes; no formatter config.
+14. **No tests or CI.** Auth, navbar, and carousel behavior rely on manual verification.
 
 ### Improvements (not bugs)
 
@@ -308,9 +313,9 @@ pizza-odering-client/
 ### Verification status
 
 - `npm.cmd run lint` — **passes**. **[Verified]**
-- `npx.cmd tsc --noEmit` — **fails** only on the committed empty auth pages (`.next/*/types/validator.ts`). **[Verified]**
-- `npm.cmd run build` — **fails** for the same empty auth pages; UI code itself compiled successfully in `next dev`. **[Verified]**
-- Browser verification (dev server on port 3000): 390×844, 768×1024, and 1440×900; no console errors; all five carousel images return HTTP 200; mobile menu, autoplay, arrows, and fixed header verified. **[Verified]**
+- `npx.cmd tsc --noEmit` — **passes**. **[Verified]**
+- `npm.cmd run build` — **passes**; `/`, `/sign-in`, `/sign-up` are static; `/api/auth/[...all]` is dynamic. Warns that GitHub auth credentials are missing. **[Verified]**
+- Browser verification (dev server on port 3000): 390×844, 768×1024, and 1440×900; no console errors; all five carousel images return HTTP 200; mobile menu, auth links, autoplay, arrows, and fixed header verified. `Sign In`/`Sign Up` are visible on desktop and inside the mobile/tablet menu. **[Verified]**
 
 > PowerShell note for this environment: `npm`/`npx` `.ps1` shims are blocked by execution policy. Use `npm.cmd` and `npx.cmd`.
 
@@ -343,14 +348,14 @@ Observed conventions (follow unless the owner directs otherwise):
 | `src/app/layout.tsx` | Root HTML shell, metadata, Google Fonts, global CSS import | Exposes font variables on `<html>`; Lato body |
 | `src/app/page.tsx` | Home route `/` | Renders `Navbar` + `Banner` |
 | `src/app/globals.css` | Tailwind v4 imports, theme tokens, dark palette, base layer | Font vars wired; some color tokens undefined |
-| `src/components/Navbar/Navbar.tsx` | Fixed responsive navbar, mobile menu, cart badge | Client component; links are placeholders |
+| `src/components/Navbar/Navbar.tsx` | Fixed responsive navbar, auth links, mobile menu, cart badge | Client component; desktop auth actions + mobile menu auth |
 | `src/components/Banner/Banner.tsx` | 5-image autoplay carousel hero | Client component; uses `next/image` |
 | `src/components/ui/button.tsx` | Base UI button with CVA variants/sizes | Unused; destructive variant depends on missing token |
 | `src/lib/auth.ts` | Better Auth server config + MongoDB adapter | Requires env; runtime untested |
 | `src/lib/auth-client.ts` | Better Auth React client helpers | Likely duplicate `createAuthClient` bug |
 | `src/app/api/auth/[...all]/route.ts` | Better Auth GET/POST handler | Only API route |
-| `src/app/(auth)/sign-in/page.tsx` | Sign-in route | **Empty (0 bytes)** — build blocker |
-| `src/app/(auth)/sign-up/page.tsx` | Sign-up route | **Empty (0 bytes)** — build blocker |
+| `src/app/(auth)/sign-in/page.tsx` | Sign-in placeholder route | No form; heading + home link |
+| `src/app/(auth)/sign-up/page.tsx` | Sign-up placeholder route | No form; heading + home link |
 | `src/lib/utils.ts` | Re-exports `cn` | Unused |
 | `public/pizza1.webp`…`pizza5.webp` | Hero carousel images | Used by Banner; pizza5 is AVIF content |
 | `.env` | Local secrets | Git-ignored; never read values into docs |
@@ -369,11 +374,12 @@ Observed conventions (follow unless the owner directs otherwise):
 **Stage: early UI foundation with partial auth.** **[Verified]**
 
 - Responsive fixed navbar and 5-image hero carousel are implemented and browser-verified.
+- Sign In/Sign Up links are visible on desktop and inside the mobile/tablet hamburger menu.
 - Fonts/theme tokens are wired; dark mode and some secondary tokens remain incomplete.
-- Better Auth backend foundation exists, but auth pages are empty and env/config issues remain.
-- `eslint` passes; `next build` / `tsc` are blocked by the empty auth page files.
+- Better Auth backend foundation exists; auth pages are placeholders and env/config issues remain.
+- `eslint`, `tsc`, and `next build` pass; the build warns about missing GitHub auth credentials.
 - No catalog, cart, checkout, orders, or product data layer exists.
-- Working tree contains uncommitted UI work (navbar, banner, home page, layout, CSS).
+- Working tree contains uncommitted navbar/auth-placeholder changes.
 
 **Do not describe this project as a working pizza-ordering application.** It currently has a polished homepage hero plus an unfinished auth foundation.
 
@@ -383,29 +389,28 @@ Observed conventions (follow unless the owner directs otherwise):
 
 These are recommendations, not owner-confirmed requirements. Confirm scope before building:
 
-1. **Unblock the build:** fill or remove the empty `(auth)/sign-in/page.tsx` and `(auth)/sign-up/page.tsx` files (auth task, not the homepage task).
-2. **Finish auth:** build sign-in/sign-up UI, fix `auth-client.ts` duplicate client creation, add missing GitHub env names, validate env values, and test the flow against MongoDB.
-3. **Review/commit the homepage work:** `Navbar`, `Banner`, `page.tsx`, `layout.tsx`, `globals.css`.
-4. **Add the remaining page sections and routes** (menu/catalog, cart, checkout, orders) after product scope is confirmed.
-5. **Connect cart UI:** the navbar badge is visual-only; add real cart state when cart requirements exist.
-6. **Fix theme foundation:** define/remove `--destructive`, `--chart-*`, and `--sidebar-*`; decide whether dark mode is in scope.
-7. **Add quality gates:** test runner/tests, type-check/format scripts, CI.
-8. **Project hygiene:** replace the README, confirm naming, move `shadcn` to dev dependencies, remove unused packages, re-encode `pizza5.webp`.
-9. **Update this `AGENT.md`** after every meaningful change.
+1. **Finish auth:** build sign-in/sign-up forms, fix `auth-client.ts` duplicate client creation, add missing GitHub env names, validate env values, and test the flow against MongoDB.
+2. **Review/commit the current work:** `Navbar.tsx`, both auth placeholder pages, and `AGENT.md`.
+3. **Add the remaining page sections and routes** (menu/catalog, cart, checkout, orders) after product scope is confirmed.
+4. **Connect cart UI:** the navbar badge is visual-only; add real cart state when cart requirements exist.
+5. **Fix theme foundation:** define/remove `--destructive`, `--chart-*`, and `--sidebar-*`; decide whether dark mode is in scope.
+6. **Add quality gates:** test runner/tests, type-check/format scripts, CI.
+7. **Project hygiene:** replace the README, confirm naming, move `shadcn` to dev dependencies, remove unused packages, re-encode `pizza5.webp`.
+8. **Update this `AGENT.md`** after every meaningful change.
 
 ---
 
 ## 16. Important Notes for Future AI Agents
 
 - **Read this file first** and trust verified sections to avoid re-auditing. Open only task-relevant files.
-- **Do not assume features exist.** There is a homepage shell and a partial Better Auth foundation only — no catalog, cart, checkout, orders, or product database.
-- **`next build` and `tsc` currently fail** because of the committed 0-byte auth pages, not because of the navbar/banner code. Verify before attributing build errors.
+- **Do not assume features exist.** There is a homepage shell, auth links/placeholder pages, and a partial Better Auth foundation — no catalog, cart, checkout, orders, or product database.
+- **Build is green** (`eslint`, `tsc`, `next build`) but warns about missing GitHub auth credentials. Do not confuse the warning with a failure.
 - **Do not invent product requirements.** The repo contains no spec beyond "Pizza Ordering & Delivery Platform".
-- **Keep the uncommitted homepage work** (`layout.tsx`, `page.tsx`, `globals.css`, `Banner.tsx`, new `Navbar.tsx`). Do not reset it.
+- **Keep the uncommitted changes** (`Navbar.tsx`, both auth placeholder pages, `AGENT.md`). Do not reset them.
 - **Use `npm.cmd` / `npx.cmd`** in this PowerShell environment; the `.ps1` shims are blocked.
 - **Next.js 16 is not the Next.js in most training data.** Read `node_modules/next/dist/docs/` for routing, caching (`cacheComponents`), prefetching (`preload` replaced `priority` on `Image`), and auth-with-cache rules.
 - **Keep `AGENTS.md` intact.** The Next.js block is regenerated by `next dev`; removing it only creates churn.
 - **No secrets:** never add credentials. `.env` exists; record names and purpose only.
-- **No test harness:** do not claim tests pass; there are none. Use `npm.cmd run lint`; build/type-check are blocked until auth pages are fixed.
-- **Browser-verified layout:** 390px (mobile), 768px (tablet), 1440px (desktop); navbar fixed, mobile menu works, carousel autoplay/arrows work, all images load.
+- **No test harness:** do not claim tests pass; there are none. Validate with `npm.cmd run lint`, `npx.cmd tsc --noEmit`, and `npm.cmd run build`.
+- **Browser-verified layout:** 390px (mobile), 768px (tablet), 1440px (desktop); navbar fixed; desktop auth links visible; mobile auth links inside the menu; carousel autoplay/arrows work; all images load.
 - **Maintain this document:** update Sections 6–11, 13–15 when features, auth, bugs, or architecture change, and refresh the update date.
