@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 
 const roleOptions = [
   { value: "customer", label: "A hungry customer" },
-  { value: "Vendor", label: "Restaurant Vendor" },
+  { value: "vendor", label: "Restaurant Vendor" },
 ];
 
 export default function SignUpPage() {

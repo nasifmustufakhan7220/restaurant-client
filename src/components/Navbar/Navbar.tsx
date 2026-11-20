@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+
 const navLinks = [
   { name: "Home", src: "/", alt: "Home" },
   { name: "Browse", src: "/browse", alt: "Browse" },
@@ -32,8 +33,8 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
   const isDashboardNavbar = variant === "dashboard";
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { data: session, isPending } = useSession();
   const router = useRouter();
+  const { data: session, isPending } = useSession();
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -41,7 +42,7 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/login");
+          router.push("/sign-in"); // redirect to login page
         },
       },
     });
@@ -127,16 +128,8 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
                   0
                 </span>
               </button>
-              {isPending ? (
-                <div className="flex items-center gap-7 animate-pulse">
-                  {/* Sign In Skeleton */}
-                  <div className="h-4 w-12 rounded bg-neutral-200" />
-
-                  {/* Join Free Button Skeleton */}
-                  <div className="h-11 w-28 rounded-full bg-neutral-200" />
-                </div>
-              ) : session?.user ? (
-                <>
+              {!isPending && session?.user && (
+                <div className="flex items-center">
                   <DropdownMenu>
                     <DropdownMenuTrigger
                       render={
@@ -173,22 +166,7 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href="/sign-in"
-                    className="rounded-full px-4 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:text-primary"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/sign-up"
-                    className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary/90"
-                  >
-                    Join Free
-                  </Link>
-                </>
+                </div>
               )}
             </div>
 
@@ -225,6 +203,8 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
                 </div>
               ) : session?.user ? (
                 <>
+                  {!isPending && session?.user && (
+                <div className="flex items-center">
                   <DropdownMenu>
                     <DropdownMenuTrigger
                       render={
@@ -261,6 +241,8 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
+                </div>
+              )}
                 </>
               ) : (
                 <>
@@ -344,42 +326,7 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
                     Join Free
                   </Link>
                 </>
-              ) :  <DropdownMenu>
-                    <DropdownMenuTrigger
-                      render={
-                        <Image
-                          className="rounded-full"
-                          src="https://github.com/shadcn.png"
-                          alt="Open"
-                          width={32}
-                          height={32}
-                        />
-                      }
-                    />
-                    <DropdownMenuContent className="w-56 mt-7" align="end">
-                      <DropdownMenuItem>
-                        <UserIcon />
-                        Profile
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <CreditCardIcon />
-                        Billing
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <SettingsIcon />
-                        Settings
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        variant="destructive"
-                        className="cursor-pointer hover:text-primary"
-                        onClick={handelSignOut}
-                      >
-                        <LogOutIcon />
-                        Log out
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>}
+              ) : null}
             </div>
           </div>
         )}
