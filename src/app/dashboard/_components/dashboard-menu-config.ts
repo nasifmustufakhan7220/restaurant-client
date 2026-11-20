@@ -9,6 +9,7 @@ import {
   ShoppingBag,
   UtensilsCrossed,
   Users,
+  HomeIcon,
 } from "lucide-react";
 
 import type { Role } from "@/lib/types/role";
@@ -20,6 +21,7 @@ export type DashboardMenuItem = {
 };
 
 const vendorMenuItems: DashboardMenuItem[] = [
+  {label: "Home", href: "/", icon: HomeIcon},
   { label: "Overview", href: "/dashboard/vendor", icon: LayoutDashboard },
   { label: "My Menu Items", href: "/dashboard/vendor/menu", icon: UtensilsCrossed },
   { label: "Add Menu Item", href: "/dashboard/vendor/menu/new", icon: PlusCircle },
@@ -29,12 +31,14 @@ const vendorMenuItems: DashboardMenuItem[] = [
 ];
 
 const customerMenuItems: DashboardMenuItem[] = [
+  {label: "Home", href: "/", icon: HomeIcon},
   { label: "Overview", href: "/dashboard/customer", icon: LayoutDashboard },
   { label: "My Orders", href: "/dashboard/customer/orders", icon: ShoppingBag },
   { label: "Profile Settings", href: "/dashboard/customer/profile", icon: Settings },
 ];
 
 const adminMenuItems: DashboardMenuItem[] = [
+  {label: "Home", href: "/", icon: HomeIcon},
   { label: "Overview", href: "/dashboard/admin", icon: LayoutDashboard },
   { label: "Manage Users", href: "/dashboard/admin/users", icon: Users },
   { label: "Manage Menu Items", href: "/dashboard/admin/menu", icon: UtensilsCrossed },

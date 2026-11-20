@@ -20,11 +20,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 
-const navLinks = [
-  { name: "Home", src: "/", alt: "Home" },
-  { name: "Browse", src: "/browse", alt: "Browse" },
-];
-
 type NavbarProps = {
   variant?: "home" | "dashboard";
 };
@@ -47,6 +42,16 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
       },
     });
   };
+
+  const navLinks = [
+    { name: "Home", src: "/", alt: "Home" },
+    { name: "Browse", src: "/browse", alt: "Browse" },
+    {
+      name: "Dashboard",
+      src: `/dashboard/${session?.user?.role}`,
+      alt: "Dashboard",
+    },
+  ];
 
   return (
     <header
@@ -204,45 +209,45 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
               ) : session?.user ? (
                 <>
                   {!isPending && session?.user && (
-                <div className="flex items-center">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger
-                      render={
-                        <Image
-                          className="rounded-full"
-                          src="https://github.com/shadcn.png"
-                          alt="Open"
-                          width={32}
-                          height={32}
+                    <div className="flex items-center">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger
+                          render={
+                            <Image
+                              className="rounded-full"
+                              src="https://github.com/shadcn.png"
+                              alt="Open"
+                              width={32}
+                              height={32}
+                            />
+                          }
                         />
-                      }
-                    />
-                    <DropdownMenuContent className="w-56 mt-7" align="end">
-                      <DropdownMenuItem>
-                        <UserIcon />
-                        Profile
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <CreditCardIcon />
-                        Billing
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <SettingsIcon />
-                        Settings
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        variant="destructive"
-                        className="cursor-pointer hover:text-primary"
-                        onClick={handelSignOut}
-                      >
-                        <LogOutIcon />
-                        Log out
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              )}
+                        <DropdownMenuContent className="w-56 mt-7" align="end">
+                          <DropdownMenuItem>
+                            <UserIcon />
+                            Profile
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <CreditCardIcon />
+                            Billing
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <SettingsIcon />
+                            Settings
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            variant="destructive"
+                            className="cursor-pointer hover:text-primary"
+                            onClick={handelSignOut}
+                          >
+                            <LogOutIcon />
+                            Log out
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  )}
                 </>
               ) : (
                 <>
