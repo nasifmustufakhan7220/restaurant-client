@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useEffect, useState, useRef, type ChangeEvent } from "react";
 import { ImagePlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ImageThumbnail from "./ImageThumbnail";
@@ -16,39 +15,45 @@ type SelectedImage = {
 };
 
 type ImageUploadBoxProps = {
-  onFilesChange?: (files: File[]) => void;
+  onImagesChange?: (imageUrls: string[]) => void;
 };
 
 export default function ImageUploadBox({
-  onFilesChange,
+  onImagesChange,
 }: ImageUploadBoxProps) {
   const [selectedImages, setSelectedImages] = useState<SelectedImage[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const previewUrlsRef = useRef<string[]>([]);
 
   const isAtLimit = selectedImages.length >= MAX_IMAGES;
 
   // Clean up preview URLs when the component is removed
   useEffect(() => {
+    const urls = previewUrlsRef.current;
     return () => {
-      selectedImages.forEach((image) => {
-        URL.revokeObjectURL(image.previewUrl);
-        URL.revokeObjectURL(image.imageUrl);
-      });
+      urls.forEach((url) => URL.revokeObjectURL(url));
     };
   }, []);
 
   // Select images
-  async function handleFilesSelected  (event: ChangeEvent<HTMLInputElement>) {
+  async function handleFilesSelected(event: ChangeEvent<HTMLInputElement>) {
     const files = Array.from(event.target.files || []);
 
     // Reset input
     event.target.value = "";
+
+    if (files.length === 0) {
+      setErrorMessage("No files selected.");
+      return;
+    }
 
     const newImages = [...selectedImages];
     let error = "";
 
     for (const file of files) {
       // Check maximum image limit
+
       if (newImages.length >= MAX_IMAGES) {
         error = `You can select a maximum of ${MAX_IMAGES} images.`;
         break;
@@ -57,8 +62,7 @@ export default function ImageUploadBox({
       // Check duplicate images
       const alreadyExists = newImages.some(
         (image) =>
-          image.file.name === file.name &&
-          image.file.size === file.size
+          image.file.name === file.name && image.file.size === file.size,
       );
 
       if (alreadyExists) {
@@ -93,38 +97,40 @@ export default function ImageUploadBox({
       }
 
       const result = await res.json();
-      console.log("Image uploaded to imgbb:", result.data.url);
+
+      console.log("Image uploaded:", result.data.url);
+      const imageUrl = result.data.url;
 
       // Create image preview
       const previewUrl = URL.createObjectURL(file);
+      previewUrlsRef.current.push(previewUrl);
 
       newImages.push({
         file,
         previewUrl,
-        imageUrl: result.data.url,
+        imageUrl,
       });
     }
 
     setSelectedImages(newImages);
-    onFilesChange?.(newImages.map((image) => image.file));
+    onImagesChange?.(newImages.map((image) => image.imageUrl));
     setErrorMessage(error);
   }
 
   // Remove selected image
   function handleRemoveImage(previewUrl: string) {
+    // শুধু blob URL revoke করা যায়, তাই এখানে previewUrl দিলাম
     URL.revokeObjectURL(previewUrl);
-    const imageUrl = selectedImages.find((image) => image.previewUrl === previewUrl)?.imageUrl;
-
-    if (imageUrl) {
-      URL.revokeObjectURL(imageUrl);
-    }
+    previewUrlsRef.current = previewUrlsRef.current.filter(
+      (url) => url !== previewUrl,
+    );
 
     const newImages = selectedImages.filter(
-      (image) => image.previewUrl !== previewUrl
+      (image) => image.previewUrl !== previewUrl,
     );
 
     setSelectedImages(newImages);
-    onFilesChange?.(newImages.map((image) => image.file));
+    onImagesChange?.(newImages.map((image) => image.imageUrl));
     setErrorMessage("");
   }
 
@@ -148,7 +154,7 @@ export default function ImageUploadBox({
           "peer-focus-visible:border-primary peer-focus-visible:ring-4 peer-focus-visible:ring-ring/30",
           isAtLimit
             ? "cursor-not-allowed opacity-60"
-            : "cursor-pointer hover:border-primary hover:bg-accent"
+            : "cursor-pointer hover:border-primary hover:bg-accent",
         )}
       >
         <ImagePlus className="size-6 text-text-muted" />

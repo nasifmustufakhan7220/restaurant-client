@@ -19,7 +19,7 @@ export default function ImageThumbnail({
       <img
         src={previewUrl}
         alt={fileName}
-        className="h-[84px] w-[84px] rounded-xl border border-border object-cover"
+        className="h-21 w-21 rounded-xl border border-border object-cover"
       />
 
       <button

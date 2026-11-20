@@ -14,26 +14,71 @@ import FormFooter from "./FormFooter";
 import ImageUploadBox from "./ImageUploadBox";
 import { inputClasses, textareaClasses } from "./fieldStyles";
 import { menuCategories } from "./menuCategories";
-import { createMenuPost } from "@/lib/actions/menu";
+import { createMenuPost, MenuItemData } from "@/lib/actions/menu";
+import { useState } from "react";
+import { useSession } from "@/lib/auth-client";
+import { toast } from "@/components/ui/toast";
+import { useRouter } from "next/navigation";
 
 // The Add Menu Item form. Static UI only; the owner wires the behaviour later.
 export default function AddMenuItemForm() {
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const { data: session } = useSession();
+  const router = useRouter();
+
   const handelSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const objectData = Object.fromEntries(formData.entries());
-    console.log("Form submitted:", objectData);
+    if (
+      !objectData.itemName ||
+      !objectData.category ||
+      !objectData.description ||
+      !objectData.price ||
+      !objectData.location
+    ) {
+      toast.add({
+        title: "Error",
+        description: "Please fill in all required fields.",
+      });
+      return;
+    }
 
-    //     Fields: Item Name, Category, Description, Price, Location (area / city), Item Image (required, must be uploaded as a file using ImgBB)
-    // Vendor must be authenticated, and required fields are validated
-    // Saved in the menuItems collection with default status Pending until an admin approves
+    if (imageUrls.length === 0) {
+      toast.add({
+        title: "Error",
+        description: "Please upload at least one image.",
+      });
+      return;
+    }
 
-    const result = await createMenuPost({...objectData, status: "Pending"});
-    console.log("Menu item created:", result);
+    const data: MenuItemData = {
+      itemName: objectData.itemName as string,
+      category: objectData.category as string,
+      description: objectData.description as string,
+      price: objectData.price as string,
+      location: objectData.location as string,
+      images: imageUrls,
+      status: "Pending",
+      vendorId: session?.user?.id as string,
+    };
+    const result = await createMenuPost(data);
+    if (result.insertedId) {
+      toast.add({
+        title: "Success",
+        description: "Menu item created successfully.",
+      });
+      router.refresh();
+    } else {
+      toast.add({
+        title: "Error",
+        description: "Failed to create menu item.",
+      });
+    }
   };
+
   return (
     <CardShell className="min-w-0">
-      {/* FUNCTIONALITY: connect form submit here */}
       <form onSubmit={handelSubmit}>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
           <FormField label="Item Name" htmlFor="itemName" required>
@@ -111,7 +156,7 @@ export default function AddMenuItemForm() {
 
         <div className="mt-4 sm:mt-5">
           <FormField label="Item Images" htmlFor="images" required>
-            <ImageUploadBox />
+            <ImageUploadBox onImagesChange={setImageUrls} />
           </FormField>
         </div>
 
