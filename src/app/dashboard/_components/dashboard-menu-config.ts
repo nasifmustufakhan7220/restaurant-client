@@ -24,7 +24,7 @@ const vendorMenuItems: DashboardMenuItem[] = [
   {label: "Home", href: "/", icon: HomeIcon},
   { label: "Overview", href: "/dashboard/vendor", icon: LayoutDashboard },
   { label: "My Menu Items", href: "/dashboard/vendor/menu", icon: UtensilsCrossed },
-  { label: "Add Menu Item", href: "/dashboard/vendor/menu/new", icon: PlusCircle },
+  { label: "Add Menu Item", href: "/dashboard/vendor/add-menu", icon: PlusCircle },
   { label: "Customer Orders", href: "/dashboard/vendor/orders", icon: ClipboardList },
   { label: "Subscription", href: "/dashboard/vendor/subscription", icon: CreditCard },
   { label: "Profile Settings", href: "/dashboard/vendor/profile", icon: Settings },

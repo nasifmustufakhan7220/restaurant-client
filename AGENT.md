@@ -666,3 +666,116 @@ Notes / blockers:
    **Tokens:** none added — every required token already existed in `globals.css` (`:root`, `.dark`, `@theme inline`).
 2. **Project status:** Overview UI restyled for all 3 roles. Data is **placeholder**. Next logical step: replace each page's placeholder constants with real data and keep the same components/props.
 3. **For future agents:** content lives in the constant arrays at the top of each role page; presentation lives in the shared `overview` components; the status-to-pill mapping lives only in `StatusPill.tsx`. Do not add role tabs or move data fetching into these presentational components.
+
+---
+
+## Task in progress: Vendor Add Menu Item page UI
+
+Status: Done
+Last completed step: 8. Final self-check done
+Next step: (none — UI complete; owner adds functionality)
+
+- [x] 1. Read AGENT.md and the project, find the Add Menu Item route
+      Found the empty page at `src/app/dashboard/vendor/add-menu/page.tsx`. Note: `dashboard-menu-config.ts` linked to `/dashboard/vendor/menu/new`, which did not exist; the config was not changed (out of scope). The owner has since updated that link to `/dashboard/vendor/add-menu`.
+- [x] 2. Check that the required tokens exist in globals.css
+      All required tokens exist in `:root`, `.dark` and `@theme inline`; no `globals.css` changes needed.
+- [x] 3. Create the small UI components
+      Created: `src/app/dashboard/vendor/add-menu/_components/{CardShell,FormField,FormFooter,PlanUsageCard,ImageUploadBox,MenuItemPreviewCard,AddMenuItemForm}.tsx` plus `fieldStyles.ts` and `menuCategories.ts`
+- [x] 4. Build the page and connect the components
+      Changed: `src/app/dashboard/vendor/add-menu/page.tsx`
+- [x] 5. Responsive check (360px, 768px, 1024px, 1280px)
+      Headless Chrome at 320, 360, 768, 1024 and 1280px: no horizontal page scroll, 0 overflowing elements. One column through tablet; form + preview 3:2 at `lg`. Inputs/select 44px tall, 16px text below `md`, buttons full width on mobile and right-aligned from `sm`.
+- [x] 6. Light mode and dark mode check
+      Checked at 360px and 1280px in both modes. All colors come from existing tokens. Select opens and shows all 6 categories.
+- [x] 7. Code readability check (mid-level beginner level)
+      Small one-job components, clear names, mobile-first class order, short WHY comments, data separated into constants, no hooks/handlers/`any`/`console.log`.
+- [x] 8. Final self-check done
+      `npx.cmd tsc --noEmit` passes; lint only reports the pre-existing `src/hooks/use-mobile.ts` error. No functionality, API, auth or session code was added; no new packages; home/Navbar/Sidebar/layout/other pages untouched.
+
+Notes / blockers:
+- The ShadCN `Card` and `Textarea` components are not installed in this project, so `CardShell` (a small semantic card) and a styled native `<textarea>` were used instead. No packages were installed.
+- Route note: the page lives at `/dashboard/vendor/add-menu` (the path the owner pointed at). The sidebar link now also points there (`src/app/dashboard/_components/dashboard-menu-config.ts`), so the mismatch is resolved. That config edit was made by the owner, not by this task.
+- The page is static UI only. The owner adds submit, ImgBB upload, thumbnails, live preview and real plan usage personally.
+
+### Handover: where the functionality goes
+
+| What to add | Marker location |
+| --- | --- |
+| Form submit | `src/app/dashboard/vendor/add-menu/_components/AddMenuItemForm.tsx` |
+| ImgBB image upload | `src/app/dashboard/vendor/add-menu/_components/ImageUploadBox.tsx` |
+| Uploaded image thumbnails | `src/app/dashboard/vendor/add-menu/_components/ImageUploadBox.tsx` |
+| Live preview from form values | `src/app/dashboard/vendor/add-menu/_components/MenuItemPreviewCard.tsx` |
+| Real plan usage | `src/app/dashboard/vendor/add-menu/_components/PlanUsageCard.tsx` |
+
+### Final summary (Vendor Add Menu Item page UI)
+
+1. **Files created:** `src/app/dashboard/vendor/add-menu/page.tsx` plus `_components/CardShell.tsx`, `FormField.tsx`, `FormFooter.tsx`, `PlanUsageCard.tsx`, `AddMenuItemForm.tsx`, `ImageUploadBox.tsx`, `MenuItemPreviewCard.tsx`, `fieldStyles.ts`, `menuCategories.ts`. No existing files were changed; `globals.css` was not edited.
+2. **Project status:** Add Menu Item page: UI done, responsive, no functionality yet. Next logical step: the owner wires the five functionality markers above, then decides whether the route should be `/dashboard/vendor/add-menu` or `/dashboard/vendor/menu/new`.
+3. **Functionality places:** see the handover table above.
+4. **For future agents:** the owner adds all behaviour personally — do not add hooks, handlers, validation, API calls, upload logic or state unless explicitly asked. Keep the static markup, `name`/`id` fields (`itemName`, `category`, `description`, `price`, `location`, `images`) and the FUNCTIONALITY markers intact.
+
+---
+
+## Task in progress: ImageUploadBox local file selection
+
+Status: Done
+Last completed step: 8. Final self-check done
+Next step: (none — local selection/preview done; owner adds the ImgBB upload)
+
+- [x] 1. Read AGENT.md, ImageUploadBox and the parent form
+      Read: `AGENT.md`, `_components/ImageUploadBox.tsx`, `_components/AddMenuItemForm.tsx`
+- [x] 2. Add the hidden file input and connect it to the upload box
+      Changed: `_components/ImageUploadBox.tsx` (hidden input + `<label htmlFor="images">` + focus ring)
+- [x] 3. Add the selected images state, validation and inline error message
+      Changed: `_components/ImageUploadBox.tsx` (`selectedImages`, `errorMessage`, `checkFile`, `handleFilesSelected`)
+- [x] 4. Add thumbnails with remove buttons and the image counter
+      Created: `_components/ImageThumbnail.tsx`; changed `_components/ImageUploadBox.tsx` (`handleRemoveImage`, counter, `ImageThumbnail` row)
+- [x] 5. Add the onFilesChange prop for the owner (no ImgBB code)
+      Changed: `_components/ImageUploadBox.tsx` (`onFilesChange?: (files: File[]) => void`); the ImgBB marker was kept and updated
+- [x] 6. Responsive check (360px, 768px, 1280px) and light/dark mode check
+      Headless Chrome: no horizontal scroll at 360, 768 or 1280px. Thumbnails wrap, long error text wraps (`break-words`), upload box is about 163px tall on mobile. Light and dark screenshots checked.
+- [x] 7. Manual test cases checked
+      Automated in headless Chrome against the dev server; all 11 manual cases covered (see the test run notes below).
+- [x] 8. Final self-check done
+      `npx.cmd tsc --noEmit` passes; lint only reports the pre-existing `src/hooks/use-mobile.ts` error. No ImgBB/fetch/API/upload code, no new packages, no token changes. Live preview card, submit logic, Navbar, Sidebar and layout untouched.
+
+Notes / blockers: `useRef` is used only to remember the preview URLs so the unmount `useEffect` can revoke them. `AddMenuItemForm` was not changed because `onFilesChange` is optional.
+
+### Status of ImageUploadBox
+
+**ImageUploadBox: local image selection, preview and remove work. ImgBB upload NOT done yet (owner will add).**
+
+### How the owner connects ImgBB
+
+1. Add the prop where the box is used in `_components/AddMenuItemForm.tsx`:
+   `<ImageUploadBox onFilesChange={(files) => { /* upload `files` to ImgBB */ }} />`
+2. `onFilesChange` receives a plain `File[]` and is called after **every** add and after **every** remove (a removal sends the remaining files, possibly an empty array).
+3. The marker lives in `src/app/dashboard/vendor/add-menu/_components/ImageUploadBox.tsx` at **line 115**:
+   `{/* FUNCTIONALITY: upload the selected files to ImgBB (use the onFilesChange callback or the parent form) */}`
+4. Do not move the upload into the component itself, and do not call `onFilesChange` anywhere else, or the parent will receive stale lists.
+
+### Things a future agent must know
+
+- **The owner adds the ImgBB upload personally. Do not add ImgBB, `fetch`, an API call or a server action unless explicitly asked.**
+- `ImageUploadBox.tsx` is now a client component (`"use client"`). It is the only file in this folder with hooks.
+- State: `selectedImages` (`{ file: File; previewUrl: string }[]`) and `errorMessage` (string). Keeping the URL next to the file means a thumbnail can never point at the wrong file.
+- `previewUrlsRef` (`useRef<string[]>`) exists only so the empty-deps unmount `useEffect` can revoke every preview URL. A cleanup that closed over `selectedImages` would revoke stale URLs, so URLs are also removed from the ref in `handleRemoveImage`.
+- Error precedence: the 5-image limit is checked first, so at the maximum the user sees the max message. Within one selection the last rejection wins (the requirement is "latest error only").
+- Duplicates (same name + same size) are skipped silently.
+- `event.target.value = ""` runs right after reading the files, so picking the same file again after removing it still fires `onChange`.
+- Thumbnail markup lives in `ImageThumbnail.tsx` (84px preview, 32px round remove button, `aria-label="Remove [file name]"`). The `img` has a lint-disable comment because `next/image` is not needed for blob URLs.
+- `AddMenuItemForm.tsx` still renders `<ImageUploadBox />` with no callback, so the files are not used anywhere yet.
+
+### Test run notes (ImageUploadBox)
+
+Headless Chrome against `http://localhost:3000/dashboard/vendor/add-menu`, files injected with `DOM.setFileInputFiles`, no runtime exceptions.
+
+- Passed: 1 image → `1 of 5 images selected`; 3 more → `4 of 5`; 3 more at 4 → only 1 added, `You can upload a maximum of 5 images.`, input disabled, hint `Maximum images reached.`, `cursor-not-allowed`; remove → `4 of 5`, error cleared, input enabled; `.gif` and `.pdf` rejected with the type message; >5 MB rejected with the size message; duplicate silent; remove then re-add the same file works; Tab reaches `#images`; Space opens the file chooser; focus ring visible; 360px and 1280px no horizontal scroll; dark mode correct.
+- Mixed batch (`pizza-1.png` + `anim.gif` + `huge-photo.png`): the PNG is added, both bad files are skipped, and only the last error is shown. Matches the spec.
+- One automated assertion failed only because two labels share `for="images"` (the outer `FormField` "Item Images" label and the upload label), so the test read the wrong one. Re-checked with `#images + label`: hint, disabled state, cursor and counter are all correct. Not a UI bug; the `htmlFor` pairing is intentional so the field label also targets the input.
+
+### Files for this task
+
+- Changed: `src/app/dashboard/vendor/add-menu/_components/ImageUploadBox.tsx`
+- Created: `src/app/dashboard/vendor/add-menu/_components/ImageThumbnail.tsx`
+- Unchanged: `AddMenuItemForm.tsx`, `FormField.tsx`, the Live preview card, `globals.css`, layout, Navbar, Sidebar.
