@@ -10,7 +10,7 @@ import type { Role } from "@/lib/types/role";
 
 const DashboardSideFooter = ({ role }: { role: Role }) => {
   return (
-    <SidebarFooter className="border-t border-sidebar-border px-3 py-4">
+    <SidebarFooter className="mt-auto border-t border-sidebar-border px-3 py-4">
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton

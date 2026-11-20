@@ -34,6 +34,7 @@
 
   /* Other */
   --radius: 0.75rem;
+  --dashboard-navbar-height: 4rem;
 
   /* Sidebar mappings use the existing project color system. */
   --sidebar: var(--card);
@@ -76,6 +77,7 @@
 
   /* Other */
   --radius: 0.75rem;
+  --dashboard-navbar-height: 4rem;
 
   --sidebar: var(--card);
   --sidebar-foreground: var(--foreground);

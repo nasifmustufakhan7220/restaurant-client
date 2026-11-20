@@ -140,7 +140,7 @@ There are no server actions, middleware, protected routes, global state store, d
 ### Dashboard sidebar UI - Completed
 
 - **Files:** `src/app/dashboard/layout.tsx`, `src/app/dashboard/_components/DashboardSideBar.tsx`, `src/app/dashboard/_components/SidebarLink.tsx`, `src/app/dashboard/_components/DashboardSideFooter.tsx`, and `src/app/dashboard/_components/dashboard-menu-config.ts`.
-- **How it works:** The dashboard layout renders the existing responsive shadcn sidebar beside the page content. Menu links are selected from a role-based configuration for vendor, customer, or admin, and the active link follows the current pathname. The sidebar primitive provides the desktop sidebar and mobile Sheet drawer with overlay and close behavior.
+- **How it works:** The dashboard layout renders the shared Navbar in normal flow above a dedicated flex row containing the responsive shadcn sidebar and main content. The sidebar starts below the Navbar, has its own remaining-height scroll area, and uses the mobile Sheet drawer with overlay and close behavior. Menu links are selected from a role-based configuration for vendor, customer, or admin, and the active link follows the current pathname. The dashboard sidebar no longer duplicates the Navbar brand.
 - **Status:** UI-only preview is implemented. Links are presentational navigation targets; role selection is not connected to authentication and the linked feature pages do not exist yet.
 
 ## 5. UI/UX Documentation
@@ -292,10 +292,10 @@ Recommended order; these are not owner-confirmed requirements:
 ## 12. Latest Development Session
 
 - **Last reviewed:** 2026-11-20.
-- **Latest completed work:** Added the UI-only role-based dashboard sidebar with responsive drawer behavior, active links, profile footer, and CSS token mappings for the sidebar primitive. The existing navbar responsive work remains intact.
-- **Application files modified:** `src/app/dashboard/layout.tsx`, `src/app/dashboard/_components/DashboardSideBar.tsx`, `src/app/dashboard/_components/SidebarLink.tsx`, `src/app/dashboard/_components/DashboardSideFooter.tsx`, `src/app/dashboard/_components/dashboard-menu-config.ts`, `src/app/globals.css`, and `AGENT.md`.
-- **Important dashboard notes:** Change `currentRole` near the top of `DashboardSideBar.tsx` to `vendor`, `customer`, or `admin` to preview each menu. Replace it with the authenticated session role only after authorization is designed. Menu labels and routes live in `dashboard-menu-config.ts`.
-- **Validation performed:** `npx.cmd tsc --noEmit` and `npm.cmd run build` passed. `npm.cmd run lint` still reports the pre-existing `setState`-in-effect error in `src/hooks/use-mobile.ts`; no dashboard-specific lint error was reported. The build emitted the expected missing-GitHub-credentials warning.
-- **Current project status:** Home, auth entry pages, and the dashboard sidebar UI compile and build; authentication is still partial/unverified, role wiring is not connected, and no ordering domain exists.
-- **Remaining work:** Authentication hardening/runtime verification, role wiring and authorization, dashboard feature routes, product scope/schema, catalog/cart/checkout/orders, tests/CI, and project documentation cleanup.
-- **Recommended next step:** Connect the sidebar role to a verified session only after protected routes and authorization rules are defined, then add dashboard feature pages incrementally.
+- **Latest completed work:** Polished the dashboard Navbar and sidebar without changing their overall structure. The dashboard Navbar now uses a shared 4rem (`h-16`) height, centered content, safer right-side spacing, and a flat bottom border. Sidebar links are top-aligned, only the profile footer uses `mt-auto`, and the sidebar container has a continuous right border.
+- **Application files modified:** `src/components/Navbar/Navbar.tsx`, `src/app/dashboard/_components/DashboardSideBar.tsx`, `src/app/dashboard/_components/DashboardSideFooter.tsx`, `src/app/globals.css`, and `AGENT.md`.
+- **Important dashboard notes:** The home route uses the Navbar default variant and remains unchanged visually. The dashboard passes `variant="dashboard"` to use the flat full-width bar. The shared `--dashboard-navbar-height: 4rem` variable in `globals.css` is reused by the dashboard Navbar and sidebar offset/height. The dashboard menu starts with `pt-6`; the profile block is pinned with `mt-auto`.
+- **Validation performed:** `npx.cmd tsc --noEmit` and `npm.cmd run build` passed. `npm.cmd run lint` still reports the existing `setState`-in-effect error in `src/hooks/use-mobile.ts`; no dashboard-specific lint error was reported. The build emits the expected missing-GitHub-credentials warning.
+- **Current project status:** Home, auth entry pages, and the polished dashboard Navbar/sidebar UI compile and build; authentication is still partial/unverified, dashboard feature routes are not implemented, and no ordering domain exists.
+- **Remaining work:** Authentication hardening/runtime verification, dashboard feature routes, product scope/schema, catalog/cart/checkout/orders, tests/CI, and project documentation cleanup.
+- **Recommended next step:** Verify the polished dashboard visually at 360px, 768px, and 1280px widths, then define protected-route and authorization requirements before connecting dashboard behavior.
