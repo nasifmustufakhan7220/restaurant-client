@@ -6,8 +6,9 @@ export interface MenuItemData {
   price: string;
   location: string;
   images: string[];
-  status: string;
+  status: "Approved" | "Pending" | "Rejected" | "Inactive";
   vendorId: string;
+  isAvailable: boolean;
 }
 
 export const createMenuPost = async (data:MenuItemData) => {

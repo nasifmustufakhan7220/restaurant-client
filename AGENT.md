@@ -779,3 +779,40 @@ Headless Chrome against `http://localhost:3000/dashboard/vendor/add-menu`, files
 - Changed: `src/app/dashboard/vendor/add-menu/_components/ImageUploadBox.tsx`
 - Created: `src/app/dashboard/vendor/add-menu/_components/ImageThumbnail.tsx`
 - Unchanged: `AddMenuItemForm.tsx`, `FormField.tsx`, the Live preview card, `globals.css`, layout, Navbar, Sidebar.
+
+---
+
+## Task in progress: Vendor My Menu Items page UI
+
+Status: Done
+Last completed step: 5. Final self-check done
+Next step: (none — UI complete; owner adds search, filter, view/edit/delete and availability logic)
+
+- [x] 1. Read AGENT.md, the tokens and the existing `my-menu/page.tsx`
+      Replaced the placeholder `src/app/dashboard/vendor/my-menu/page.tsx`. All required tokens already exist in `globals.css`; no token changes.
+- [x] 2. Create the dummy data file and the small components
+      Created in `src/app/dashboard/vendor/my-menu/_components/`: `menuItemsData.ts`, `MenuItemsHeader.tsx`, `PlanUsageBanner.tsx`, `StatusTabs.tsx`, `MenuItemsFilters.tsx`, `MenuItemCard.tsx`, `StatusBadge.tsx`, `AvailabilityToggle.tsx`
+- [x] 3. Build the page and connect the components
+      Changed: `src/app/dashboard/vendor/my-menu/page.tsx` (header, banner, tabs, filters, 1/2/3-column card grid)
+- [x] 4. Responsive check (360px, 768px, 1280px) and light/dark check
+      Headless Chrome at 320/360/768/1024/1280px: no page horizontal scroll, 1 column → 2 at `sm` → 3 at `lg`. All cards are 427px tall (`auto-rows-fr`) and the action row is flush with the card bottom. Tabs scroll horizontally on phones (the two pills outside the screen are inside the scroll strip, not page overflow). 7 options open in the category select. Light and dark screenshots checked.
+- [x] 5. Final self-check done
+      `npx.cmd tsc --noEmit` passes; lint only reports the pre-existing `src/hooks/use-mobile.ts` error. No API/DB/auth code, no new packages, no token changes, dashboard layout untouched.
+
+Notes / blockers: (none)
+
+### My Menu Items page: state of the code
+
+- **Status:** My Menu Items UI done and responsive. Functionality not connected yet. Dummy data only.
+- **Dummy data:** `_components/menuItemsData.ts` (`menuItems`, `menuCategories`, `MenuItem`, `MenuItemStatus`). Six items: 3 Approved, 1 Pending, 1 Rejected, 1 Inactive, to match the tab counts.
+- **Visual-only state:** `StatusTabs.tsx` (`activeTab`) and `AvailabilityToggle.tsx` (`isAvailable`). Nothing filters, saves or deletes.
+- **Why the toggle is its own file:** `MenuItemCard` is a Server Component and the data holds Lucide icon components. Passing a component (a function) from a Server Component into a Client Component throws "Functions cannot be passed directly to Client Components", so only the toggle is a Client Component and it receives plain `boolean`/`string` props.
+- **Equal card heights:** the grid in `page.tsx` uses `auto-rows-fr` plus `h-full`/`mt-auto`-style flex columns in `MenuItemCard`, so every card matches the tallest one.
+- **Missing/absent pieces:** there is no `Switch`, `Badge` or `Card` in `src/components/ui`, so a small local toggle, badge and card markup are used. There is no dedicated "inactive/neutral" status token, so `Inactive` uses `bg-section text-text-secondary`; `Approved`, `Pending` and `Rejected` reuse `pill-success`/`pill-warning`/`pill-danger`.
+- **Next logical step:** wire the search, the category select, the status tabs, View/Edit/Delete and the availability toggle to real data and APIs (owner does this personally).
+- **Route:** page is `/dashboard/vendor/my-menu`; the sidebar config already links there, and the header button links to `/dashboard/vendor/add-menu`.
+
+### Environment note (My Menu Items task)
+
+- `tsc` reported `TS1149 ... /dashboard/vendor/My-Menu/page.tsx differs from ... my-menu/page.tsx only in casing`. That came from a stale generated `.next/dev/types/validator.ts`, not from the source. Clearing `.next` and restarting `next dev` regenerated the types and `tsc` is clean now.
+- The page initially returned 500 for the icon/function boundary reason above; it is fixed.

@@ -61,6 +61,7 @@ export default function AddMenuItemForm() {
       images: imageUrls,
       status: "Pending",
       vendorId: session?.user?.id as string,
+      isAvailable: false,
     };
     const result = await createMenuPost(data);
     if (result.insertedId) {
