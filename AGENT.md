@@ -622,3 +622,47 @@ These are suggestions from the audit, **not changes made**.
 | --- | --- |
 | 2026-11-19 | Initial audit: project scaffold, banner, navbar, auth setup, sign-in/sign-up UI. |
 | 2026-11-20 | Re-audit after commits `efba16e`…`3e4cb9d`: dashboard routes, sidebar shell, role menus, navbar refactor (profile dropdown inlined, `DropDownProfile.tsx` removed), layout/font changes. Verified current lint failure, passing type-check/build, empty metadata, missing font variables, and the confirmed sidebar role bug. Documentation only; no code changes. |
+| 2026-11-20 | Dashboard Overview restyle (UI only) for Customer, Vendor and Admin: added shared `_components/overview` cards, replaced placeholder headings with token-styled static layouts. No logic, route, auth or data code changed; no `globals.css` tokens needed. |
+
+---
+
+## Task in progress: Dashboard Overview restyle
+
+Status: Done
+Last completed step: 9. Final self-check done
+Next step: (none — task complete)
+
+- [x] 1. Read AGENT.md, globals.css and the existing Overview files
+      Read: `AGENT.md`, `src/app/globals.css`, `src/app/dashboard/{customer,vendor,admin}/page.tsx`
+- [x] 2. Check that all required tokens exist in globals.css (add only missing ones)
+      All required tokens already exist in `:root`, `.dark` and `@theme inline`; no `globals.css` change needed.
+- [x] 3. Create shared components: StatCard, BarChartCard, OrdersTableCard, StatusPill
+      Created: `src/app/dashboard/_components/overview/{StatCard,BarChartCard,OrdersTableCard,StatusPill,OverviewContent}.tsx`
+- [x] 4. Customer Overview restyled
+      Changed: `src/app/dashboard/customer/page.tsx` (placeholder data)
+- [x] 5. Vendor Overview restyled
+      Changed: `src/app/dashboard/vendor/page.tsx` (placeholder data)
+- [x] 6. Admin Overview restyled
+      Changed: `src/app/dashboard/admin/page.tsx` (placeholder data)
+- [x] 7. Responsive check (360px, 768px, 1280px)
+      Headless Chrome check: no page horizontal scroll; 2 stat columns at 360px, 3 at 768/1280px; chart/table stack below `lg` and split 3:2 at `lg`; table scrolls inside its card at 360px. Fixed a grid-track overflow by adding `grid-cols-1` to the chart/table grid and `min-w-0` to both cards.
+- [x] 8. Light mode and dark mode check
+      Checked all three roles in light mode (360/768/1280px) and dark mode (1280px, plus Customer at 360px). All token-based colors render correctly.
+- [x] 9. Final self-check done
+      No logic, hooks, routes, APIs, auth or role code touched; no role tabs; no hardcoded colors; `npx.cmd tsc --noEmit` passes; lint only reports the pre-existing `src/hooks/use-mobile.ts` error.
+
+Notes / blockers:
+- Scope is UI-only; no logic, hooks, routes, API, auth or role code may change.
+- The Overview pages originally contained only a heading, so they now use clearly marked placeholder constants.
+- One small deviation from the literal spec: `OrdersTableCard` uses `min-w-[480px] lg:min-w-0`. At `lg` the dashboard sidebar leaves the table card narrower than 480px, which hid the Status column behind an inner scroll; dropping the minimum from `lg` keeps all columns visible. Mobile/tablet still keep the 480px minimum and scroll inside the card.
+- `npm.cmd run lint` still fails only on the pre-existing `src/hooks/use-mobile.ts:15` `react-hooks/set-state-in-effect` error; this task added none.
+- The navbar logo is low-contrast in dark mode; the navbar is out of scope and was not touched.
+- `src/app/globals.css` already had uncommitted token additions when this task started (the required tokens plus sidebar/cart tokens). This task did not edit `globals.css`.
+
+### Final summary (Dashboard Overview restyle)
+
+1. **Files created:** `src/app/dashboard/_components/overview/StatCard.tsx`, `BarChartCard.tsx`, `OrdersTableCard.tsx`, `StatusPill.tsx`, `OverviewContent.tsx`.
+   **Files restyled:** `src/app/dashboard/customer/page.tsx`, `src/app/dashboard/vendor/page.tsx`, `src/app/dashboard/admin/page.tsx`.
+   **Tokens:** none added — every required token already existed in `globals.css` (`:root`, `.dark`, `@theme inline`).
+2. **Project status:** Overview UI restyled for all 3 roles. Data is **placeholder**. Next logical step: replace each page's placeholder constants with real data and keep the same components/props.
+3. **For future agents:** content lives in the constant arrays at the top of each role page; presentation lives in the shared `overview` components; the status-to-pill mapping lives only in `StatusPill.tsx`. Do not add role tabs or move data fetching into these presentational components.

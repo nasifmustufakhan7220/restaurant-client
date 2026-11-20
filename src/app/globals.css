@@ -45,6 +45,50 @@
   --sidebar-accent-foreground: var(--accent-foreground);
   --sidebar-border: var(--border);
   --sidebar-ring: var(--ring);
+
+  /* ================================================================
+     NEW TOKENS (added for the dashboard redesign)
+     Most of them reuse your existing variables, so the colors stay
+     consistent. Only new colors (orange, status, charts) are real hex.
+     ================================================================ */
+
+  /* Orange highlight: used with --primary for red-to-orange gradients */
+  --highlight: #f97316;
+
+  /* Status colors: pending, accepted/approved, rejected/cancelled */
+  --success: #16a34a;
+  --warning: #d97706;
+  --destructive: #dc2626;
+
+  /* Soft pill backgrounds (15% of the status color) */
+  --pill-success-bg: color-mix(in srgb, var(--success) 15%, transparent);
+  --pill-warning-bg: color-mix(in srgb, var(--warning) 15%, transparent);
+  --pill-danger-bg: color-mix(in srgb, var(--destructive) 15%, transparent);
+
+  /* Charts: chart-1 (red) to chart-2 (orange) is the bar gradient */
+  --chart-1: var(--primary);
+  --chart-2: var(--highlight);
+  --chart-3: #f59e0b;
+  --chart-4: #16a34a;
+  --chart-5: #2563eb;
+
+  /* Stat cards (Overview page) */
+  --stat-icon-bg: var(--accent);
+  --stat-icon-foreground: var(--accent-foreground);
+
+  /* Tables (Overview page) */
+  --table-header-foreground: var(--text-secondary);
+  --table-row-border: var(--border);
+
+  /* Sidebar extras */
+  --sidebar-label: var(--text-muted);
+  --sidebar-hover-bg: var(--section);
+
+  /* Dashboard navbar: cart circle and badge */
+  --cart-bg: var(--foreground);
+  --cart-foreground: var(--background);
+  --cart-badge: var(--primary);
+  --cart-badge-foreground: var(--primary-foreground);
 }
 
 .dark {
@@ -87,6 +131,25 @@
   --sidebar-accent-foreground: var(--accent-foreground);
   --sidebar-border: var(--border);
   --sidebar-ring: var(--ring);
+
+  /* ---- NEW TOKENS: dark values (only the ones that change) ---- */
+  --highlight: #fb923c;
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --destructive: #ef4444;
+
+  --chart-3: #fbbf24;
+  --chart-4: #4ade80;
+  --chart-5: #60a5fa;
+
+  /* In dark mode --accent is dark gray, so the stat icon uses a soft red instead */
+  --stat-icon-bg: color-mix(in srgb, var(--primary) 20%, transparent);
+  --stat-icon-foreground: #fb7185;
+
+  /* Dark active sidebar link: soft red background with light red text */
+  --sidebar-accent: color-mix(in srgb, var(--primary) 20%, transparent);
+  --sidebar-accent-foreground: #fb7185;
 }
 
 
@@ -147,6 +210,29 @@
 
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+
+  /* ---- NEW: Tailwind class names for the new tokens ---- */
+  --color-highlight: var(--highlight);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+
+  --color-pill-success: var(--pill-success-bg);
+  --color-pill-warning: var(--pill-warning-bg);
+  --color-pill-danger: var(--pill-danger-bg);
+
+  --color-stat-icon: var(--stat-icon-bg);
+  --color-stat-icon-foreground: var(--stat-icon-foreground);
+
+  --color-table-header: var(--table-header-foreground);
+  --color-table-border: var(--table-row-border);
+
+  --color-sidebar-label: var(--sidebar-label);
+  --color-sidebar-hover: var(--sidebar-hover-bg);
+
+  --color-cart: var(--cart-bg);
+  --color-cart-foreground: var(--cart-foreground);
+  --color-cart-badge: var(--cart-badge);
+  --color-cart-badge-foreground: var(--cart-badge-foreground);
 
   /* Radius */
   --radius-sm: calc(var(--radius) * 0.6);
