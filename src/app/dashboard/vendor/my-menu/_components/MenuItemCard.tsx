@@ -49,6 +49,14 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
           <p className="mt-3 rounded-lg bg-pill-warning px-3 py-2 text-xs text-warning">
             Waiting for admin approval.
           </p>
+        ) : item.status === "Approved" ? (
+          <p className="mt-3 rounded-lg bg-pill-success px-3 py-2 text-xs text-success">
+            Admin approval completed.
+          </p>
+        ) : item.status === "Rejected" ? (
+          <p className="mt-3 rounded-lg bg-pill-danger px-3 py-2 text-xs text-danger">
+            Your menu item has been rejected.
+          </p>
         ) : null}
       </div>
 
@@ -69,12 +77,11 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
           <button type="button">View</button>
         </Link>
 
-        <Link href={`/dashboard/vendor/my-menu/${item._id}/updateMenu`} className="flex-1 py-3 text-center text-sm font-semibold text-foreground transition-colors hover:bg-accent">
-          <button
-            type="button"
-          >
-            Edit
-          </button>
+        <Link
+          href={`/dashboard/vendor/my-menu/${item._id}/updateMenu`}
+          className="flex-1 py-3 text-center text-sm font-semibold text-foreground transition-colors hover:bg-accent"
+        >
+          <button type="button">Edit</button>
         </Link>
         <DeleteBtn id={item._id as string} deleteMenuOnRole="vendor" />
       </div>

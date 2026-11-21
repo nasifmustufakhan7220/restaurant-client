@@ -62,6 +62,7 @@ export default function AddMenuItemForm() {
       status: "Pending",
       vendorId: session?.user?.id as string,
       vendorEmail: session?.user?.email as string,
+      vendorName: session?.user?.name as string,
       isAvailable: false,
       createdDate: new Date().toISOString(),
     };
