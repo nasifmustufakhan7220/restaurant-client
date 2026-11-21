@@ -3,6 +3,7 @@ import AvailabilityToggle from "./AvailabilityToggle";
 import StatusBadge from "./StatusBadge";
 import { MenuItemData } from "@/lib/actions/menu";
 import Image from "next/image";
+import Link from "next/link";
 
 // One menu item card: image, details, availability toggle and the three actions.
 type MenuItemCardProps = {
@@ -60,12 +61,12 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
       </div>
 
       <div className="flex divide-x divide-border border-t border-border">
-        <button
-          type="button"
-          className="flex-1 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
+        <Link
+          className="flex-1 py-3 text-center text-sm font-semibold text-foreground transition-colors hover:bg-accent"
+          href={`/dashboard/vendor/my-menu/${item._id}`}
         >
-          View
-        </button>
+          <button type="button">View</button>
+        </Link>
         <button
           type="button"
           className="flex-1 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"

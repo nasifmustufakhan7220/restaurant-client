@@ -8,6 +8,7 @@ export interface MenuItemData {
   images: string[];
   status: "Approved" | "Pending" | "Rejected" | "Inactive";
   vendorId: string;
+  vendorEmail: string;
   isAvailable: boolean;
 }
 
