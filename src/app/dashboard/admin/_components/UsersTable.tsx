@@ -76,6 +76,7 @@ const UsersTable = ({ users }: { users: UserItem[] }) => {
               <td className={cellStyles}>
                 <UserActions
                   isBlocked={user.isBlocked}
+                  user={user}
                   className="flex gap-2"
                 />
               </td>

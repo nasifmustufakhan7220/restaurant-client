@@ -7,7 +7,6 @@ import { UserItem } from "./users-data";
 // One user as a card, for mobile and tablet. Needs: user.
 const UserCard = ({ user }: { user: UserItem }) => {
   const status = user.isBlocked ? "blocked" : "active";
-  console.log(user.businessName);
 
   return (
     <article
@@ -31,7 +30,7 @@ const UserCard = ({ user }: { user: UserItem }) => {
         <UserBadge tone={status}>{status}</UserBadge>
       </div>
       
-      <UserActions isBlocked={user.isBlocked} className="grid grid-cols-2 gap-2" />
+      <UserActions isBlocked={user.isBlocked} user={user} className="grid grid-cols-2 gap-2" />
     </article>
   );
 };

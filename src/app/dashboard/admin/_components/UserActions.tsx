@@ -1,9 +1,11 @@
+import Link from "next/link";
 import { Ban, Eye, UserCheck } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { UserItem } from "./users-data";
 
 // The "View" and "Block / Unblock" buttons of one user.
-// Needs: isBlocked, and an optional className to control the layout.
+// Needs: userId, isBlocked, and an optional className to control the layout.
 
 const baseButtonStyles =
   "inline-flex min-h-10 items-center justify-center gap-1.5 rounded-full border px-4 text-sm font-bold transition-colors";
@@ -11,19 +13,20 @@ const baseButtonStyles =
 type UserActionsProps = {
   isBlocked: boolean;
   className?: string;
+  user: UserItem;
 };
 
-const UserActions = ({ isBlocked, className }: UserActionsProps) => {
+const UserActions = ({ isBlocked, className, user }: UserActionsProps) => {
   return (
     <div className={cn(className)}>
-      {/* FUNCTIONALITY: open the user details dialog here */}
-      <button
-        type="button"
+      {/* View opens the User Details page */}
+      <Link
+        href={`/dashboard/admin/users/${user._id}`}
         className={cn(baseButtonStyles, "border-border text-foreground hover:bg-section")}
       >
         <Eye className="size-4" aria-hidden="true" />
         View
-      </button>
+      </Link>
 
       {/* FUNCTIONALITY: connect block / unblock (with a confirm dialog) here */}
       {isBlocked ? (

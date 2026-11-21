@@ -12,18 +12,8 @@ export type UserItem = {
   businessName?: string; // vendors only
   subscriptionPlan?: SubscriptionPlan; // vendors only
   isBlocked: boolean;
-  joinedAt: string;
   createdAt: string;
 };
-
-export const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString("en-US", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-};
-
 export const formatDateTime = (date: string) => {
   return new Date(date).toLocaleString("en-US", {
     day: "2-digit",
@@ -34,9 +24,85 @@ export const formatDateTime = (date: string) => {
     hour12: true,
   });
 };
-
-
-// Numbers shown in the four small cards at the top
-
-
-// FUNCTIONALITY: load real users from the database here
+export const usersPlaceholder: UserItem[] = [
+  {
+    _id: "1",
+    name: "Rahim Uddin",
+    email: "rahim@example.com",
+    role: "vendor",
+    businessName: "Roma Pizza",
+    subscriptionPlan: "premium",
+    isBlocked: false,
+    createdAt: "Oct 02, 2026",
+  },
+  {
+    _id: "2",
+    name: "Nusrat Jahan",
+    email: "nusrat@example.com",
+    role: "customer",
+    isBlocked: false,
+    createdAt : "Oct 05, 2026",
+  },
+  {
+    _id: "3",
+    name: "Arif Hossain",
+    email: "arif.hossain@example.com",
+    role: "vendor",
+    businessName: "Slice House",
+    subscriptionPlan: "free",
+    isBlocked: false,
+    createdAt: "Oct 11, 2026",
+  },
+  {
+    _id: "4",
+    name: "Mitu Akter",
+    email: "mitu@example.com",
+    role: "customer",
+    isBlocked: true,
+    createdAt: "Oct 14, 2026",
+  },
+  {
+    _id: "5",
+    name: "Tanvir Ahmed",
+    email: "tanvir@example.com",
+    role: "vendor",
+    businessName: "Green Oven",
+    subscriptionPlan: "premium",
+    isBlocked: false,
+    createdAt: "Oct 20, 2026",
+  },
+  {
+    _id: "6",
+    name: "Sadia Rahman",
+    email: "sadia.rahman@example.com",
+    role: "customer",
+    isBlocked: false,
+    createdAt: "Nov 01, 2026",
+  },
+  {
+    _id: "7",
+    name: "Imran Khan",
+    email: "imran@example.com",
+    role: "vendor",
+    businessName: "Dough & Co",
+    subscriptionPlan: "free",
+    isBlocked: true,
+    createdAt: "Nov 06, 2026",
+  },
+  {
+    _id: "8",
+    name: "Farhana Islam",
+    email: "farhana@example.com",
+    role: "customer",
+    isBlocked: false,
+    createdAt: "Nov 12, 2026",
+  },
+  {
+    _id: "9",
+    name: "Farhana Islam",
+    email: "farhana@example.com",
+    role: "customer",
+    isBlocked: false,
+    createdAt: "Nov 12, 2026",
+  },
+];

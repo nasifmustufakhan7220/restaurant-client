@@ -13,6 +13,8 @@ const UserFirstPage = async () => {
         return user;
     }
   });
+
+  console.log(users);
   return (
     <div className="flex flex-col gap-6 rounded-2xl border border-border bg-card p-6 space-y-4">
       <UsersStats users={users} />
@@ -31,7 +33,7 @@ const UserFirstPage = async () => {
       <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-text-secondary">
         {/* FUNCTIONALITY: show the real count and connect pagination here */}
         <p>
-          Showing {result.length} of {result.length} users
+          Showing {users.length} of {users.length} users
         </p>
         <div className="flex gap-2">
           <button
