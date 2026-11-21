@@ -6,10 +6,11 @@ export interface MenuItemData {
   price: string;
   location: string;
   images: string[];
-  status: "Approved" | "Pending" | "Rejected" | "Inactive";
+  status: "Approved" | "Pending" | "Rejected";
   vendorId: string;
   vendorEmail: string;
   isAvailable: boolean;
+  createdDate: string;
 }
 
 export const createMenuPost = async (data:MenuItemData) => {
@@ -30,3 +31,28 @@ export const createMenuPost = async (data:MenuItemData) => {
 
   return await res.json();
 };
+
+
+export const updateMenuPost = async (id: string, data: MenuItemData) => {
+  try{
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/vendor/update-menu/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to update menu");
+    }
+
+    return await res.json();
+
+  }catch(error){
+    console.error("Error updating menu item:", error);
+  }
+}

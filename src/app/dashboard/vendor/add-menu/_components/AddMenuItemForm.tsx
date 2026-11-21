@@ -63,6 +63,7 @@ export default function AddMenuItemForm() {
       vendorId: session?.user?.id as string,
       vendorEmail: session?.user?.email as string,
       isAvailable: false,
+      createdDate: new Date().toISOString(),
     };
     const result = await createMenuPost(data);
     if (result.insertedId) {

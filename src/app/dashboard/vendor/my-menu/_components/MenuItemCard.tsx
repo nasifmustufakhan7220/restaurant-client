@@ -67,12 +67,14 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
         >
           <button type="button">View</button>
         </Link>
-        <button
-          type="button"
-          className="flex-1 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
-        >
-          Edit
-        </button>
+
+        <Link href={`/dashboard/vendor/my-menu/${item._id}/updateMenu`} className="flex-1 py-3 text-center text-sm font-semibold text-foreground transition-colors hover:bg-accent">
+          <button
+            type="button"
+          >
+            Edit
+          </button>
+        </Link>
         <button
           type="button"
           className="flex-1 py-3 text-sm font-semibold text-destructive transition-colors hover:bg-accent"
