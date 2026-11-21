@@ -56,3 +56,21 @@ export const updateMenuPost = async (id: string, data: MenuItemData) => {
     console.error("Error updating menu item:", error);
   }
 }
+
+
+export const deleteMenuPost = async (id: string) => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/vendor/delete-menu/${id}`,
+      {
+        method: "DELETE",
+      },
+    );
+    if (!res.ok) {
+      throw new Error("Failed to delete menu");
+    }
+    return await res.json();
+  } catch (error) {
+    console.error("Error deleting menu item:", error);
+  }
+}

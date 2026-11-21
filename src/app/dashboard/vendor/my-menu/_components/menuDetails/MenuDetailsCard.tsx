@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, Pencil, Trash2, Check, ChevronRight } from "lucide-react";
+import { ArrowLeft, Pencil, Check, ChevronRight } from "lucide-react";
 import { MenuItemData } from "@/lib/actions/menu";
 import Image from "next/image";
 import Link from "next/link";
@@ -49,10 +49,7 @@ export default function MenuDetailsCard({ menu }: { menu: MenuItemData }) {
               </button>
             </Link>
 
-            <button className="flex items-center justify-center gap-1.5 rounded-full border border-destructive bg-card px-3 py-2 text-xs font-semibold text-destructive transition hover:bg-pill-danger sm:px-4">
-              <Trash2 size={13} />
-              Delete
-            </button>
+            
           </div>
         </div>
 

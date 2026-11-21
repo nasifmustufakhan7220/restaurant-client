@@ -4,6 +4,7 @@ import StatusBadge from "./StatusBadge";
 import { MenuItemData } from "@/lib/actions/menu";
 import Image from "next/image";
 import Link from "next/link";
+import DeleteBtn from "./DeleteBtn/DeleteBtn";
 
 // One menu item card: image, details, availability toggle and the three actions.
 type MenuItemCardProps = {
@@ -75,12 +76,14 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
             Edit
           </button>
         </Link>
-        <button
+        {/* <button
           type="button"
-          className="flex-1 py-3 text-sm font-semibold text-destructive transition-colors hover:bg-accent"
+          
         >
           Delete
-        </button>
+        </button> */}
+        
+        <DeleteBtn id={item._id as string} />
       </div>
     </article>
   );
