@@ -29,3 +29,18 @@ export const getUserDetails = async (id: string) => {
         throw error;
     }
 }
+
+
+export const getAllMenuItems = async () => {
+    try{
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/admin/get-all-menu`);
+        if (!response.ok) {
+            notFound()
+        }
+        const menuItems = await response.json();
+        return menuItems;
+    } catch (error) {
+        console.error("Error fetching all menu items:", error);
+        throw error;
+    }
+}

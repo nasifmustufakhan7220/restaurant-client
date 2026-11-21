@@ -1,8 +1,12 @@
+"use client";
 import type { LucideIcon } from "lucide-react";
-import { Check, Eye, EyeOff, Trash2, X } from "lucide-react";
+import { Check, EyeOff, Trash2, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import type { MenuItemStatus } from "./menu-items-data";
+import { updateMenuItemStatus } from "@/lib/actions/admin";
+import { toast } from "@/components/ui/toast";
+import { useRouter } from "next/navigation";
 
 // The action buttons of one item. They change with the item status.
 // Needs: status, and an optional className to control the layout.
@@ -17,13 +21,12 @@ type ItemAction = {
 
 // Which buttons each status gets (the delete button is added for every status below)
 const actionsByStatus: Record<MenuItemStatus, ItemAction[]> = {
-  pending: [
-    { label: "Approve", tone: "success", icon: Check },
-    { label: "Reject", tone: "danger", icon: X },
+  Pending: [
+    { label: "Approved", tone: "success", icon: Check },
+    { label: "Rejected", tone: "danger", icon: X },
   ],
-  approved: [{ label: "Deactivate", tone: "neutral", icon: EyeOff }],
-  rejected: [],
-  inactive: [{ label: "Activate", tone: "success", icon: Eye }],
+  Approved: [{ label: "Deactivate", tone: "neutral", icon: EyeOff }],
+  Rejected: [],
 };
 
 const toneStyles: Record<ActionTone, string> = {
@@ -38,17 +41,43 @@ const baseButtonStyles =
 type MenuItemActionsProps = {
   status: MenuItemStatus;
   className?: string;
+  id: string;
 };
 
-const MenuItemActions = ({ status, className }: MenuItemActionsProps) => {
+const MenuItemActions = ({ status, className, id }: MenuItemActionsProps) => {
   const actions = actionsByStatus[status];
+  const router = useRouter();
+
+  const handleActionClick = async (actionLabel: "Approved" | "Rejected" | "Pending") => {
+    console.log(`${actionLabel} clicked for status: ${actionLabel} and ID: ${id}`);
+    const result = await updateMenuItemStatus(id, actionLabel);
+    console.log("Update result:", result); 
+    if(result.matchedCount > 0){
+      toast.add({
+        title: "Success",
+        description: `Menu item status updated to ${actionLabel}.`,
+        type: "success",
+      });
+      router.refresh();
+    }else{
+      toast.add({
+        title: "Error",
+        description: `Failed to update menu item status to ${actionLabel}.`,
+        type: "error",
+      });
+    }
+  }
 
   return (
     <div className={cn("flex flex-wrap items-center gap-2", className)}>
       {/* FUNCTIONALITY: connect approve, reject, activate and deactivate here */}
       {actions.map((action) => (
+
         <button
           key={action.label}
+          onClick={() => {
+            handleActionClick(action.label as "Approved" | "Rejected" | "Pending");
+          }}
           type="button"
           className={cn(baseButtonStyles, toneStyles[action.tone])}
         >

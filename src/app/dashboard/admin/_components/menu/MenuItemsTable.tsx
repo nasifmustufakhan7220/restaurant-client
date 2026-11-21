@@ -30,7 +30,7 @@ const MenuItemsTable = ({ items }: { items: MenuItem[] }) => {
 
         <tbody>
           {items.map((item) => (
-            <tr key={item.id}>
+            <tr key={item._id}>
               <td className={cellStyles}>
                 <div className="flex min-w-0 items-center gap-3">
                   <MenuItemThumb />
@@ -46,7 +46,7 @@ const MenuItemsTable = ({ items }: { items: MenuItem[] }) => {
                 <p className="text-sm text-text-muted">{item.location}</p>
               </td>
 
-              <td className={`${cellStyles} font-bold text-foreground`}>{formatPrice(item.price)}</td>
+              <td className={`${cellStyles} font-bold text-foreground`}>{formatPrice(Number(item.price))}</td>
 
               <td className={`${cellStyles} whitespace-nowrap text-text-secondary`}>{item.createdAt}</td>
 
@@ -55,7 +55,7 @@ const MenuItemsTable = ({ items }: { items: MenuItem[] }) => {
               </td>
 
               <td className={cellStyles}>
-                <MenuItemActions status={item.status} />
+                <MenuItemActions status={item.status} id={item._id} />
               </td>
             </tr>
           ))}

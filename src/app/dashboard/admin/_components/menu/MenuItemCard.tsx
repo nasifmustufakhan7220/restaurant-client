@@ -25,7 +25,7 @@ const MenuItemCard = ({ item }: { item: MenuItem }) => {
         <p className="shrink-0 text-lg font-extrabold text-foreground">{formatPrice(item.price)}</p>
       </div>
 
-      <MenuItemActions status={item.status} />
+      <MenuItemActions status={item.status} id={item._id} />
     </article>
   );
 };
