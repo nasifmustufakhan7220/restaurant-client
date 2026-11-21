@@ -14,6 +14,14 @@ export const auth = betterAuth({
       role: {
         type: ["customer", "vendor", "admin"],
         input: true,
+        required: true,
+        defaultValue: "customer",
+      },
+      isBlocked: {
+        type: "boolean",
+        required: false,
+        defaultValue: false,
+        input: false,
       },
     },
   },
