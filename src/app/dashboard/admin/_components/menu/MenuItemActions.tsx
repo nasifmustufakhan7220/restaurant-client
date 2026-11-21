@@ -1,12 +1,13 @@
 "use client";
 import type { LucideIcon } from "lucide-react";
-import { Check, EyeOff, Trash2, X } from "lucide-react";
+import { Check, EyeOff, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import type { MenuItemStatus } from "./menu-items-data";
 import { updateMenuItemStatus } from "@/lib/actions/admin";
 import { toast } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
+import DeleteBtn from "@/app/dashboard/vendor/my-menu/_components/DeleteBtn/DeleteBtn";
 
 // The action buttons of one item. They change with the item status.
 // Needs: status, and an optional className to control the layout.
@@ -16,6 +17,7 @@ type ActionTone = "success" | "danger" | "neutral";
 type ItemAction = {
   label: string;
   tone: ActionTone;
+  disabled?: boolean;
   icon: LucideIcon;
 };
 
@@ -25,7 +27,7 @@ const actionsByStatus: Record<MenuItemStatus, ItemAction[]> = {
     { label: "Approved", tone: "success", icon: Check },
     { label: "Rejected", tone: "danger", icon: X },
   ],
-  Approved: [{ label: "Deactivate", tone: "neutral", icon: EyeOff }],
+  Approved: [{ label: "Deactivate", tone: "neutral", icon: EyeOff, disabled: true }],
   Rejected: [],
 };
 
@@ -79,21 +81,14 @@ const MenuItemActions = ({ status, className, id }: MenuItemActionsProps) => {
             handleActionClick(action.label as "Approved" | "Rejected" | "Pending");
           }}
           type="button"
+          disabled={action.label === "Deactivate" && true }
           className={cn(baseButtonStyles, toneStyles[action.tone])}
         >
           <action.icon className="size-4" aria-hidden="true" />
           {action.label}
         </button>
       ))}
-
-      {/* FUNCTIONALITY: connect delete (with a confirm dialog) here */}
-      <button
-        type="button"
-        aria-label="Delete item"
-        className="inline-flex size-10 items-center justify-center rounded-full border border-border text-destructive transition-colors hover:bg-pill-danger"
-      >
-        <Trash2 className="size-4" aria-hidden="true" />
-      </button>
+      <DeleteBtn id={id as string} deleteMenuOnRole="admin"/>
     </div>
   );
 };

@@ -22,7 +22,7 @@ const MenuItemCard = ({ item }: { item: MenuItem }) => {
         <p className="min-w-0 wrap-break-word text-sm text-text-secondary">
           {item.vendorName} · {item.location}
         </p>
-        <p className="shrink-0 text-lg font-extrabold text-foreground">{formatPrice(item.price)}</p>
+        <p className="shrink-0 text-lg font-extrabold text-foreground">{formatPrice(Number(item.price))}</p>
       </div>
 
       <MenuItemActions status={item.status} id={item._id} />

@@ -76,14 +76,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
             Edit
           </button>
         </Link>
-        {/* <button
-          type="button"
-          
-        >
-          Delete
-        </button> */}
-        
-        <DeleteBtn id={item._id as string} />
+        <DeleteBtn id={item._id as string} deleteMenuOnRole="vendor" />
       </div>
     </article>
   );
