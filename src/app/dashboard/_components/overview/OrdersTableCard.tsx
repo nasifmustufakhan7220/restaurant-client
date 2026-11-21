@@ -18,6 +18,7 @@ export default function OrdersTableCard({
   columns,
   rows,
 }: OrdersTableCardProps) {
+  console.log(title,columns);
   return (
     <section className="min-w-0 rounded-2xl border border-border bg-card p-4.5">
       <h3 className="text-[17px] font-semibold text-foreground">{title}</h3>

@@ -24,7 +24,7 @@ export default function OverviewContent({
 }: OverviewContentProps) {
   return (
     <div className="flex flex-col gap-5">
-      <h1 className="text-2xl font-bold text-foreground">Overview</h1>
+      
 
       <section
         aria-label={statsLabel}
