@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/Navbar/Navbar";
 import { Suspense } from "react";
 
@@ -15,9 +14,11 @@ export default function Home() {
         <Navbar />
       </Suspense>
       <Banner />
-      <FeaturedItems /> 
-      <Categories /> 
-      <WhyChoose /> 
+      <Suspense fallback={<div className="h-16" />}>
+        <FeaturedItems />
+      </Suspense>
+      <Categories />
+      <WhyChoose />
       <HowItWorks />
     </main>
   );

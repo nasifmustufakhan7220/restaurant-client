@@ -20,8 +20,8 @@ export default function MenuCard({ item, priority = false }: MenuCardProps) {
       {/* 🖼️ ছবির container: relative + নির্দিষ্ট উচ্চতা দিতে হবে, নাহলে fill কাজ করবে না */}
       <div className="relative w-full h-48 bg-gray-100">
         <Image
-          src={item.image}
-          alt={item.name}
+          src={item.images[0]}
+          alt={item.itemName}
           fill // 🖼️ container-এর পুরো জায়গা ভরবে
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" // 🖼️ স্ক্রিন অনুযায়ী সঠিক সাইজের ছবি আনবে
           priority={priority} // 🖼️ true হলে আগে লোড হবে
@@ -45,7 +45,7 @@ export default function MenuCard({ item, priority = false }: MenuCardProps) {
         <p className="mt-1 text-sm text-gray-500">📍 {item.location}</p>
 
         {/* Vendor */}
-        <p className="text-sm text-gray-500">🏪 {item.vendor}</p>
+        <p className="text-sm text-gray-500">🏪 {item.vendorName}</p>
 
         <Link
           href={`/menu/${item._id}`}
