@@ -5,10 +5,9 @@ import type { MenuItemStatus } from "./menu-items-data";
 
 // One place to change every badge color
 const statusStyles: Record<MenuItemStatus, string> = {
-  pending: "bg-pill-warning text-warning",
-  approved: "bg-pill-success text-success",
-  rejected: "bg-pill-danger text-destructive",
-  inactive: "bg-section text-text-secondary",
+  Pending: "bg-pill-warning text-warning",
+  Approved: "bg-pill-success text-success",
+  Rejected: "bg-pill-danger text-destructive",
 };
 
 const MenuItemBadge = ({ status }: { status: MenuItemStatus }) => {
