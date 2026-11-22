@@ -14,7 +14,7 @@ import OverviewContent from "@/app/dashboard/_components/overview/OverviewConten
 import { getMenuItems } from "@/lib/api/menu"; // path to your Better Auth server instance
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { MenuItemData } from "@/lib/actions/menu";
+import type { MenuItemData } from "@/lib/types/menu-item";
 
 // Placeholder data. Replace with real data later.
 

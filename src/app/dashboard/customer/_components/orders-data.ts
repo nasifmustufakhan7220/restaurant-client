@@ -2,7 +2,7 @@
 
 // Placeholder data and helpers for the My Orders page.
 
-import { Order, OrderStatus } from "./order";
+import { Order, OrderStatus } from "@/lib/types/order";
 
 // The tabs above the list ("all" shows every order)
 export const statusTabs: (OrderStatus | "all")[] = [

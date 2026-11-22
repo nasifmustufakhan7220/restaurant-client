@@ -2,12 +2,7 @@
 
 // Type and placeholder data for the User Details page.
 
-import { UserItem } from "./users-data";
-
-export type UserDetails = UserItem & {
-  subscriptionExpiresAt?: string; // vendors with a premium plan only
-  summary: { label: string; value: number }[]; // the small number cards at the top
-};
+import type { UserDetails } from "@/lib/types/user";
 
 // FUNCTIONALITY: load the real user by its id (from the page URL) here
 export const userDetailsPlaceholder: UserDetails = {

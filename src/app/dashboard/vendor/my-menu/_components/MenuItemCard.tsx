@@ -1,7 +1,7 @@
 import { MapPin } from "lucide-react";
 import AvailabilityToggle from "./AvailabilityToggle";
 import StatusBadge from "./StatusBadge";
-import { MenuItemData } from "@/lib/actions/menu";
+import type { MenuItemData } from "@/lib/types/menu-item";
 import Image from "next/image";
 import Link from "next/link";
 import DeleteBtn from "./DeleteBtn/DeleteBtn";
@@ -22,7 +22,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
 
         <Image
           src={item.images?.[0] || "/placeholder.png"}
-          alt={item.itemName}
+          alt={item.itemName as string} // Type fix only: no runtime change
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition-transform duration-300 hover:scale-105"
@@ -65,7 +65,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
 
         <AvailabilityToggle
           initialValue={item.isAvailable}
-          itemName={item.itemName}
+          itemName={item.itemName as string} // Type fix only: no runtime change
         />
       </div>
 

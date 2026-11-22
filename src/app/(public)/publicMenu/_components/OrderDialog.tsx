@@ -15,17 +15,15 @@ import {
 import OrderFormFields from "./OrderFormFields";
 import OrderItemSummary from "./OrderItemSummary";
 import { formatPrice } from "@/app/dashboard/admin/_components/menu/menu-items-data";
+import type { MenuItem } from "@/lib/types/menu-item";
 
 // A pop-up with the item and the order form. Needs: item.
 // The "Order Now" button opens it. "use client" is needed because of the form submit handler.
 
 
-type OrderDialogProps = {
-  images: string[];
-  itemName: string;
-};
+type OrderDialogProps = MenuItem;
 const OrderDialog = ({ item }: { item: OrderDialogProps }) => {
-  const imageUrl = item.images[0];
+  const imageUrl = item.images![0]; // Type fix only: no runtime change
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     // Stop the browser from reloading the page
@@ -64,7 +62,7 @@ const OrderDialog = ({ item }: { item: OrderDialogProps }) => {
             {imageUrl ? (
               <Image
                 src={imageUrl}
-                alt={item.itemName}
+                alt={item.itemName as string} // Type fix only: no runtime change
                 fill
                 sizes="(min-width: 768px) 400px, 100vw"
                 className="object-cover"
@@ -79,7 +77,7 @@ const OrderDialog = ({ item }: { item: OrderDialogProps }) => {
 
           <form onSubmit={handleSubmit} className="grid content-start gap-5">
             <OrderItemSummary item={item} />
-            <OrderFormFields itemId={item._id} />
+            <OrderFormFields itemId={item._id as string} />
 
             {/* A normal submit button. Do not use AlertDialogAction here: it closes the dialog at once */}
             <button

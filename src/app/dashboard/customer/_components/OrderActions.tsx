@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { OrderStatus } from "./order";
+import { OrderStatus } from "@/lib/types/order";
 
 
 // The "View" and "Cancel" buttons of one order.

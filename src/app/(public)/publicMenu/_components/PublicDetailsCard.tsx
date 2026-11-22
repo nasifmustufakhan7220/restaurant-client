@@ -33,7 +33,7 @@ const PublicDetailsCard = async ({ params }: ItemDetailsPageProps) => {
 
       <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-12">
         <MotionFade x={-30}>
-          <ImageGallery images={res.images} name={res.itemName} />
+          <ImageGallery images={res.images} name={res.itemName as string} />
         </MotionFade>
 
         <MotionFade x={30} delay={0.1} className="flex flex-col">
@@ -56,7 +56,7 @@ const PublicDetailsCard = async ({ params }: ItemDetailsPageProps) => {
           )}
 
           {/* 🛒 Order বাটন: দাম ও বিবরণের ঠিক পরে, তথ্য কার্ডের আগে */}
-          <OrderButton price={res.price} />
+          <OrderButton price={res.price as string} />
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
             <MotionFade y={20} delay={0.3} duration={0.4}>

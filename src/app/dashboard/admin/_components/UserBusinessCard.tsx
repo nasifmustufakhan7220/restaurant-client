@@ -1,5 +1,5 @@
 
-import type { UserDetails } from "./user-details-data";
+import type { UserDetails } from "@/lib/types/user";
 import UserBadge from "./UserBadge";
 
 

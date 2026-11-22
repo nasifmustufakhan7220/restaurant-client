@@ -1,4 +1,4 @@
-import { UserItem } from "./users-data";
+import type { UserItem } from "@/lib/types/user";
 
 const UsersStats = ({ users }: { users: UserItem[] }) => {
   const usersStats = [

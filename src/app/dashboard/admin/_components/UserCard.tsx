@@ -1,7 +1,7 @@
 import UserActions from "./UserActions";
 import UserAvatar from "./UserAvatar";
 import UserBadge from "./UserBadge";
-import { UserItem } from "./users-data";
+import type { UserItem } from "@/lib/types/user";
 
 
 // One user as a card, for mobile and tablet. Needs: user.

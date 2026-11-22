@@ -1,4 +1,4 @@
-import type { UserDetails } from "./user-details-data";
+import type { UserDetails } from "@/lib/types/user";
 
 // Card with the basic profile information. Needs: user.
 const UserInfoCard = ({ user }: { user: UserDetails }) => {

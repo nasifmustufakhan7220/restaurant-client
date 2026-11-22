@@ -2,7 +2,7 @@ import { getMenuItems } from "@/lib/api/menu";
 import MenuItemCard from "./MenuItemCard";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { MenuItemData } from "@/lib/actions/menu";
+import type { MenuItemData } from "@/lib/types/menu-item";
 
 const FirstPageOfMyMenu = async () => {
   const session = await auth.api.getSession({

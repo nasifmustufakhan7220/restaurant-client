@@ -1,21 +1,4 @@
-export interface MenuItemData {
-  _id?: string;
-  itemName: string;
-  category: string;
-  description: string;
-  price: string;
-  location: string;
-  images: string[];
-  status: "Approved" | "Pending" | "Rejected";
-  vendorId: string;
-  vendorEmail: string;
-  isAvailable: boolean;
-  createdDate: string;
-  vendorName?: string;
-  name?: string;
-  vendor?: string;
-  priority?: boolean;
-}
+import type { MenuItemData } from "@/lib/types/menu-item";
 
 export const createMenuPost = async (data:MenuItemData) => {
   const res = await fetch(

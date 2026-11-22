@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { MenuItemStatus } from "./menuItemsData";
+import type { MenuItemStatus } from "@/lib/types/menu-item";
 
 // Approved / Pending / Rejected reuse the existing status tokens.
 // There is no "inactive" token, so Inactive uses the neutral section tokens.

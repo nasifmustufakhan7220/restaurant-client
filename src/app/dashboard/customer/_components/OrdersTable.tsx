@@ -1,5 +1,5 @@
 
-import { Order } from "./order";
+import { Order } from "@/lib/types/order";
 import OrderActions from "./OrderActions";
 import OrderStatusBadge from "./OrderStatusBadge";
 import OrderThumb from "./OrderThumb";

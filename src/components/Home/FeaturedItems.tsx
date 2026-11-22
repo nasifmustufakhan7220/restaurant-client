@@ -1,4 +1,4 @@
-import { MenuItem } from "@/lib/types/home";
+import { MenuItem } from "@/lib/types/menu-item";
 import FadeIn from "./FadeIn";
 import MenuCard from "./MenuCard";
 import SectionTitle from "./SectionTitle";

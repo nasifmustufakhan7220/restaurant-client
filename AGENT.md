@@ -816,3 +816,46 @@ Notes / blockers: (none)
 
 - `tsc` reported `TS1149 ... /dashboard/vendor/My-Menu/page.tsx differs from ... my-menu/page.tsx only in casing`. That came from a stale generated `.next/dev/types/validator.ts`, not from the source. Clearing `.next` and restarting `next dev` regenerated the types and `tsc` is clean now.
 - The page initially returned 500 for the icon/function boundary reason above; it is fixed.
+
+---
+
+## Task in progress: TypeScript cleanup and central types
+
+Status: In progress | Last completed step: Step 1 | Next step: Step 2
+Errors at start: 0 | Errors now: 0
+- [x] Step 1: Collect the errors
+- [x] Step 2: Inventory the existing types
+- [ ] Step 3: Create the central types folder
+- [ ] Step 4: Move types and update imports
+- [ ] Step 5: Fix the remaining errors (type-only)
+- [ ] Step 6: Verify (no runtime change)
+- [ ] Step 7: Final report
+
+Working tree was clean at start (git status --short: no output).
+tsc --noEmit reports 0 errors. Project uses `src/lib/types/` as existing types folder (role.ts, home.ts).
+
+### Type inventory (Step 2)
+
+| Type | File | Shared? | Notes |
+|------|------|---------|-------|
+| Role | src/lib/types/role.ts | Yes | Already central |
+| MenuItem (interface) | src/lib/types/home.ts | No | Not imported anywhere (dead code) |
+| Category | src/lib/types/home.ts | Yes | Imported by CategoryCard.tsx |
+| MenuItemData | src/lib/actions/menu.ts | Yes | Imported by firstPageoFMyMenu.tsx, MenuItemCard, MenuDetailsCard |
+| MenuItemStatus | vendor/my-menu/_components/menuItemsData.ts | Yes | "Approved\|Pending\|Rejected\|Inactive" |
+| MenuItem | vendor/my-menu/_components/menuItemsData.ts | Yes | Vendor version (id, name, icon...) |
+| MenuItemStatus | admin/_components/menu/menu-items-data.ts | DUPLICATE | "Pending\|Approved\|Rejected" (3 values) |
+| MenuItem | admin/_components/menu/menu-items-data.ts | DUPLICATE | Admin version (_id, itemName, price:number...) |
+| OrderStatus | customer/_components/order.ts | Yes | Used by order.ts, orders-data.ts, OrderStatusBadge |
+| Order | customer/_components/order.ts | Yes | Used by orders-data.ts, OrderThumb, OrderCard, etc. |
+| DashboardMenuItem | dashboard/_components/dashboard-menu-config.ts | No | Only used in that file |
+| UserRole | admin/_components/users-data.ts | DUPLICATE of Role | Same values as Role |
+| SubscriptionPlan | admin/_components/users-data.ts | Yes | Used by users-data.ts, user-details-data.ts |
+| UserItem | admin/_components/users-data.ts | Yes | Used by users-data.ts, user-details-data.ts |
+| UserDetails | admin/_components/user-details-data.ts | Yes | Used by user-details-data.ts |
+| ErrorPageProps | src/app/error.tsx | No | Component-only, stays |
+
+Duplicates to merge:
+- MenuItemStatus × 2 (conflict: admin uses Record<MenuItemStatus> requiring exhaustiveness; cannot widen to 4 values without runtime change to actionsByStatus)
+- MenuItem × 3 + MenuItemData (conflicting shapes: price string vs number, createdAt vs createdDate, id vs _id; merging requires non-null assertion at one usage site)
+- Role and UserRole (same values, safe to merge)

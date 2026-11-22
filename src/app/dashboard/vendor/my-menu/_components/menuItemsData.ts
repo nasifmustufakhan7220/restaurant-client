@@ -1,18 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { CakeSlice, Flame, Leaf, Pizza, Salad, Sparkles } from "lucide-react";
 
-export type MenuItemStatus = "Approved" | "Pending" | "Rejected" | "Inactive";
-
-export type MenuItem = {
-  id: string;
-  name: string;
-  category: string;
-  location: string;
-  price: string;
-  status: MenuItemStatus;
-  isAvailable: boolean;
-  icon: LucideIcon;
-};
+import type { MenuItem, MenuItemStatus } from "@/lib/types/menu-item";
 
 // The six categories from the Add Menu Item form, reused by the filter select.
 export const menuCategories = [

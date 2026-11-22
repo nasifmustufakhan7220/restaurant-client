@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ArrowLeft, Pencil, Check, ChevronRight } from "lucide-react";
-import { MenuItemData } from "@/lib/actions/menu";
+import type { MenuItemData } from "@/lib/types/menu-item";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -61,8 +61,8 @@ export default function MenuDetailsCard({ menu }: { menu: MenuItemData }) {
             <section className="rounded-2xl border border-border bg-card p-3.5 sm:p-4">
               <div className="relative h-55 overflow-hidden rounded-xl sm:h-75 lg:h-85">
                 <Image
-                  src={menu.images[0]}
-                  alt={menu.itemName}
+                  src={menu.images![0]}
+                  alt={menu.itemName as string}
                   fill
                   priority
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 60vw"
@@ -154,7 +154,7 @@ export default function MenuDetailsCard({ menu }: { menu: MenuItemData }) {
                 { label: "Category", value: menu.category },
                 { label: "Price", value: `$${menu.price}.00` },
                 { label: "Location", value: menu.location },
-                { label: "Images", value: `${menu.images.length} photos` },
+                { label: "Images", value: `${menu.images!.length} photos` },
                 // { label: "Created", value: menu.createdDate },
                 { label: "Status", value: menu.status },
               ].map((item) => (

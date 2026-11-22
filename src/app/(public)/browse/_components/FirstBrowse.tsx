@@ -4,7 +4,7 @@ import EmptyState from "./EmptyState";
 import FadeIn from "@/components/Home/FadeIn";
 import MenuCard from "@/components/Home/MenuCard";
 import { getAllActiveMenuItems } from "@/lib/api/browse";
-import { MenuItemData } from "@/lib/actions/menu";
+import type { MenuItemData } from "@/lib/types/menu-item";
 import { MenuItem } from "@/lib/types/home";
 
 const FirstBrowse = async ({

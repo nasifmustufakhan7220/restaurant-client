@@ -1,19 +1,9 @@
 // Types and placeholder data for the Manage Users page.
 // Replace the placeholder data with real data later.
 
-export type UserRole = "vendor" | "customer" | "admin";
-export type SubscriptionPlan = "free" | "premium";
+import type { Role } from "@/lib/types/role";
+import type { SubscriptionPlan, UserItem } from "@/lib/types/user";
 
-export type UserItem = {
-  _id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  businessName?: string; // vendors only
-  subscriptionPlan?: SubscriptionPlan; // vendors only
-  isBlocked: boolean;
-  createdAt: string;
-};
 export const formatDateTime = (date: string) => {
   return new Date(date).toLocaleString("en-US", {
     day: "2-digit",

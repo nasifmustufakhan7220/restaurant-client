@@ -2,7 +2,8 @@
 import UserActions from "./UserActions";
 import UserAvatar from "./UserAvatar";
 import UserBadge from "./UserBadge";
-import { formatDateTime, UserItem } from "./users-data";
+import { formatDateTime } from "./users-data";
+import type { UserItem } from "@/lib/types/user";
 
 const tableHeaders = [
   "User",

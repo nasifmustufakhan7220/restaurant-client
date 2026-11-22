@@ -13,7 +13,7 @@ import type { OverviewTableRow } from "@/app/dashboard/_components/overview/Orde
 import type { StatCardData } from "@/app/dashboard/_components/overview/StatCard";
 import OverviewContent from "@/app/dashboard/_components/overview/OverviewContent";
 import { getAllMenuItems, getAllUsers } from "@/lib/api/admin";
-import { MenuItemData } from "@/lib/actions/menu";
+import type { MenuItemData } from "@/lib/types/menu-item";
 export interface IUser {
   _id: string;
   name: string;
@@ -76,7 +76,7 @@ const FirstOverview = async () => {
   const pendingMenuItems: OverviewTableRow[] = pendingItemsRows.map((item) => ({
     id: item._id!,
     cells: [item.itemName, item.vendorEmail, item.price],
-    status: item.status,
+    status: item.status as OverviewTableRow["status"], // Type fix only: no runtime change
   }));
 
   return (

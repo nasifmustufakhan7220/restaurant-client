@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image"; // 🖼️ Next.js Image component
 import { motion } from "framer-motion";
-import { MenuItem } from "@/lib/types/home";
+import { MenuItem } from "@/lib/types/menu-item";
 import { useSession } from "@/lib/auth-client";
 import { Button } from "../ui/button";
 import { toast } from "../ui/toast";
@@ -38,8 +38,8 @@ export default function MenuCard({ item, priority = false }: MenuCardProps) {
       {/* 🖼️ ছবির container: relative + নির্দিষ্ট উচ্চতা দিতে হবে, নাহলে fill কাজ করবে না */}
       <div className="relative w-full h-48 bg-gray-100">
         <Image
-          src={item.images[0]}
-          alt={item.itemName}
+          src={item.images![0]} // Type fix only: no runtime change
+          alt={item.itemName as string} // Type fix only: no runtime change
           fill // 🖼️ container-এর পুরো জায়গা ভরবে
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" // 🖼️ স্ক্রিন অনুযায়ী সঠিক সাইজের ছবি আনবে
           priority={priority} // 🖼️ true হলে আগে লোড হবে

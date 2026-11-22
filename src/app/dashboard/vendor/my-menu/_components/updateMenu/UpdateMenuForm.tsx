@@ -8,7 +8,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { MenuItemData, updateMenuPost } from "@/lib/actions/menu";
+import { updateMenuPost } from "@/lib/actions/menu";
+import type { MenuItemData } from "@/lib/types/menu-item";
 import { useEffect, useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "@/components/ui/toast";

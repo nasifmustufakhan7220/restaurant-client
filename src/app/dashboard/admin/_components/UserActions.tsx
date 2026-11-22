@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Ban, Eye, UserCheck } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { UserItem } from "./users-data";
+import type { UserItem } from "@/lib/types/user";
 
 // The "View" and "Block / Unblock" buttons of one user.
 // Needs: userId, isBlocked, and an optional className to control the layout.

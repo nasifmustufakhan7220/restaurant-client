@@ -2,7 +2,7 @@ import { Ban, UserCheck } from "lucide-react";
 
 
 import { cn } from "@/lib/utils";
-import type { UserDetails } from "./user-details-data";
+import type { UserDetails } from "@/lib/types/user";
 import UserBadge from "./UserBadge";
 
 // Account status card with the Block / Unblock button. Needs: user.

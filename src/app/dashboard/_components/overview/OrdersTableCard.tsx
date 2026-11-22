@@ -3,7 +3,7 @@ import StatusPill, { type OrderStatus } from "./StatusPill";
 // One row of table content. `cells` holds the text for every column except Status.
 export type OverviewTableRow = {
   id: string;
-  cells: string[];
+  cells: (string | number | undefined)[];
   status: OrderStatus;
 };
 

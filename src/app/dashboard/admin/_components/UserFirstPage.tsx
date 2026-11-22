@@ -2,7 +2,7 @@ import React from "react";
 import UsersStats from "./UsersStats";
 import UsersToolbar from "./UsersToolbar";
 import UsersTable from "./UsersTable";
-import { UserItem } from "./users-data";
+import type { UserItem } from "@/lib/types/user";
 import UserCard from "./UserCard";
 import { getAllUsers } from "@/lib/api/admin";
 

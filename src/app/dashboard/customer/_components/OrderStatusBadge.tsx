@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { OrderStatus } from "./order";
+import { OrderStatus } from "@/lib/types/order";
 
 
 // Small rounded label that shows the status of an order. Needs: status.

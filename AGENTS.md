@@ -15,22 +15,48 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - The mobile menu continues to control the existing navigation and unauthenticated sign-in/join links.
 - The responsive layout change is implemented in `src/components/Navbar/Navbar.tsx`; `src/components/Navbar/DropDownProfile.tsx` was inspected and unchanged.
 
-## Task in progress: Vendor Menu Item Details page UI
-Status: Done | Last completed step: Step 5 | Next step: none
-- [x] Step 3: Create components
-- [x] Step 4: Build the page
-- [x] Step 5: Self-check
-Files created:
-- src/app/dashboard/vendor/my-menu/[id]/page.tsx
-- src/app/dashboard/vendor/my-menu/_components/menuDetails/status-config.ts
-- src/app/dashboard/vendor/my-menu/_components/menuDetails/DetailsHeader.tsx
-- src/app/dashboard/vendor/my-menu/_components/menuDetails/ItemGallery.tsx
-- src/app/dashboard/vendor/my-menu/_components/menuDetails/ApprovalStatusCard.tsx
-- src/app/dashboard/vendor/my-menu/_components/menuDetails/ItemDetailsCard.tsx
-Menu Item Details page: UI done, no functionality yet.
-FUNCTIONALITY markers:
-- `{/* FUNCTIONALITY: connect Edit here */}` in DetailsHeader.tsx
-- `{/* FUNCTIONALITY: connect Delete and confirm dialog here */}` in DetailsHeader.tsx
-- `{/* FUNCTIONALITY: image gallery switching here */}` in ItemGallery.tsx
-- `{/* FUNCTIONALITY: connect availability toggle here */}` in ItemDetailsCard.tsx
-- `{/* FUNCTIONALITY: load real item data here */}` in page.tsx
+## Task in progress: TypeScript cleanup and central types
+Status: Done | Last completed step: Step 7 | Next step: none
+Errors at start: 18 | Errors now: 0
+- [x] Step 1: Collect the errors
+- [x] Step 2: Inventory the existing types
+- [x] Step 3: Create the central types folder
+- [x] Step 4: Move types and update imports
+- [x] Step 5: Fix the remaining errors (type-only)
+- [x] Step 6: Verify (no runtime change)
+- [x] Step 7: Final report
+
+Working tree was NOT clean at start (pre-existing changes from previous tasks).
+
+### Central type files (`src/lib/types/`)
+- `menu-item.ts` — `MenuItemStatus`, `MenuItem`, `MenuItemData`, `Category`
+- `order.ts` — `OrderStatus`, `Order`
+- `user.ts` — `SubscriptionPlan`, `UserItem`, `UserDetails`
+- `role.ts` — `Role`
+- `home.ts` — re-exports `Category` and `MenuItem`
+
+### Files touched by this task
+- `src/lib/types/menu-item.ts` — made `itemName`, `images`, `vendorEmail`, `vendorName` optional
+- `src/lib/types/home.ts` — added re-export of `MenuItem`
+- `src/app/dashboard/customer/_components/order.ts` — added re-export of `Order`, `OrderStatus`
+- `src/app/(public)/publicMenu/_components/OrderDialog.tsx` — set `OrderDialogProps = MenuItem`, added import, assertions
+- `src/app/(public)/browse/_components/FirstBrowse.tsx` — import from `@/lib/types/menu-item`
+- `src/app/dashboard/_components/overview/FirstOverview.tsx` — import from `@/lib/types/menu-item`, status assertion
+- `src/app/dashboard/vendor/my-menu/_components/FirstOverViewVendor.tsx` — import from `@/lib/types/menu-item`
+- `src/app/dashboard/admin/_components/UserActions.tsx` — import from `@/lib/types/user`
+- `src/app/dashboard/admin/_components/UserCard.tsx` — import from `@/lib/types/user`
+- `src/app/(public)/publicMenu/_components/PublicDetailsCard.tsx` — type assertions
+- `src/app/dashboard/_components/overview/OrdersTableCard.tsx` — widened `cells` to `(string | number | undefined)[]`
+- `src/app/dashboard/vendor/my-menu/_components/menuDetails/MenuDetailsCard.tsx` — non-null assertions
+- `src/app/dashboard/vendor/my-menu/_components/MenuItemCard.tsx` — type assertions
+- `src/components/Home/MenuCard.tsx` — type assertions
+
+### Duplicates merged
+- `MenuItem` / `MenuItemStatus`: merged admin's `menu-items-data.ts` definition and vendor's `menuItemsData.ts` usage into one `MenuItem` in `src/lib/types/menu-item.ts`
+- `MenuItemData`: alias for `MenuItem` in `src/lib/types/menu-item.ts` (was local to `@/lib/actions/menu`)
+- `UserItem`: was duplicated in `users-data.ts`; now single source in `src/lib/types/user.ts`
+- `Order` / `OrderStatus`: was in `customer/_components/order.ts`; now in `src/lib/types/order.ts`
+- `Category`: was in `home.ts`; now in `menu-item.ts` with re-export from `home.ts`
+
+### Rule for the future
+New shared types go in `src/types/` (currently `src/lib/types/`). Types describe the real data. Never change the data to fit a type.
