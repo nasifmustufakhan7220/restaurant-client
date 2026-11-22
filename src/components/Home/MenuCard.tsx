@@ -1,8 +1,12 @@
 "use client";
-import Link from "next/link";
 import Image from "next/image"; // 🖼️ Next.js Image component
 import { motion } from "framer-motion";
 import { MenuItem } from "@/lib/types/home";
+import { useSession } from "@/lib/auth-client";
+import { Button } from "../ui/button";
+import { toast } from "../ui/toast";
+import { useRouter } from "next/navigation";
+import { ArrowRight } from "lucide-react";
 
 interface MenuCardProps {
   item: MenuItem;
@@ -10,6 +14,21 @@ interface MenuCardProps {
 }
 
 export default function MenuCard({ item, priority = false }: MenuCardProps) {
+  const { data: session } = useSession();
+  const router = useRouter();
+  console.log(session?.user?.role);
+
+  const handleViewDetails = () => {
+    if (session?.user?.role === "vendor" || session?.user?.role === "admin") {
+      toast.add({
+        title: "Access Denied",
+        description: `You need to be a customer to view menu details. Current role: ${session?.user?.role}`,
+        type: "error",
+      });
+      return;
+    }
+    router.push(`/publicMenu/${item._id}`)
+  };
   return (
     // 🎬 MOTION ANIMATION: mouse নিলে card একটু উপরে উঠবে
     <motion.div
@@ -47,14 +66,26 @@ export default function MenuCard({ item, priority = false }: MenuCardProps) {
         {/* Vendor */}
         <p className="text-sm text-gray-500">🏪 {item.vendorName}</p>
 
-        <Link
-          href={`/menu/${item._id}`}
-          className="mt-auto pt-4 block"
-        >
-          <span className="block text-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-lg transition">
-            View Details
-          </span>
-        </Link>
+        <div className="mt-auto pt-5">
+  <Button
+    onClick={handleViewDetails}
+    className="group relative flex h-11 w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-red-600 text-sm font-semibold text-white shadow-md shadow-red-600/25 transition-all duration-300 hover:bg-red-700 hover:shadow-lg hover:shadow-red-600/40 active:scale-[0.97]"
+  >
+    {/* 🎨 hover-এ আলোর ঝলক */}
+    <span
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-y-0 -left-full w-1/2 -skew-x-12 bg-white/25 transition-all duration-700 group-hover:left-[150%]"
+    />
+
+    <span className="relative">View Details</span>
+
+    {/* 🎨 hover-এ তীর একটু ডানে সরবে */}
+    <ArrowRight
+      className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+      aria-hidden="true"
+    />
+  </Button>
+</div>
       </div>
     </motion.div>
   );
