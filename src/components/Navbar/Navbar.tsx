@@ -4,7 +4,7 @@ import { Menu, Pizza, ShoppingCart, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion"; // 🎬 MOTION
-import { authClient, useSession } from "@/lib/auth-client";
+import { signOut, useSession } from "@/lib/auth-client";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   CreditCardIcon,
@@ -35,10 +35,10 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
   const closeMenu = () => setIsMenuOpen(false);
 
   const handelSignOut = async () => {
-    await authClient.signOut({
+    signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/sign-in"); // redirect to login page
+          router.push("/sign-in");
         },
       },
     });
@@ -124,7 +124,11 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
                     <motion.span
                       layoutId="nav-underline"
                       className="absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-primary"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 380,
+                        damping: 30,
+                      }}
                     />
                   )}
 
@@ -364,7 +368,10 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
                       key={link.name}
                       initial={{ opacity: 0, x: -16 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.25, delay: 0.05 + index * 0.06 }}
+                      transition={{
+                        duration: 0.25,
+                        delay: 0.05 + index * 0.06,
+                      }}
                     >
                       <Link
                         href={link.src}

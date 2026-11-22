@@ -1,16 +1,22 @@
-import { notFound } from "next/navigation";
 
-export const updateMenuItemStatus = async (id: string, newStatus: "Approved" | "Rejected" | "Pending") => {
+
+export const updateMenuItemStatus = async (
+  id: string,
+  newStatus: "Approved" | "Rejected" | "Pending",
+) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/admin/update-menu/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/admin/update-menu/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
       },
-      body: JSON.stringify({ status: newStatus }),
-    });
+    );
     if (!response.ok) {
-      notFound()
+      throw new Error(`Failed to update menu item status: ${response.status}`);
     }
     return await response.json();
   } catch (error) {
@@ -19,17 +25,19 @@ export const updateMenuItemStatus = async (id: string, newStatus: "Approved" | "
   }
 };
 
-
 export const deleteMenuItem = async (id: string) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/admin/delete-menu/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/admin/delete-menu/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
     if (!response.ok) {
-      notFound()
+      throw new Error(`Failed to delete menu item: ${response.status}`);
     }
     return await response.json();
   } catch (error) {
