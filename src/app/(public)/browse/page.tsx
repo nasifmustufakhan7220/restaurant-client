@@ -8,8 +8,8 @@ import FirstBrowse from "./_components/FirstBrowse";
 
 // ডেমো ডেটা (পরে API থেকে আসবে)
 
-export default function BrowseMenuPage() {
-
+export default async function BrowseMenuPage({searchParams}:{ searchParams: Promise<{ [key: string]: string | string[] | undefined }>}) {
+  
 
   return (
     <main className="mt-20 min-h-screen py-16">
@@ -24,7 +24,7 @@ export default function BrowseMenuPage() {
               <MenuCardSkeleton key={n} />
             ))}
           </div>}>
-          <FirstBrowse/>
+          <FirstBrowse searchParams={searchParams} />
         </Suspense>
 
        

@@ -1,6 +1,6 @@
-export const getAllActiveMenuItems = async ()=>{
+export const getAllActiveMenuItems = async (query=" ")=>{
     try{
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/browse/get-all-menu`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/browse/get-all-menu?${query}`);
         if (!response.ok) {
             throw new Error(`Failed to fetch active menu items: ${response.status}`);
         }

@@ -16,7 +16,6 @@ interface MenuCardProps {
 export default function MenuCard({ item, priority = false }: MenuCardProps) {
   const { data: session } = useSession();
   const router = useRouter();
-  console.log(session?.user?.role);
 
   const handleViewDetails = () => {
     if (session?.user?.role === "vendor" || session?.user?.role === "admin") {
