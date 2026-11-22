@@ -1,10 +1,8 @@
 // একটা menu item-এর ডেটা কেমন হবে তার নকশা
 export interface MenuItem {
-  _id: string; // MongoDB-র id (string আকারে আসে)
-  name: string;
+  _id?: string; // MongoDB-র id (string আকারে আসে)
   category: string;
   location: string;
-  vendor: string;
   priority?: boolean; // ঐচ্ছিক: যদি priority থাকে, তাহলে true হবে, না থাকলে undefined
   createdDate: string;
   description: string;

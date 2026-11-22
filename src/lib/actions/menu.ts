@@ -12,6 +12,9 @@ export interface MenuItemData {
   isAvailable: boolean;
   createdDate: string;
   vendorName?: string;
+  name?: string;
+  vendor?: string;
+  priority?: boolean;
 }
 
 export const createMenuPost = async (data:MenuItemData) => {

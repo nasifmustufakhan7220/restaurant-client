@@ -1,6 +1,6 @@
 export const getSixHomeData = async()=>{
     try{
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/home/get-six-menu`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/home/get-six-menu`, { cache: "force-cache" });
        if (!response.ok) {
             throw new Error(`Failed to fetch six home data: ${response.status}`);
         }

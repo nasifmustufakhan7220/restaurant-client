@@ -47,12 +47,15 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
   const navLinks = [
     { name: "Home", src: "/", alt: "Home" },
     { name: "Browse", src: "/browse", alt: "Browse" },
-    {
+  ];
+
+  if(session?.user){
+    navLinks.push({
       name: "Dashboard",
       src: `/dashboard/${session?.user?.role}`,
       alt: "Dashboard",
-    },
-  ];
+    },)
+  }
 
   return (
     // 🎬 MOTION ANIMATION: Navbar উপর থেকে নেমে আসবে

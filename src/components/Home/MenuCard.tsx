@@ -57,10 +57,8 @@ export default function MenuCard({ item, priority = false }: MenuCardProps) {
           <span className="text-lg font-bold text-red-600">${item.price}</span>
         </div>
 
-        {/* নাম */}
-        <h3 className="mt-3 text-xl font-bold text-gray-800">{item.name}</h3>
-
         {/* Location */}
+        <p className="mt-1 text-sm text-gray-500"> 🍕 {item.itemName}</p>
         <p className="mt-1 text-sm text-gray-500">📍 {item.location}</p>
 
         {/* Vendor */}
