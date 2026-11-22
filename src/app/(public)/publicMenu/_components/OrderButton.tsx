@@ -13,6 +13,7 @@ export default function OrderButton({ price, disabled = false }: OrderButtonProp
   // TODO: 👉 এখানে তোমার order ফাংশনালিটি বসাবে
   const handleOrder = () => {
     // তোমার কোড এখানে লিখবে
+    console.log("oders");
   };
 
   return (

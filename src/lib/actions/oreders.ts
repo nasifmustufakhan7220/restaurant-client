@@ -1,0 +1,1 @@
+// customer info, item info, delivery date, delivery address, customer message, order status
