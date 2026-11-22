@@ -16,7 +16,7 @@ export interface MenuItemData {
 
 export const createMenuPost = async (data:MenuItemData) => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/vendor/add-menu`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/add-menu`,
     {
       method: "POST",
       headers: {
@@ -37,7 +37,7 @@ export const createMenuPost = async (data:MenuItemData) => {
 export const updateMenuPost = async (id: string, data: MenuItemData) => {
   try{
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/vendor/update-menu/${id}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/update-menu/${id}`,
       {
         method: "PATCH",
         headers: {
@@ -62,7 +62,7 @@ export const updateMenuPost = async (id: string, data: MenuItemData) => {
 export const deleteMenuPost = async (id: string) => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/vendor/delete-menu/${id}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/delete-menu/${id}`,
       {
         method: "DELETE",
       },

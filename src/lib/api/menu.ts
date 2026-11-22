@@ -1,7 +1,7 @@
 export const getMenuItems = async (id: string) => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/vendor/${id}/my-menu`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/${id}/my-menu`,
     );
     if (!res.ok) {
       throw new Error(`Failed to fetch menu items: ${res.status}`);
@@ -15,7 +15,7 @@ export const getMenuItems = async (id: string) => {
 export const getMenuDetails = async (id: string) => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/vendor/menu-details/${id}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/menu-details/${id}`,
     );
     if (!res.ok) {
       throw new Error(`Failed to fetch menu details: ${res.status}`);

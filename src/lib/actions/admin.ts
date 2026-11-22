@@ -6,7 +6,7 @@ export const updateMenuItemStatus = async (
 ) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/admin/update-menu/${id}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/update-menu/${id}`,
       {
         method: "PATCH",
         headers: {
@@ -28,7 +28,7 @@ export const updateMenuItemStatus = async (
 export const deleteMenuItem = async (id: string) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/admin/delete-menu/${id}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/delete-menu/${id}`,
       {
         method: "DELETE",
         headers: {
