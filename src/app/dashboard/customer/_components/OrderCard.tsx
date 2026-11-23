@@ -8,6 +8,7 @@ import OrderThumb from "./OrderThumb";
 
 const OrderCard = ({ order }: { order: Order }) => {
   // Each row is { label, value }. To show one more detail, add one line here.
+  console.log("OrderCard order:", order); // Log the order object to check its structure
   const details = [
     { label: "Delivery date", value: order.deliveryDate },
     { label: "Address", value: order.deliveryAddress },
@@ -37,7 +38,7 @@ const OrderCard = ({ order }: { order: Order }) => {
         ))}
       </dl>
 
-      <OrderActions status={order.orderStatus} id={order.itemId} />
+      <OrderActions status={order.orderStatus} id={order.itemId} orderId={order._id} />
     </article>
   );
 };

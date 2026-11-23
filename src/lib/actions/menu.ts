@@ -61,3 +61,26 @@ export const deleteMenuPost = async (id: string) => {
     console.error("Error deleting menu item:", error);
   }
 }
+
+export const updateCustomerOrderStatus = async (orderId: string, status: string) => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/order-status-update/${orderId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ orderStatus: status }),
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch orders: ${res.status}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Error updating customer order status:", error);
+  }
+}

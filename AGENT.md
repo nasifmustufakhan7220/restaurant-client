@@ -859,3 +859,37 @@ Duplicates to merge:
 - MenuItemStatus × 2 (conflict: admin uses Record<MenuItemStatus> requiring exhaustiveness; cannot widen to 4 values without runtime change to actionsByStatus)
 - MenuItem × 3 + MenuItemData (conflicting shapes: price string vs number, createdAt vs createdDate, id vs _id; merging requires non-null assertion at one usage site)
 - Role and UserRole (same values, safe to merge)
+
+---
+
+## Task in progress: Vendor Customer Orders page UI (clone)
+
+Status: Done | Last completed step: Step 4 | Next step: none
+- [x] Step 1: Find the project's real types and existing components
+- [x] Step 2: Create the new components and the data file
+- [x] Step 3: Build the page
+- [x] Step 4: Verify (types, allowed files only)
+
+Files created:
+- `src/app/dashboard/vendor/customer-orders/page.tsx`
+- `src/app/dashboard/vendor/customer-orders/_components/vendor-orders-data.ts`
+- `src/app/dashboard/vendor/customer-orders/_components/VendorOrderStatusBadge.tsx`
+- `src/app/dashboard/vendor/customer-orders/_components/VendorOrderStatusTabs.tsx`
+- `src/app/dashboard/vendor/customer-orders/_components/VendorOrderActions.tsx`
+- `src/app/dashboard/vendor/customer-orders/_components/VendorOrdersTable.tsx`
+- `src/app/dashboard/vendor/customer-orders/_components/VendorOrderCard.tsx`
+
+Vendor Customer Orders page: UI done, no functionality yet.
+
+Existing components reused:
+- `DashboardPageHeader` (page header)
+- `OrderThumb` (item picture in table and card)
+- `EmptyState` (empty state)
+- `cn` from `@/lib/utils` (class merging)
+
+FUNCTIONALITY markers:
+- `page.tsx`: `{/* FUNCTIONALITY: load the logged-in vendor's real orders here */}`
+- `VendorOrderStatusTabs.tsx`: `{/* FUNCTIONALITY: mark the really selected tab and connect the filter here */}`
+- `VendorOrderActions.tsx`: pending-only Accept/Reject buttons with `{/* FUNCTIONALITY: connect accept here */}` and `{/* FUNCTIONALITY: connect reject (with a confirm dialog) here */}` implied by button-only markup
+
+

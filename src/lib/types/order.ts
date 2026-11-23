@@ -16,6 +16,9 @@ export type Order = {
   customerId: string;
   customerName?: string;
   customerEmail?: string;
+  vendorEmail?: "crazypizzavendor@gmail.com";
+  vendorId?: "6b0206915ca5ad785cc52a34";
+  category?: "Meat Lovers";
 };
 
 export type OrderFormData = {

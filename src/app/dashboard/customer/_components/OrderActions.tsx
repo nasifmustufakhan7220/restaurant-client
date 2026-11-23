@@ -1,11 +1,11 @@
+"use client"
 import { cn } from "@/lib/utils";
 import { OrderStatus } from "@/lib/types/order";
 import Link from "next/link";
+import { deleteOrder } from "@/lib/actions/customer";
+import { toast } from "@/components/ui/toast";
+import { useRouter } from "next/navigation";
 
-
-// The "View" and "Cancel" buttons of one order.
-// Needs: status. Optional: className to control the layout.
-// Only a pending order can be cancelled, so the Cancel button shows only for "pending".
 
 const baseButtonStyles =
   "inline-flex min-h-10 flex-1 items-center justify-center rounded-full border px-4 text-sm font-bold transition-colors lg:flex-none";
@@ -14,10 +14,30 @@ type OrderActionsProps = {
   status: OrderStatus;
   className?: string;
   id : string;
+  orderId: string;
 };
 
-const OrderActions = ({ status, className, id }: OrderActionsProps) => {
-  console.log("OrderActions id:", id); // Log the id to verify it's being passed correctly
+const OrderActions = ({ status, className, id, orderId }: OrderActionsProps) => {
+  const router = useRouter();
+
+  const handelCancelOrder = async () => {
+    const result = await deleteOrder(orderId);
+    if(result.deletedCount === 1){
+      router.refresh();
+      toast.add({
+        title: "Order Cancelled",
+        description: "Your order has been cancelled successfully.",
+        type: "success",
+      });
+    }else{
+      toast.add({
+        title: "Cancellation Failed",
+        description: "There was an issue cancelling your order. Please try again.",
+        type: "error",
+      });
+      return;
+    }
+  }
   return (
     <div className={cn("flex flex-wrap gap-2", className)}>
       {/* FUNCTIONALITY: open the order details here */}
@@ -34,6 +54,7 @@ const OrderActions = ({ status, className, id }: OrderActionsProps) => {
       {/* FUNCTIONALITY: connect cancel order (with a confirm dialog) here */}
       {status === "Pending" && (
         <button
+        onClick={handelCancelOrder}
           type="button"
           className={cn(baseButtonStyles, "border-destructive text-destructive hover:bg-pill-danger")}
         >

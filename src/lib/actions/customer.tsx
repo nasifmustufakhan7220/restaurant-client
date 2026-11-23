@@ -20,3 +20,25 @@ export const createOrder = async (orderData: OrderFormData) => {
         throw error;
     }
 }
+
+
+
+export const deleteOrder = async (id: string) => {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/customer/delete-order/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to delete order");
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error deleting order:", error);
+        throw error;
+    }
+}

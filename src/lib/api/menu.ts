@@ -25,3 +25,18 @@ export const getMenuDetails = async (id: string) => {
     console.error("Error fetching menu details:", error);
   }
 };
+
+
+export const getOrders = async (email: string) => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/get-orders/${email}`,
+    );
+    if (!res.ok) {
+      throw new Error(`Failed to fetch orders: ${res.status}`);
+    }
+    return res.json();
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+  }
+}
