@@ -27,11 +27,13 @@ import { Button } from "@/components/ui/button";
 import { createOrder } from "@/lib/actions/customer";
 import { OrderFormData } from "@/lib/types/order";
 import { toast } from "@/components/ui/toast";
+import { useSession } from "@/lib/auth-client";
 
 // Order Dialog Component
 type OrderDialogProps = MenuItem;
 
 const OrderDialog = ({ item }: { item: OrderDialogProps }) => {
+  const {data:session} = useSession(); // Get session data if needed
   // Main Dialog state
   const [open, setOpen] = useState(false);
 
@@ -73,6 +75,10 @@ const OrderDialog = ({ item }: { item: OrderDialogProps }) => {
         vendorId: item.vendorId ?? "",
         category: item.category,
         images: item.images,
+        customerId: session?.user?.id,
+        customerName: session?.user?.name,
+        customerEmail: session?.user?.email,
+        createdAt: new Date().toISOString(),
         deliveryAddress: orderData.deliveryAddress as string,
         deliveryDate: orderData.deliveryDate as string,
         itemId: item?._id ?? "",

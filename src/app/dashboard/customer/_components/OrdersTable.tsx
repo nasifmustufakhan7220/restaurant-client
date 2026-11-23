@@ -34,7 +34,7 @@ const OrdersTable = ({ orders }: { orders: Order[] }) => {
             <tr key={order._id}>
               <td className={cellStyles}>
                 <div className="flex min-w-0 items-center gap-3">
-                  <OrderThumb itemName={order.itemName} imageUrl={order.itemImage} />
+                  <OrderThumb itemName={order.itemName} imageUrl={order.images[0]} />
                   <div className="min-w-0">
                     <p className="truncate font-bold text-foreground">{order.itemName}</p>
                     <p className="truncate text-sm text-text-muted">{order.vendorName}</p>
@@ -54,11 +54,11 @@ const OrdersTable = ({ orders }: { orders: Order[] }) => {
               <td className={`${cellStyles} whitespace-nowrap text-text-secondary`}>{order.createdAt}</td>
 
               <td className={cellStyles}>
-                <OrderStatusBadge status={order.status} />
+                <OrderStatusBadge status={order.orderStatus} />
               </td>
 
               <td className={cellStyles}>
-                <OrderActions status={order.status} />
+                <OrderActions status={order.orderStatus} />
               </td>
             </tr>
           ))}

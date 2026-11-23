@@ -26,7 +26,7 @@ const OrderActions = ({ status, className }: OrderActionsProps) => {
       </button>
 
       {/* FUNCTIONALITY: connect cancel order (with a confirm dialog) here */}
-      {status === "pending" && (
+      {status === "Pending" && (
         <button
           type="button"
           className={cn(baseButtonStyles, "border-destructive text-destructive hover:bg-pill-danger")}

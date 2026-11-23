@@ -6,10 +6,9 @@ import { OrderStatus } from "@/lib/types/order";
 
 // One place to change every badge color
 const statusStyles: Record<OrderStatus, string> = {
-  pending: "bg-pill-warning text-warning",
-  accepted: "bg-pill-success text-success",
-  rejected: "bg-pill-danger text-destructive",
-  cancelled: "bg-section text-text-secondary",
+  Pending: "bg-pill-warning text-warning",
+  Accepted: "bg-pill-success text-success",
+  Rejected: "bg-pill-danger text-destructive",
 };
 
 const OrderStatusBadge = ({ status }: { status: OrderStatus }) => {

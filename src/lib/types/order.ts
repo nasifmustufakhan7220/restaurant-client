@@ -1,18 +1,21 @@
 // Order status values. Matches the status field on order documents.
-export type OrderStatus = "pending" | "accepted" | "rejected" | "cancelled";
+export type OrderStatus = "Pending" | "Accepted" | "Rejected";
 
 // One order. Matches the orders collection in the database.
 export type Order = {
   _id: string;
   itemId: string;
   itemName: string;
-  itemImage?: string;
+  images: string[];
   vendorName: string;
   deliveryDate: string;
   deliveryAddress: string;
   message?: string;
-  status: OrderStatus;
+  orderStatus: OrderStatus;
   createdAt: string;
+  customerId: string;
+  customerName?: string;
+  customerEmail?: string;
 };
 
 export type OrderFormData = {
@@ -27,5 +30,8 @@ export type OrderFormData = {
   vendorEmail: string;
   vendorId: string;
   vendorName: string;
-  
+  customerId?: string;
+  customerName?: string;
+  customerEmail?: string;
+  createdAt: string;
 };

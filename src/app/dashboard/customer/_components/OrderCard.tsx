@@ -18,13 +18,13 @@ const OrderCard = ({ order }: { order: Order }) => {
     <article className="grid gap-3 rounded-2xl border border-border bg-card p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
-          <OrderThumb itemName={order.itemName} imageUrl={order.itemImage} />
+          <OrderThumb itemName={order.itemName} imageUrl={order.images[0]} />
           <div className="min-w-0">
             <p className="wrap-break-word font-bold text-foreground">{order.itemName}</p>
             <p className="wrap-break-word text-sm text-text-muted">{order.vendorName}</p>
           </div>
         </div>
-        <OrderStatusBadge status={order.status} />
+        <OrderStatusBadge status={order.orderStatus} />
       </div>
 
       <dl className="grid gap-1.5 text-sm">
@@ -37,7 +37,7 @@ const OrderCard = ({ order }: { order: Order }) => {
         ))}
       </dl>
 
-      <OrderActions status={order.status} />
+      <OrderActions status={order.orderStatus} />
     </article>
   );
 };
