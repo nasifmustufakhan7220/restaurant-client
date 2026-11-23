@@ -13,11 +13,13 @@ import { Order } from '@/lib/types/order';
 const FirstOrder = async () => {
     const session = await auth.api.getSession({
         headers: await headers(),
-      });
+    });
 
       const customerId = session?.user?.id;
-      const result:Order[] = await getOrdersByUserId(customerId as string); // Replace "userId" with the actual user ID
-      console.log("Fetched orders:", result); // Log the fetched orders for debugging
+      if(session?.user.role !== "customer"){
+        return null;
+      }
+      const result:Order[] = await getOrdersByUserId(customerId as string);
     
      const orders = result;
 

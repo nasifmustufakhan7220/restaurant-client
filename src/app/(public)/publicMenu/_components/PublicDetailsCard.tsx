@@ -7,6 +7,8 @@ import MotionFade from "./MotionFade";
 import ImageGallery from "./ImageGallery";
 // import OrderButton from "./OrderButton";
 import OrderDialog from "./OrderDialog";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 interface ItemDetailsPageProps {
   params: Promise<{ id: string }>;
@@ -14,6 +16,23 @@ interface ItemDetailsPageProps {
 
 const PublicDetailsCard = async ({ params }: ItemDetailsPageProps) => {
   const { id } = await params;
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const user = session?.user;
+
+  if(user?.role === "vendor" || user?.role === "admin"){ // only public users and customers can view the details
+    return (
+      <div className="mx-auto max-w-6xl px-4 pb-16 pt-28 sm:px-6 lg:pt-36">
+        <MotionFade x={-16} duration={0.4}>
+          <h1 className="text-2xl font-bold text-neutral-900">
+            You are not authorized to view this page.
+          </h1>
+        </MotionFade>
+      </div>
+    );
+  }
 
   const res: MenuItem | null = await getPublicItemDetails(id);
 
@@ -70,7 +89,9 @@ const PublicDetailsCard = async ({ params }: ItemDetailsPageProps) => {
                   <p className="text-xs uppercase tracking-wide text-neutral-500">
                     Location
                   </p>
-                  <p className="font-semibold text-neutral-800">{res.location}</p>
+                  <p className="font-semibold text-neutral-800">
+                    {res.location}
+                  </p>
                 </div>
               </div>
             </MotionFade>
@@ -84,7 +105,9 @@ const PublicDetailsCard = async ({ params }: ItemDetailsPageProps) => {
                   <p className="text-xs uppercase tracking-wide text-neutral-500">
                     Vendor
                   </p>
-                  <p className="font-semibold text-neutral-800">{res.vendorName}</p>
+                  <p className="font-semibold text-neutral-800">
+                    {res.vendorName}
+                  </p>
                 </div>
               </div>
             </MotionFade>
