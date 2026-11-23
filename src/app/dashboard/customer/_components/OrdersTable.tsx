@@ -58,7 +58,7 @@ const OrdersTable = ({ orders }: { orders: Order[] }) => {
               </td>
 
               <td className={cellStyles}>
-                <OrderActions status={order.orderStatus} />
+                <OrderActions status={order.orderStatus} id={order.itemId} />
               </td>
             </tr>
           ))}

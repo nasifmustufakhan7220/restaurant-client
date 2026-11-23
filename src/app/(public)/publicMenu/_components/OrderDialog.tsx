@@ -76,11 +76,11 @@ const OrderDialog = ({ item }: { item: OrderDialogProps }) => {
       const orderData = Object.fromEntries(new FormData(event.currentTarget));
 
       const orders: OrderFormData = {
-        itemName: item.itemName ?? "",
-        vendorName: item.vendorName ?? "",
-        vendorEmail: item.vendorEmail ?? "",
+        itemName: item.itemName as string,
+        vendorName: item.vendorName as string,
+        vendorEmail: item.vendorEmail as string,
         orderStatus: "Pending",
-        vendorId: item.vendorId ?? "",
+        vendorId: item.vendorId as string,
         category: item.category,
         images: item.images,
         customerId: session?.user?.id,
@@ -89,7 +89,7 @@ const OrderDialog = ({ item }: { item: OrderDialogProps }) => {
         createdAt: new Date().toISOString(),
         deliveryAddress: orderData.deliveryAddress as string,
         deliveryDate: orderData.deliveryDate as string,
-        itemId: item?._id ?? "",
+        itemId: item._id as string,
         message: orderData.message as string,
       };
 

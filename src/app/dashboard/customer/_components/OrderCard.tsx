@@ -37,7 +37,7 @@ const OrderCard = ({ order }: { order: Order }) => {
         ))}
       </dl>
 
-      <OrderActions status={order.orderStatus} />
+      <OrderActions status={order.orderStatus} id={order.itemId} />
     </article>
   );
 };
