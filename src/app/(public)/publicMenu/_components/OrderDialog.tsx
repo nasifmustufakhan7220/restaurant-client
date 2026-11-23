@@ -54,6 +54,14 @@ const OrderDialog = ({ item }: { item: OrderDialogProps }) => {
       return;
     }
 
+    if(!session?.user){
+      setOpen(false);
+      return toast.add({
+        title: "Not Logged In",
+        description: "You must be logged in to place an order.",
+        type: "error",
+      });
+    }
     setConfirmOpen(true);
   };
 
@@ -84,6 +92,7 @@ const OrderDialog = ({ item }: { item: OrderDialogProps }) => {
         itemId: item?._id ?? "",
         message: orderData.message as string,
       };
+
 
       // Send order data to backend
       const result = await createOrder(orders);
