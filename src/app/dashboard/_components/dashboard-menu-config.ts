@@ -26,15 +26,15 @@ const vendorMenuItems: DashboardMenuItem[] = [
   { label: "My Menu Items", href: "/dashboard/vendor/my-menu", icon: UtensilsCrossed },
   { label: "Add Menu Item", href: "/dashboard/vendor/add-menu", icon: PlusCircle },
   { label: "Customer Orders", href: "/dashboard/vendor/customer-orders", icon: ClipboardList },
-  { label: "Subscription", href: "/dashboard/vendor/subscription", icon: CreditCard },
-  { label: "Profile Settings", href: "/dashboard/vendor/profile", icon: Settings },
+  { label: "Subscription", href: "/checkout", icon: CreditCard },
+  { label: "Profile Settings", href: "/profile", icon: Settings },
 ];
 
 const customerMenuItems: DashboardMenuItem[] = [
   {label: "Home", href: "/", icon: HomeIcon},
   { label: "Overview", href: "/dashboard/customer", icon: LayoutDashboard },
   { label: "My Orders", href: "/dashboard/customer/orders", icon: ShoppingBag },
-  { label: "Profile Settings", href: "/dashboard/customer/profile", icon: Settings },
+  { label: "Profile Settings", href: "/profile", icon: Settings },
 ];
 
 const adminMenuItems: DashboardMenuItem[] = [

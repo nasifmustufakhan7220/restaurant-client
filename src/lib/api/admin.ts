@@ -46,3 +46,17 @@ export const getAllMenuItems = async () => {
         throw error;
     }
 }
+
+export const getAllPayments = async () =>{
+    try{
+        const response = await authFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/get-all-payments`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch all payments: ${response.status}`);
+        }
+        const payments = await response.json();
+        return payments;
+    }catch (error) {
+        console.error("Error fetching all payments:", error);
+        throw error;
+    }
+}
