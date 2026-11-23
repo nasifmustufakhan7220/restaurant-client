@@ -25,6 +25,7 @@ export type MenuItem = {
   priority?: boolean;
   vendor?: string;
   icon?: LucideIcon;
+  deliveryDate?: string;
 };
 
 // Kept for backwards compatibility: code that imports MenuItemData still works.

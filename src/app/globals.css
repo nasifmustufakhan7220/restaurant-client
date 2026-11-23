@@ -89,6 +89,9 @@
   --cart-foreground: var(--background);
   --cart-badge: var(--primary);
   --cart-badge-foreground: var(--primary-foreground);
+   --demo-card-from: #3b2a24;
+  --demo-card-to: #6e4331;
+  --demo-card-foreground: #ffffff;
 }
 
 .dark {
@@ -150,6 +153,10 @@
   /* Dark active sidebar link: soft red background with light red text */
   --sidebar-accent: color-mix(in srgb, var(--primary) 20%, transparent);
   --sidebar-accent-foreground: #fb7185;
+
+    --demo-card-from: #3b2a24;
+  --demo-card-to: #6e4331;
+  --demo-card-foreground: #ffffff;
 }
 
 
@@ -242,6 +249,11 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+
+    --color-demo-card-from: var(--demo-card-from);
+  --color-demo-card-to: var(--demo-card-to);
+  --color-demo-card-foreground: var(--demo-card-foreground);
 }
 @layer base {
   * {

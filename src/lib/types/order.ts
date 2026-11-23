@@ -14,3 +14,18 @@ export type Order = {
   status: OrderStatus;
   createdAt: string;
 };
+
+export type OrderFormData = {
+  category: string;
+  deliveryAddress: string;
+  deliveryDate: string;
+  images?: string[];
+  itemId: string;
+  itemName: string;
+  message: string;
+  orderStatus: "Pending" | "Accepted" | "Rejected";
+  vendorEmail: string;
+  vendorId: string;
+  vendorName: string;
+  
+};

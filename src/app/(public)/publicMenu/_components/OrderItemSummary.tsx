@@ -30,7 +30,7 @@ const OrderItemSummary = ({ item }: { item: MenuItem }) => {
 
       <div className="flex items-baseline gap-2 border-t border-border pt-4">
         <span className="font-heading text-3xl text-foreground">{formatPrice(Number(item.price))}</span>
-        <span className="text-xs text-text-muted">made fresh to order</span>
+        <span className="text-xs whitespace-nowrap text-text-muted">made fresh to order</span>
       </div>
     </div>
   );

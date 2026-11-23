@@ -5,7 +5,8 @@ import { getPublicItemDetails } from "@/lib/api/home";
 import { MenuItem } from "@/lib/types/home";
 import MotionFade from "./MotionFade";
 import ImageGallery from "./ImageGallery";
-import OrderButton from "./OrderButton"; // 🛒 নতুন
+// import OrderButton from "./OrderButton";
+import OrderDialog from "./OrderDialog";
 
 interface ItemDetailsPageProps {
   params: Promise<{ id: string }>;
@@ -56,7 +57,8 @@ const PublicDetailsCard = async ({ params }: ItemDetailsPageProps) => {
           )}
 
           {/* 🛒 Order বাটন: দাম ও বিবরণের ঠিক পরে, তথ্য কার্ডের আগে */}
-          <OrderButton price={res.price as string} />
+          {/* <OrderButton price={res.price as string} /> */}
+          <OrderDialog item={res} />
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
             <MotionFade y={20} delay={0.3} duration={0.4}>
