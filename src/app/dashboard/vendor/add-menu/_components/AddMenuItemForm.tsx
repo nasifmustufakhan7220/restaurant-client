@@ -20,6 +20,7 @@ import { useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
+import { getMenuItemCount, getPremiumVendor } from "@/lib/api/menu";
 
 // The Add Menu Item form. Static UI only; the owner wires the behaviour later.
 export default function AddMenuItemForm() {
@@ -31,55 +32,70 @@ export default function AddMenuItemForm() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const objectData = Object.fromEntries(formData.entries());
-    if (
-      !objectData.itemName ||
-      !objectData.category ||
-      !objectData.description ||
-      !objectData.price ||
-      !objectData.location
-    ) {
-      toast.add({
-        title: "Error",
-        description: "Please fill in all required fields.",
-      });
-      return;
-    }
+    const user = session?.user;
+    if (!user) {
+      router.push("/sign-in");
+    } else if (user.role === "vendor") {
+      const countResult = await getMenuItemCount(`vendorId=${user.id}`);
+      const premium = await getPremiumVendor(user.id);
+      if(!premium.premium && countResult.count >= 3){
+        router.push("/checkout");
+        return toast.add({
+          title: "Limit Reached",
+          description: "You have reached the limit of 3 menu items. Please upgrade your plan to add more.",
+          type: "error",
+        });
+      };
+      if (
+        !objectData.itemName ||
+        !objectData.category ||
+        !objectData.description ||
+        !objectData.price ||
+        !objectData.location
+      ) {
+        toast.add({
+          title: "Error",
+          description: "Please fill in all required fields.",
+        });
+        return;
+      }
 
-    if (imageUrls.length === 0) {
-      toast.add({
-        title: "Error",
-        description: "Please upload at least one image.",
-      });
-      return;
-    }
+      if (imageUrls.length === 0) {
+        toast.add({
+          title: "Error",
+          description: "Please upload at least one image.",
+        });
+        return;
+      }
 
-    const data: MenuItemData = {
-      itemName: objectData.itemName as string,
-      category: objectData.category as string,
-      description: objectData.description as string,
-      price: objectData.price as string,
-      location: objectData.location as string,
-      images: imageUrls,
-      status: "Pending",
-      vendorId: session?.user?.id as string,
-      vendorEmail: session?.user?.email as string,
-      vendorName: session?.user?.name as string,
-      name: session?.user?.name as string,
-      isAvailable: false,
-      createdDate: new Date().toISOString(),
-    };
-    const result = await createMenuPost(data);
-    if (result.insertedId) {
-      toast.add({
-        title: "Success",
-        description: "Menu item created successfully.",
-      });
-      router.refresh();
-    } else {
-      toast.add({
-        title: "Error",
-        description: "Failed to create menu item.",
-      });
+      const data: MenuItemData = {
+        itemName: objectData.itemName as string,
+        category: objectData.category as string,
+        description: objectData.description as string,
+        price: objectData.price as string,
+        location: objectData.location as string,
+        images: imageUrls,
+        status: "Pending",
+        vendorId: session?.user?.id as string,
+        vendorEmail: session?.user?.email as string,
+        vendorName: session?.user?.name as string,
+        name: session?.user?.name as string,
+        isAvailable: false,
+        createdDate: new Date().toISOString(),
+      };
+      const result = await createMenuPost(data);
+      if (result.insertedId) {
+        toast.add({
+          title: "Success",
+          description: "Menu item created successfully.",
+        });
+        router.refresh();
+      } else {
+        toast.add({
+          title: "Error",
+          description: "Failed to create menu item.",
+        });
+      }
     }
   };
 
