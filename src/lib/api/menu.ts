@@ -1,8 +1,9 @@
+"use server"
+import { authFetch } from "./servers";
+
 export const getMenuItems = async (id: string) => {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/${id}/my-menu`,
-    );
+    const res = await authFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/${id}/my-menu`)
     if (!res.ok) {
       throw new Error(`Failed to fetch menu items: ${res.status}`);
     }
@@ -15,9 +16,7 @@ export const getMenuItems = async (id: string) => {
 
 export const getMenuDetails = async (id: string) => {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/menu-details/${id}`,
-    );
+    const res = await authFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/menu-details/${id}`)
     if (!res.ok) {
       throw new Error(`Failed to fetch menu details: ${res.status}`);
     }
@@ -31,9 +30,7 @@ export const getMenuDetails = async (id: string) => {
 
 export const getOrders = async (email: string) => {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/get-orders/${email}`,
-    );
+    const res = await authFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/get-orders/${email}`)
     if (!res.ok) {
       throw new Error(`Failed to fetch orders: ${res.status}`);
     }
@@ -46,7 +43,7 @@ export const getOrders = async (email: string) => {
 
 export const getMenuItemCount = async (query=" ") : Promise<{count: number}>=>{
   try{
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/menu-count?${query}`);
+    const res = await authFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/menu-count?${query}`)
     if (!res.ok) {
       throw new Error(`Failed to fetch menu item count: ${res.status}`);
     }
@@ -60,9 +57,7 @@ export const getMenuItemCount = async (query=" ") : Promise<{count: number}>=>{
 
 export const getPremiumVendor = async (id: string) => {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/${id}/premium`,
-    );
+    const res = await authFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/${id}/premium`)
     if (!res.ok) {
       throw new Error(`Failed to fetch premium vendor: ${res.status}`);
     }

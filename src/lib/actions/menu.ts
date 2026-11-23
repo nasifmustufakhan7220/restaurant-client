@@ -1,16 +1,10 @@
+"use server"
 import type { MenuItemData } from "@/lib/types/menu-item";
+import { authDelete, authPost } from "../api/servers";
 
 export const createMenuPost = async (data:MenuItemData) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/add-menu`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    },
-  );
+
+  const res = await authPost(`${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/add-menu`, "POST", data);
 
   if (!res.ok) {
     throw new Error("Failed to create menu");
@@ -22,16 +16,8 @@ export const createMenuPost = async (data:MenuItemData) => {
 
 export const updateMenuPost = async (id: string, data: MenuItemData) => {
   try{
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/update-menu/${id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      },
-    );
+
+    const res = await authPost(`${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/update-menu/${id}`,"PATCH", data)
 
     if (!res.ok) {
       throw new Error("Failed to update menu");
@@ -47,12 +33,7 @@ export const updateMenuPost = async (id: string, data: MenuItemData) => {
 
 export const deleteMenuPost = async (id: string) => {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/delete-menu/${id}`,
-      {
-        method: "DELETE",
-      },
-    );
+    const res = await authDelete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/delete-menu/${id}`);
     if (!res.ok) {
       throw new Error("Failed to delete menu");
     }
@@ -64,16 +45,7 @@ export const deleteMenuPost = async (id: string) => {
 
 export const updateCustomerOrderStatus = async (orderId: string, status: string) => {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/order-status-update/${orderId}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ orderStatus: status }),
-      },
-    );
+    const res = await authPost(`${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/order-status-update/${orderId}`,"PATCH",{ orderStatus: status })
 
     if (!res.ok) {
       throw new Error(`Failed to fetch orders: ${res.status}`);

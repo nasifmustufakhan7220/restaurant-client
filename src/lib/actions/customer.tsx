@@ -1,14 +1,10 @@
+"use server"
+import { authDelete, authPost } from "../api/servers";
 import { OrderFormData } from "../types/order";
 
 export const createOrder = async (orderData: OrderFormData) => {
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/customer/add-order`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(orderData),
-        });
+        const response = await authPost(`${process.env.NEXT_PUBLIC_API_BASE_URL}/customer/add-order`,"POST", orderData)
 
         if (!response.ok) {
             throw new Error("Failed to create order");
@@ -25,12 +21,7 @@ export const createOrder = async (orderData: OrderFormData) => {
 
 export const deleteOrder = async (id: string) => {
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/customer/delete-order/${id}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+        const response = await authDelete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/customer/delete-order/${id}`)
 
         if (!response.ok) {
             throw new Error("Failed to delete order");

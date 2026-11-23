@@ -1,20 +1,11 @@
+"use server"
+import { authDelete, authPost } from "../api/servers";
 
 
-export const updateMenuItemStatus = async (
-  id: string,
-  newStatus: "Approved" | "Rejected" | "Pending",
-) => {
+export const updateMenuItemStatus = async (id: string,newStatus: "Approved" | "Rejected" | "Pending") => {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/update-menu/${id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status: newStatus }),
-      },
-    );
+
+    const response = await authPost(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/update-menu/${id}`, "PATCH", { status: newStatus });
     if (!response.ok) {
       throw new Error(`Failed to update menu item status: ${response.status}`);
     }
@@ -27,15 +18,7 @@ export const updateMenuItemStatus = async (
 
 export const deleteMenuItem = async (id: string) => {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/delete-menu/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
+    const response = await authDelete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/delete-menu/${id}`)
     if (!response.ok) {
       throw new Error(`Failed to delete menu item: ${response.status}`);
     }

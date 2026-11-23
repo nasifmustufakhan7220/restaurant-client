@@ -18,6 +18,7 @@ type OrderActionsProps = {
 };
 
 const OrderActions = ({ status, className, id, orderId }: OrderActionsProps) => {
+  console.log(orderId)
   const router = useRouter();
 
   const handelCancelOrder = async () => {

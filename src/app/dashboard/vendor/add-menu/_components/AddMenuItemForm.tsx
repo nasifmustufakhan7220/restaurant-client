@@ -38,6 +38,7 @@ export default function AddMenuItemForm() {
     } else if (user.role === "vendor") {
       const countResult = await getMenuItemCount(`vendorId=${user.id}`);
       const premium = await getPremiumVendor(user.id);
+      console.log("Menu Item Count:", countResult.count);
       if(!premium.premium && countResult.count >= 3){
         router.push("/checkout");
         return toast.add({

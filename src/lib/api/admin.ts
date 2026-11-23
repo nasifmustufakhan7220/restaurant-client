@@ -1,8 +1,9 @@
+import { authFetch } from "./servers";
 
 
 export const getAllUsers = async () => {
     try{
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/get-all-users`);
+        const response = await authFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/get-all-users`)
         if (!response.ok) {
             throw new Error(`Failed to fetch all users: ${response.status}`);
         }
@@ -18,7 +19,7 @@ export const getAllUsers = async () => {
 
 export const getUserDetails = async (id: string) => {
     try{
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/get-user-details/${id}`);
+        const response = await authFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/get-user-details/${id}`)
         if (!response.ok) {
             throw new Error(`Failed to fetch user details: ${response.status}`);
         }
@@ -33,7 +34,8 @@ export const getUserDetails = async (id: string) => {
 
 export const getAllMenuItems = async () => {
     try{
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/get-all-menu`);
+
+        const response = await authFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/get-all-menu`)
         if (!response.ok) {
             throw new Error(`Failed to fetch all menu items: ${response.status}`);
         }
