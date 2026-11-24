@@ -92,6 +92,12 @@ export default function SignInPage() {
       });
     }
   };
+
+  const handelSignInWithGoogle = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+    });
+  }
   return (
     <main className="flex min-h-dvh items-center justify-center bg-[#f3ede4] bg-[radial-gradient(circle_at_top,#fbf6ee,#f0e8db)] px-4 py-8 sm:px-6 sm:py-12">
       <section className="w-full max-w-137 rounded-3xl bg-[#fdfaf5] p-5 shadow-[0_30px_70px_-35px_rgba(27,27,27,0.45)] ring-1 ring-black/5 sm:p-7 lg:p-9">
@@ -176,6 +182,7 @@ export default function SignInPage() {
 
         {/* ✅ নতুন: Google বাটন (ফাংশনালিটি পরে onClick দিয়ে যোগ করবেন) */}
         <Button
+          onClick={handelSignInWithGoogle}
           type="button"
           variant="outline"
           className="h-12 w-full gap-3 rounded-lg border-black/10 bg-white text-[15px] font-semibold shadow-sm hover:bg-black/5"

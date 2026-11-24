@@ -61,7 +61,7 @@ export default function SignUpPage() {
     if (!/[a-z]/.test(password)) {
       return "Password must have at least one lowercase letter.";
     }
-    if(!/[0-9]/.test(password)){
+    if (!/[0-9]/.test(password)) {
       return "Password must have at least one number.";
     }
     return "";
@@ -103,6 +103,12 @@ export default function SignUpPage() {
         type: "error",
       });
     }
+  };
+
+  const handelSignUpWithGoogle = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+    });
   };
   return (
     <main className="flex min-h-dvh items-center justify-center bg-[#f3ede4] bg-[radial-gradient(circle_at_top,#fbf6ee,#f0e8db)] px-4 py-8 sm:px-6 sm:py-12">
@@ -232,6 +238,7 @@ export default function SignUpPage() {
 
         {/* ✅ নতুন: Google বাটন (ফাংশনালিটি পরে onClick দিয়ে যোগ করবেন) */}
         <Button
+          onClick={handelSignUpWithGoogle}
           type="button"
           variant="outline"
           className="h-12 w-full gap-3 rounded-xl border-black/10 bg-white text-[15px] font-semibold shadow-sm hover:bg-black/5"

@@ -14,10 +14,11 @@ import { dashboardMenuItems } from "./dashboard-menu-config";
 import DashboardSideFooter from "./DashboardSideFooter";
 import SidebarLink from "./SidebarLink";
 import { useSession } from "@/lib/auth-client";
+import SidebarSkeleton from "./SideBarSkeleton";
 
 const DashboardSideBar = () => {
 
-  const {data:session} = useSession();
+  const {data:session, isPending} = useSession();
   const currentRole = session?.user?.role || "customer";
 
   const pathname = usePathname();
@@ -35,7 +36,7 @@ const DashboardSideBar = () => {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
-              {menuItems.map((menuItem) => (
+              {isPending ? <SidebarSkeleton/> : menuItems.map((menuItem) => (
                 <SidebarLink
                   key={menuItem.href}
                   {...menuItem}

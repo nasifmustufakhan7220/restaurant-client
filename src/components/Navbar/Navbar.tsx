@@ -58,8 +58,6 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
   }
 
   return (
-    // 🎬 MOTION ANIMATION: Navbar উপর থেকে নেমে আসবে
-    // dashboard-এ animation নেই (initial={false}), কারণ পেজ বদলালে বারবার চললে বিরক্তিকর লাগবে
     <motion.header
       initial={isDashboardNavbar ? false : { y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
