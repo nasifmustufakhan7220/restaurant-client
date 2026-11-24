@@ -9,6 +9,6 @@ export const getOrdersByUserId = async (userId: string) => {
         return await res.json();
     } catch (error) {
         console.error("Error fetching orders:", error);
-        throw error;
+        return [];
     }
 }

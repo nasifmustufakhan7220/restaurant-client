@@ -21,6 +21,7 @@ const getToken = async () => {
 export const authFetch = async(api:string)=>{
   const token = await getToken();
   const res = await fetch(api,{
+    cache: "no-store",
     headers:{
       authorization: `Bearer ${token}`
     }
@@ -32,6 +33,7 @@ export const authDelete = async(api:string)=>{
   const token = await getToken();
   const res = await fetch(api,{
     method: "DELETE",
+    cache: "no-store",
     headers: {
       "Content-Type": "application/json",
       authorization: `Bearer ${token}`,
@@ -44,6 +46,7 @@ export const authPost = async(api:string, method:string ,data?: unknown)=>{
   const token = await getToken();
   const res = await fetch(api,{
     method:method,
+    cache: "no-store",
     headers:{"Content-Type": "application/json",authorization: `Bearer ${token}`},
     body: data ? JSON.stringify(data) : null
   })

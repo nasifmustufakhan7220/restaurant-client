@@ -10,7 +10,7 @@ export const getMenuItems = async (id: string) => {
     return res.json();
   } catch (error) {
     console.error("Error fetching menu items:", error);
-    throw error;
+    return [];
   }
 };
 
@@ -23,7 +23,7 @@ export const getMenuDetails = async (id: string) => {
     return res.json();
   } catch (error) {
     console.error("Error fetching menu details:", error);
-    throw error;
+    return null;
   }
 };
 
@@ -37,7 +37,7 @@ export const getOrders = async (email: string) => {
     return res.json();
   } catch (error) {
     console.error("Error fetching orders:", error);
-    throw error;
+    return [];
   }
 }
 
@@ -50,7 +50,7 @@ export const getMenuItemCount = async (query=" ") : Promise<{count: number}>=>{
     return res.json();
   }catch (error) {
     console.error("Error fetching menu item count:", error);
-    throw error;
+    return { count: 0 };
   }
 }
 
@@ -64,6 +64,6 @@ export const getPremiumVendor = async (id: string) => {
     return res.json();
   } catch (error) {
     console.error("Error fetching premium vendor:", error);
-    throw error;
+    return null;
   }
 }

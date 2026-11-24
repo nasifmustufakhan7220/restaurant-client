@@ -2,7 +2,20 @@ import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
 
-const client = new MongoClient(process.env.MONGODB_CLIENT_URL as string);
+// Reuse ONE MongoClient across serverless invocations (cached on globalThis).
+// This avoids "Topology is closed" and pool exhaustion on Vercel.
+const globalForMongo = globalThis as unknown as { _mongoClient?: MongoClient };
+const client =
+  globalForMongo._mongoClient ??
+  new MongoClient(process.env.MONGODB_CLIENT_URL as string, {
+    maxPoolSize: 5,
+    serverSelectionTimeoutMS: 5000,
+  });
+
+if (!globalForMongo._mongoClient) {
+  globalForMongo._mongoClient = client;
+}
+
 const db = client.db("pizza-hub");
 
 export const auth = betterAuth({
@@ -48,6 +61,13 @@ export const auth = betterAuth({
           };
         },
       },
+    },
+  },
+  // Cache sessions in cookies so not every request hits MongoDB.
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60,
     },
   },
   database: mongodbAdapter(db, {

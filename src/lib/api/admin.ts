@@ -12,7 +12,7 @@ export const getAllUsers = async () => {
 
     } catch (error) {
         console.error("Error fetching all users:", error);
-        throw error;
+        return [];
     }
 }
 
@@ -27,7 +27,7 @@ export const getUserDetails = async (id: string) => {
         return user;
     } catch (error) {
         console.error("Error fetching user details:", error);
-        throw error;
+        return null;
     }
 }
 
@@ -43,7 +43,7 @@ export const getAllMenuItems = async () => {
         return menuItems;
     } catch (error) {
         console.error("Error fetching all menu items:", error);
-        throw error;
+        return [];
     }
 }
 
@@ -57,6 +57,6 @@ export const getAllPayments = async () =>{
         return payments;
     }catch (error) {
         console.error("Error fetching all payments:", error);
-        throw error;
+        return [];
     }
 }
