@@ -12,7 +12,7 @@ import type { ChartBar } from "@/app/dashboard/_components/overview/BarChartCard
 import type { OverviewTableRow } from "@/app/dashboard/_components/overview/OrdersTableCard";
 import type { StatCardData } from "@/app/dashboard/_components/overview/StatCard";
 import OverviewContent from "@/app/dashboard/_components/overview/OverviewContent";
-import { getAllMenuItems, getAllUsers } from "@/lib/api/admin";
+import { getAllMenuItems, getAllPayments, getAllUsers } from "@/lib/api/admin";
 import type { MenuItemData } from "@/lib/types/menu-item";
 export interface IUser {
   _id: string;
@@ -28,6 +28,7 @@ export interface IUser {
 const FirstOverview = async () => {
   const users: IUser[] = await getAllUsers();
   const menu: MenuItemData[] = await getAllMenuItems();
+  const tranjactions = await getAllPayments();; 
   const statCards: StatCardData[] = [
     {
       label: "Total Users",
@@ -55,7 +56,7 @@ const FirstOverview = async () => {
       value: menu.filter((item) => item.status === "Rejected").length,
       icon: X,
     },
-    { label: "Transactions", value: 37, icon: ReceiptText },
+    { label: "Transactions", value: tranjactions.length, icon: ReceiptText },
   ];
 
   const monthlyRevenueBars: ChartBar[] = [
