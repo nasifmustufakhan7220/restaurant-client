@@ -8,7 +8,7 @@ type DashboardPageHeaderProps = {
 
 const DashboardPageHeader = ({ title, description }: DashboardPageHeaderProps) => {
   return (
-    <div>
+    <div className="mx-auto w-full max-w-6xl space-y-1.5">
       <h1 className="text-2xl font-bold text-foreground">{title}</h1>
       <p className="mt-1 text-text-secondary">{description}</p>
     </div>
