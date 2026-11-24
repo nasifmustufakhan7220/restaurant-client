@@ -319,7 +319,7 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
             </div>
 
             {isDashboardNavbar ? (
-              <div className="lg:hidden">
+              <div className="">
                 <SidebarTrigger aria-label="Open dashboard menu" />
               </div>
             ) : (

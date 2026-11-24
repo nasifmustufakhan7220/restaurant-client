@@ -9,6 +9,7 @@ import {
 import { Toaster } from "@/components/ui/toast"
 
 import "./globals.css";
+import Footer from "@/components/Footer";
 
 
 const dmSerif = DM_Serif_Display({
@@ -50,6 +51,7 @@ export default function RootLayout({
       <body className={lato.className}>
         {children}
         <Toaster />
+        <Footer/>
       </body>
     </html>
   );
