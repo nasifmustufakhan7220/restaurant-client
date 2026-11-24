@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import UserFirstPage from "../_components/UserFirstPage";
+import OrdersSkeleton from "../../vendor/customer-orders/_components/SkeletonOfCustomerOrder";
 
 const ManageUsersPage = async () => {
  
@@ -12,7 +13,7 @@ const ManageUsersPage = async () => {
         </p>
       </div>
 
-      <Suspense fallback={<div className="flex justify-center text-center text-text-secondary">Loading users...</div>}>
+      <Suspense fallback={<OrdersSkeleton/>}>
         <UserFirstPage/>
       </Suspense>
 

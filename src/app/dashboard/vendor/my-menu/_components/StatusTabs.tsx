@@ -2,19 +2,19 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { MenuItemData } from "@/lib/types/menu-item";
 
 // The counts match the dummy items in menuItemsData.ts.
-const statusTabs = [
-  { label: "All", count: 6 },
-  { label: "Approved", count: 3 },
-  { label: "Pending", count: 1 },
-  { label: "Rejected", count: 1 },
-  { label: "Inactive", count: 1 },
-];
 
 // The status filter pills. Only the active look is state; there is no filtering yet.
-export default function StatusTabs() {
+export default function StatusTabs({result}:{result:MenuItemData[]}) {
   const [activeTab, setActiveTab] = useState("All");
+  const statusTabs = [
+    { label: "All", count: 6 },
+    { label: "Approved", count: result.filter(item=>item.status==="Approved").length },
+    { label: "Pending", count: result.filter(item=>item.status==="Pending").length },
+    { label: "Rejected", count: result.filter(item=>item.status==="Rejected").length },
+  ];
 
   return (
     // overflow-x-auto keeps the pills on one line on phones instead of wrapping badly.

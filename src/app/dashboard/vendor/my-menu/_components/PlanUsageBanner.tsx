@@ -1,15 +1,17 @@
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getMenuItemCount } from "@/lib/api/menu";
+import { getSession } from "@/lib/api/servers";
+export default async function PlanUsageBanner() {
+  const session = await getSession();
+  const count = await getMenuItemCount(`vendorId=${session?.user?.id as string}`);
 
-// Placeholder. Replace with real plan data later.
-const planUsage = {
-  planName: "Free",
-  usedItems: 2,
-  itemLimit: 3,
-};
 
-// The soft banner that shows how many active items the vendor's plan allows.
-export default function PlanUsageBanner() {
+  const planUsage = {
+    planName: "Free",
+    usedItems: count.count <= 3 ? count.count : 3,
+    itemLimit: 3,
+  };
   const fillPercent = (planUsage.usedItems / planUsage.itemLimit) * 100;
 
   return (

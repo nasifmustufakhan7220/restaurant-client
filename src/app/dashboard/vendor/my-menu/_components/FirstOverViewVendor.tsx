@@ -11,10 +11,11 @@ import type { ChartBar } from "@/app/dashboard/_components/overview/BarChartCard
 import type { OverviewTableRow } from "@/app/dashboard/_components/overview/OrdersTableCard";
 import type { StatCardData } from "@/app/dashboard/_components/overview/StatCard";
 import OverviewContent from "@/app/dashboard/_components/overview/OverviewContent";
-import { getMenuItems } from "@/lib/api/menu"; // path to your Better Auth server instance
+import { getMenuItems, getOrders, getPremiumVendor } from "@/lib/api/menu"; // path to your Better Auth server instance
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import type { MenuItemData } from "@/lib/types/menu-item";
+import { Order } from "@/lib/types/order";
 
 // Placeholder data. Replace with real data later.
 
@@ -23,13 +24,14 @@ const FirstOverViewVendor = async () => {
     headers: await headers(), // you need to pass the headers object.
   });
   const result:MenuItemData[] = await getMenuItems(session?.user?.id as string);
-  console.log("Menu items fetched:", result);
+  const acceptOrders:Order[]  = await getOrders(session?.user?.email as string);
+  const premium = await getPremiumVendor(session?.user?.id as string);
   const statCards: StatCardData[] = [
     { label: "Menu Items", value: result.length, icon: UtensilsCrossed },
     { label: "Active Items", value: result.filter((item) => item.status === "Approved").length, icon: BadgeCheck },
     { label: "Pending Orders", value: result.filter((item) => item.status === "Pending").length, icon: Clock3 },
-    { label: "Accepted Orders", value: 28, icon: CheckCircle2 },
-    { label: "Plan", value: "Free", icon: Crown },
+    { label: "Accepted Orders", value: acceptOrders.filter(accept=> accept.orderStatus === "Accepted").length, icon: CheckCircle2 },
+    { label: "Plan", value: premium.premium === true ? "Premium User" : "Free User", icon: Crown },
   ];
 
   const weeklyOrderBars: ChartBar[] = [

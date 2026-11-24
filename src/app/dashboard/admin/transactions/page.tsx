@@ -5,6 +5,7 @@
 
 import { Suspense } from "react";
 import FirstTranjactions from "../../_components/FirstTranjactions";
+import TransactionsSkeleton from "../../_components/Tranjaction";
 
 const TransactionsPage = () => {
   return (
@@ -16,7 +17,7 @@ const TransactionsPage = () => {
         </p>
       </div>
 
-      <Suspense fallback={<p className="text-text-secondary">Loading transactions...</p>}>
+      <Suspense fallback={<TransactionsSkeleton />}>
         <FirstTranjactions/>
       </Suspense>
     </div>

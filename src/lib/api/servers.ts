@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { auth } from "../auth";
 import { redirect } from "next/navigation";
 
-const getSession = async () => {
+export const getSession = async () => {
   const session = await auth.api.getSession({
     headers: await headers(), // you need to pass the headers object.
   });

@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import FirstMenuPage from "../_components/menu/FirstMenuPage";
+import OrdersSkeleton from "../../vendor/customer-orders/_components/SkeletonOfCustomerOrder";
 
 const ManageMenuItemsPage = () => {
   // FUNCTIONALITY: load the real menu items from the database here
@@ -15,7 +16,7 @@ const ManageMenuItemsPage = () => {
         </p>
       </div>
 
-      <Suspense fallback={<p>Loading menu items...</p>}>
+      <Suspense fallback={<OrdersSkeleton/>}>
         <FirstMenuPage />
       </Suspense>
     </div>

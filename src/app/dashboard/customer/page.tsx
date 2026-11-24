@@ -2,12 +2,13 @@
 
 import { Suspense } from "react";
 import FirstOverview from "./_components/FirstOverview";
+import Loading from "../vendor/my-menu/_components/OverViewSkeleton";
 
 const CustomerDashBoardPage = () => {
  
   return (
     <div className="space-y-4">
-      <Suspense fallback={<div className="text-center text-gray-500">Loading overview...</div>}>
+      <Suspense fallback={<Loading/>}>
         <FirstOverview />
       </Suspense>
     </div>

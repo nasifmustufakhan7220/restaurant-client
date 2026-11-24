@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import DashboardPageHeader from "../_components/DashboardPageHeader";
 import FirstOrder from "../_components/FirstOrder";
+import OrdersSkeleton from "../../vendor/customer-orders/_components/SkeletonOfCustomerOrder";
 
 const MyOrdersPage = () => {
  return(
@@ -10,7 +11,7 @@ const MyOrdersPage = () => {
         description="Track your orders and cancel the ones that are still pending."
       />
 
-      <Suspense fallback={<p className="text-center text-gray-500">Loading your orders...</p>}>
+      <Suspense fallback={<OrdersSkeleton/>}>
         <FirstOrder/>
       </Suspense>
   </div>

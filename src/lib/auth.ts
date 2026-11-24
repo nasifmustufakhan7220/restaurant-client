@@ -8,6 +8,7 @@ const db = client.db("pizza-hub");
 export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
+    minPasswordLength: 6,
   },
   user: {
     additionalFields: {
@@ -22,6 +23,24 @@ export const auth = betterAuth({
         required: false,
         defaultValue: false,
         input: false,
+      },
+    },
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          console.log("Hook received role:", user.role);
+          const safeRole = user.role === "vendor" ? "vendor" : "customer";
+          console.log("Safe role:", safeRole);
+          return {
+            data: {
+              ...user,
+              role: safeRole,
+              isBlocked: false,
+            },
+          };
+        },
       },
     },
   },
