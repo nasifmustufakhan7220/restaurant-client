@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { getUserDetails } from "@/lib/api/admin";
 import { userDetailsPlaceholder } from "./user-details-data";
 import UserAccountCard from "./UserAccountCard";
@@ -8,6 +9,7 @@ import UserSummaryCards from "./UserSummaryCards";
 
 
 const UserDetailsFirst = async ({ params }: { params:Promise<{ id: string }> }) => {
+    await connection();
     const { id } = await params;
     console.log(id);
     const userResult = await getUserDetails(id);

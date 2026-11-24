@@ -9,12 +9,14 @@ import ImageGallery from "./ImageGallery";
 import OrderDialog from "./OrderDialog";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { connection } from "next/server";
 
 interface ItemDetailsPageProps {
   params: Promise<{ id: string }>;
 }
 
 const PublicDetailsCard = async ({ params }: ItemDetailsPageProps) => {
+  await connection();
   const { id } = await params;
   const session = await auth.api.getSession({
     headers: await headers(),

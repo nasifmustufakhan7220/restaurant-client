@@ -18,9 +18,9 @@ const FirstSuccess = async ({
   const { session_id } = await searchParams;
   const user = await getSession();
 
-  if (!session_id)
+  if (!session_id){
     throw new Error("Please provide a valid session_id (`cs_test_...`)");
-
+  }
   const { status, payment_status, customer_email, metadata, payment_intent } =
     await stripe.checkout.sessions.retrieve(session_id, {
       expand: ["line_items", "payment_intent"],

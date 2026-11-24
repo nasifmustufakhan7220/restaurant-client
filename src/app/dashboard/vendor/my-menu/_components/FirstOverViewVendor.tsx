@@ -14,12 +14,14 @@ import OverviewContent from "@/app/dashboard/_components/overview/OverviewConten
 import { getMenuItems, getOrders, getPremiumVendor } from "@/lib/api/menu"; // path to your Better Auth server instance
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { connection } from "next/server";
 import type { MenuItemData } from "@/lib/types/menu-item";
 import { Order } from "@/lib/types/order";
 
 // Placeholder data. Replace with real data later.
 
 const FirstOverViewVendor = async () => {
+  await connection();
   const session = await auth.api.getSession({
     headers: await headers(), // you need to pass the headers object.
   });

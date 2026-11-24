@@ -1,4 +1,5 @@
 import React from "react";
+import { connection } from "next/server";
 import MenuFilters from "./MenuFilters";
 import EmptyState from "./EmptyState";
 import FadeIn from "@/components/Home/FadeIn";
@@ -12,6 +13,7 @@ const FirstBrowse = async ({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
+  await connection();
   const search = await searchParams;
   const urlSearch = new URLSearchParams(
     search as Record<string, string>,

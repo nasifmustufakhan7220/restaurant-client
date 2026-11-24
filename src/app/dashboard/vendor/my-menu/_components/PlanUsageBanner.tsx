@@ -2,7 +2,9 @@ import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getMenuItemCount } from "@/lib/api/menu";
 import { getSession } from "@/lib/api/servers";
+import { connection } from "next/server";
 export default async function PlanUsageBanner() {
+  await connection();
   const session = await getSession();
   const count = await getMenuItemCount(`vendorId=${session?.user?.id as string}`);
 

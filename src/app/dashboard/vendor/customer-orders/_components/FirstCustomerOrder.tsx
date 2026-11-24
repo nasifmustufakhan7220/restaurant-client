@@ -8,9 +8,11 @@ import { ClipboardList } from 'lucide-react';
 import { getOrders } from '@/lib/api/menu';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+import { connection } from 'next/server';
 import { Order } from '@/app/dashboard/customer/_components/order';
 
 const FirstCustomerOrder = async () => {
+    await connection();
 
     const session = await auth.api.getSession({
         headers: await headers(),

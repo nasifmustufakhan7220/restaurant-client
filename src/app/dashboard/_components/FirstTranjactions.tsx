@@ -1,6 +1,7 @@
 import React from 'react';
 import { ReceiptText } from "lucide-react";
 import { getAllPayments } from '@/lib/api/admin';
+import { connection } from 'next/server';
 export type Transaction = {
   _id: string;
   status: string; // the checkout session status: "complete", "open" or "expired"
@@ -166,6 +167,7 @@ const TransactionCard = ({ transaction }: { transaction: Transaction }) => {
 
 
 const FirstTranjactions = async () => {
+    await connection();
     const transactions: Transaction[] = await getAllPayments();
     const stats = getStats(transactions);
     return (

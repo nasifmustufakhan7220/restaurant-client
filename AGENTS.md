@@ -64,6 +64,7 @@ New shared types go in `src/types/` (currently `src/lib/types/`). Types describe
 ## Task: Vercel serverless MongoDB/Better Auth stability
 - `src/lib/auth.ts`: cached one `MongoClient` on `globalThis._mongoClient` (maxPoolSize 5, serverSelectionTimeoutMS 5000), passed to `mongodbAdapter(db, { client })`; no `client.close()`.
 - Enabled Better Auth `session.cookieCache` (enabled: true, maxAge: 5 * 60).
-- Server-side Express API fetches use `cache: "no-store"`; layouts under `src/app/dashboard` and `src/app/(public)` set `export const dynamic = "force-dynamic"`.
+- Server-side Express API fetches use `cache: "no-store"` (makes routes dynamic under `cacheComponents`). Removed `export const dynamic` because it conflicts with `cacheComponents`.
 - GET helpers in `src/lib/api/*` now return safe fallbacks (`[]` / `null`) instead of throwing.
+- Added `await connection()` from `next/server` in async server components that fetch data, so they skip prerendering and avoid HANGING_PROMISE_REJECTION.
 - Env vars to verify in Vercel: MONGODB_CLIENT_URL, BETTER_AUTH_SECRET, BETTER_AUTH_URL, NEXT_PUBLIC_API_BASE_URL, STRIPE_SECRET_KEY, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXT_PUBLIC_IMGBB_API_KEY.

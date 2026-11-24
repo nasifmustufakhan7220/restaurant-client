@@ -1,6 +1,7 @@
 import { getMenuItems } from "@/lib/api/menu";
 import MenuItemCard from "./MenuItemCard";
 import { headers } from "next/headers";
+import { connection } from "next/server";
 import { auth } from "@/lib/auth";
 import type { MenuItemData } from "@/lib/types/menu-item";
 import MenuItemsFilters from "./MenuItemsFilters";
@@ -8,6 +9,7 @@ import StatusTabs from "./StatusTabs";
 import PlanUsageBanner from "./PlanUsageBanner";
 
 const FirstPageOfMyMenu = async () => {
+  await connection();
   const session = await auth.api.getSession({
     headers: await headers(),
   });

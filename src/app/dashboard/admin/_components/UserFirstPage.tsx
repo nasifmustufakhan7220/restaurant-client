@@ -4,9 +4,11 @@ import UsersToolbar from "./UsersToolbar";
 import UsersTable from "./UsersTable";
 import type { UserItem } from "@/lib/types/user";
 import UserCard from "./UserCard";
+import { connection } from "next/server";
 import { getAllUsers } from "@/lib/api/admin";
 
 const UserFirstPage = async () => {
+  await connection();
   const result:UserItem[] = await getAllUsers();
   const users = result.filter((user)=>{
     if(user.role !== "admin"){

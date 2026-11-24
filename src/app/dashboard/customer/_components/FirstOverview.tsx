@@ -7,11 +7,13 @@ import OverviewContent from "@/app/dashboard/_components/overview/OverviewConten
 import { getOrdersByUserId } from "@/lib/api/orders";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { connection } from "next/server";
 import { Order } from "./order";
 
 // Placeholder data. Replace with real data later.
 
 const FirstOverview = async () => {
+  await connection();
   const session = await auth.api.getSession({
     headers: await headers(), // you need to pass the headers object.
   });

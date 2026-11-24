@@ -12,6 +12,7 @@ import type { ChartBar } from "@/app/dashboard/_components/overview/BarChartCard
 import type { OverviewTableRow } from "@/app/dashboard/_components/overview/OrdersTableCard";
 import type { StatCardData } from "@/app/dashboard/_components/overview/StatCard";
 import OverviewContent from "@/app/dashboard/_components/overview/OverviewContent";
+import { connection } from "next/server";
 import { getAllMenuItems, getAllPayments, getAllUsers } from "@/lib/api/admin";
 import type { MenuItemData } from "@/lib/types/menu-item";
 export interface IUser {
@@ -26,6 +27,7 @@ export interface IUser {
 }
 
 const FirstOverview = async () => {
+  await connection();
   const users: IUser[] = await getAllUsers();
   const menu: MenuItemData[] = await getAllMenuItems();
   const tranjactions = await getAllPayments();; 

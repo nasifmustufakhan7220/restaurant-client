@@ -7,10 +7,12 @@ import { SearchX } from 'lucide-react';
 import { getOrdersByUserId } from '@/lib/api/orders';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+import { connection } from 'next/server';
 import { Order } from '@/lib/types/order';
 
 
 const FirstOrder = async () => {
+    await connection();
     const session = await auth.api.getSession({
         headers: await headers(),
     });

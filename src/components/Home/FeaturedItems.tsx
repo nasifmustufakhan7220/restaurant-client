@@ -2,11 +2,13 @@ import { MenuItem } from "@/lib/types/menu-item";
 import FadeIn from "./FadeIn";
 import MenuCard from "./MenuCard";
 import SectionTitle from "./SectionTitle";
+import { connection } from "next/server";
 import { getSixHomeData } from "@/lib/api/home";
 import EmptyState from "@/app/(public)/browse/_components/EmptyState";
 
 
 export default async function FeaturedItems() {
+  await connection();
   const result:MenuItem[] = await getSixHomeData();
   const filteredData = result.filter(item=> item.status === "Approved" && item.isAvailable === true).slice(0, 6);
   return (

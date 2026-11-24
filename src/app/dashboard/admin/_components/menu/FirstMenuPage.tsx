@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { getAllMenuItems } from "@/lib/api/admin";
 import MenuItemsStats from "./MenuItemsStats";
 import MenuItemsToolbar from "./MenuItemsToolbar";
@@ -6,6 +7,7 @@ import MenuItemCard from "./MenuItemCard";
 import { MenuItem } from "./menu-items-data";
 
 const FirstMenuPage = async () => {
+  await connection();
   const menuItems:MenuItem[] = await getAllMenuItems();
   return (
     <div className="flex flex-col gap-6 rounded-2xl border border-border bg-card p-6 space-y-4">
