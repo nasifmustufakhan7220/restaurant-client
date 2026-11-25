@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Menu, Pizza, ShoppingCart, X } from "lucide-react";
+import { MailIcon, Menu, Pizza, ShoppingCart, UserCog, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion"; // 🎬 MOTION
@@ -290,10 +290,20 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
                             />
                           }
                         />
-                        <DropdownMenuContent className="w-56 mt-7" align="end">
+                        <DropdownMenuContent className="w-56 mt-7 p-6" align="end">
+                          <DropdownMenuItem className="flex">
+                            <UserIcon />
+                            {session?.user?.name.slice(0, 10)}
+                            
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="flex">
+                            <MailIcon/>
+                            
+                          {session?.user?.email.slice(0,15)}
+                          </DropdownMenuItem>
                           <Link href={`/dashboard/${session?.user?.role}`}>
                           <DropdownMenuItem>
-                            <UserIcon />
+                            <UserCog />
                             Profile
                           </DropdownMenuItem>
                           </Link>
