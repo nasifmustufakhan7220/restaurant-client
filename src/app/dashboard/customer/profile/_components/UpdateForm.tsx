@@ -5,6 +5,8 @@ import Image from "next/image";
 import { Lock } from "lucide-react";
 import { updateVendorProfile } from "@/lib/actions/customer";
 import ImageUpdateForProfile from "@/app/dashboard/customer/profile/_components/ImageUpdateForProfile";
+import { toast } from "@/components/ui/toast";
+import { useRouter } from "next/navigation";
 
 type CustomerProfile = {
   name: string;
@@ -87,6 +89,7 @@ const UpdateForm = ({
   user: string;
 }) => {
   const [imageUrl, setImageUrl] = useState("");
+  const router = useRouter();
 
   const profile: CustomerProfile = {
     name,
@@ -112,7 +115,14 @@ const UpdateForm = ({
 
     const result = await updateVendorProfile(id, updatedProfile);
 
-    console.log("Updated profile:", result);
+    if(result.modifiedCount > 0 && result.matchedCount > 0){
+        toast.add({
+            title: "Success",
+            description: "Profile updated successfully.",
+            type: "success",
+        });
+        router.refresh();
+    };
   };
 
   return (
