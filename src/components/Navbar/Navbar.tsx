@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, Pizza, ShoppingCart, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -20,13 +20,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+import { vendorOrCustomer } from "@/lib/api/orders";
 
 type NavbarProps = {
   variant?: "home" | "dashboard";
 };
-
+type UserData = {
+  _id: string;
+  name: string;
+  email: string;
+  emailVerified: boolean;
+  image?: string | null;
+  role: "customer" | "vendor" | "admin";
+  isBlocked: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
 export default function Navbar({ variant = "home" }: NavbarProps) {
   const isDashboardNavbar = variant === "dashboard";
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -56,6 +68,20 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
       alt: "Dashboard",
     },)
   }
+
+  useEffect(() => {
+  const id = session?.user?.id;
+  if (!id) return;
+
+  const fetchUser = async () => {
+    const u = await vendorOrCustomer(id);
+    setUserData(u);
+  };
+
+  fetchUser();
+}, [session?.user?.id]);
+
+  console.log("userData in Navbar:", userData);
 
   return (
     <motion.header
@@ -178,7 +204,7 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
                         <Image
                           // 🎨 DESIGN: hover-এ লাল ring
                           className="cursor-pointer rounded-full ring-2 ring-transparent transition hover:ring-primary"
-                          src="https://github.com/shadcn.png"
+                          src={userData?.image || session?.user?.image || "https://github.com/shadcn.png"}
                           alt="Open"
                           width={32}
                           height={32}
@@ -257,7 +283,7 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
                             <Image
                               // 🎨 DESIGN: hover-এ লাল ring
                               className="cursor-pointer rounded-full ring-2 ring-transparent transition hover:ring-primary"
-                              src="https://github.com/shadcn.png"
+                              src={userData?.image || session?.user?.image || "https://github.com/shadcn.png"}
                               alt="Open"
                               width={32}
                               height={32}

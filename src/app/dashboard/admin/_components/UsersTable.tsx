@@ -1,9 +1,11 @@
 
+import { SearchX } from "lucide-react";
 import UserActions from "./UserActions";
 import UserAvatar from "./UserAvatar";
 import UserBadge from "./UserBadge";
 import { formatDateTime } from "./users-data";
 import type { UserItem } from "@/lib/types/user";
+import EmptyState from "@/app/(public)/browse/_components/EmptyState";
 
 const tableHeaders = [
   "User",
@@ -33,7 +35,11 @@ const UsersTable = ({ users }: { users: UserItem[] }) => {
         </thead>
 
         <tbody>
-          {users.map((user) => (
+          {users.length === 0 ? <EmptyState
+          icon={<SearchX className="h-12 w-12 text-gray-400" />}
+          title="No items found"
+          text="Try a different search, category or location."
+        /> :users.map((user) => (
             <tr
               key={user._id}
               className={user.isBlocked ? "opacity-60" : ""}

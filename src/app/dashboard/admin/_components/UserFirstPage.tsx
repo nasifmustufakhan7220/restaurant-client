@@ -6,6 +6,8 @@ import type { UserItem } from "@/lib/types/user";
 import UserCard from "./UserCard";
 import { connection } from "next/server";
 import { getAllUsers } from "@/lib/api/admin";
+import EmptyState from "@/app/(public)/browse/_components/EmptyState";
+import { SearchX } from "lucide-react";
 
 const UserFirstPage = async () => {
   await connection();
@@ -26,10 +28,14 @@ const UserFirstPage = async () => {
       <UsersTable users={users} />
 
       {/* Mobile and tablet: cards (hidden from "lg") */}
-      <div className="grid gap-3 lg:hidden">
-        {users.map((user) => (
+      <div >
+        {users.length === 0 ? <EmptyState
+          icon={<SearchX className="h-12 w-12 text-gray-400" />}
+          title="No items found"
+          text="Try a different search, category or location."
+        /> : <div className="grid gap-3 lg:hidden">{users.map((user) => (
           <UserCard key={user._id} user={user} />
-        ))}
+        ))}</div>}
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-text-secondary">

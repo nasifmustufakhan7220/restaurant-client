@@ -3,6 +3,8 @@ import { Order } from "@/lib/types/order";
 import OrderActions from "./OrderActions";
 import OrderStatusBadge from "./OrderStatusBadge";
 import OrderThumb from "./OrderThumb";
+import EmptyState from "@/app/(public)/browse/_components/EmptyState";
+import { SearchX } from "lucide-react";
 
 // Desktop table of orders. Needs: orders (list).
 // Hidden below "lg" because small screens use cards instead (see OrderCard).
@@ -30,7 +32,11 @@ const OrdersTable = ({ orders }: { orders: Order[] }) => {
         </thead>
 
         <tbody>
-          {orders.map((order) => (
+          {orders.length === 0 ?<EmptyState
+          icon={<SearchX className="h-12 w-12 text-gray-400" />}
+          title="No items found"
+          text="Try a different search, category or location."
+        />  :orders.map((order) => (
             <tr key={order._id}>
               <td className={cellStyles}>
                 <div className="flex min-w-0 items-center gap-3">

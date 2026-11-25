@@ -7,6 +7,8 @@ import type { MenuItemData } from "@/lib/types/menu-item";
 import MenuItemsFilters from "./MenuItemsFilters";
 import StatusTabs from "./StatusTabs";
 import PlanUsageBanner from "./PlanUsageBanner";
+import { SearchX } from "lucide-react";
+import EmptyState from "@/app/(public)/browse/_components/EmptyState";
 
 const FirstPageOfMyMenu = async () => {
   await connection();
@@ -24,11 +26,15 @@ const FirstPageOfMyMenu = async () => {
         <StatusTabs result={result} />
         <MenuItemsFilters />
 
-        <div className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        <div >
 
-        {result.map((item) => (
+        {result.length === 0 ?<EmptyState
+          icon={<SearchX className="h-12 w-12 text-gray-400" />}
+          title="No items found"
+          text="Try a different search, category or location."
+        /> : <div className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">{result.map((item) => (
           <MenuItemCard key={item._id} item={item} />
-        ))}
+        ))}</div>}
         </div>
       </section>
     </div>

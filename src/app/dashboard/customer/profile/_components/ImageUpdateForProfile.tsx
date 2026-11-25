@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState, useRef, type ChangeEvent } from "react";
-import { ImagePlus } from "lucide-react";
+import { ImagePlus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import ImageThumbnail from "@/app/dashboard/vendor/add-menu/_components/ImageThumbnail";
-
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -15,9 +13,7 @@ type SelectedImage = {
 };
 
 type ImageUploadBoxProps = {
-  // CHANGED: string[] এর বদলে এখন শুধু string
   onImageChange?: (imageUrl: string) => void;
-  // CHANGED: string[] এর বদলে এখন শুধু string
   defaultImage?: string;
 };
 
@@ -25,7 +21,6 @@ export default function ImageUpdateForProfile({
   onImageChange,
   defaultImage,
 }: ImageUploadBoxProps) {
-  // CHANGED: array এর বদলে একটা image object অথবা null
   const [selectedImage, setSelectedImage] = useState<SelectedImage | null>(
     null,
   );
@@ -34,7 +29,6 @@ export default function ImageUpdateForProfile({
   const previewUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
-    // CHANGED: defaultImage এখন একটা string, তাই array এর দরকার নেই
     if (defaultImage) {
       setSelectedImage({
         previewUrl: defaultImage,
@@ -93,7 +87,6 @@ export default function ImageUpdateForProfile({
         return;
       }
 
-      // CHANGED: imageUrl একটা string
       const imageUrl: string = result.data.url;
 
       if (previewUrlRef.current) {
@@ -105,7 +98,6 @@ export default function ImageUpdateForProfile({
 
       setSelectedImage({ file, previewUrl, imageUrl });
 
-      // CHANGED: parent কে array নয়, শুধু string পাঠানো হচ্ছে
       onImageChange?.(imageUrl);
 
       setErrorMessage("");
@@ -122,14 +114,13 @@ export default function ImageUpdateForProfile({
 
     setSelectedImage(null);
 
-    // CHANGED: ছবি না থাকলে খালি string পাঠানো হচ্ছে (আগে খালি array ছিল)
     onImageChange?.("");
 
     setErrorMessage("");
   }
 
   return (
-    <div>
+    <div className="w-full">
       <input
         type="file"
         id="image"
@@ -166,11 +157,24 @@ export default function ImageUpdateForProfile({
 
       {selectedImage && (
         <div className="mt-3">
-          <ImageThumbnail
-            previewUrl={selectedImage.previewUrl}
-            fileName={selectedImage.file?.name ?? "Existing Image"}
-            onRemove={handleRemoveImage}
-          />
+          {/* relative + inline-block: ✕ বাটন এখন ছবির কোণাতেই থাকবে */}
+          <div className="relative inline-block">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={selectedImage.previewUrl}
+              alt={selectedImage.file?.name ?? "Existing Image"}
+              className="size-24 rounded-2xl border border-gray-200 object-cover"
+            />
+
+            <button
+              type="button"
+              onClick={handleRemoveImage}
+              aria-label="Remove image"
+              className="absolute -right-2 -top-2 flex size-6 items-center justify-center rounded-full bg-red-500 text-white shadow transition hover:bg-red-600"
+            >
+              <X size={14} />
+            </button>
+          </div>
         </div>
       )}
     </div>

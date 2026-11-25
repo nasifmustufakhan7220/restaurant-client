@@ -33,3 +33,16 @@ export const deleteOrder = async (id: string) => {
         throw error;
     }
 }
+
+export const updateVendorProfile = async (id: string, updatedProfile: { name: string; image: string }) => {
+    try {
+        const response = await authPost(`${process.env.NEXT_PUBLIC_API_BASE_URL}/customer/${id}/profile`, "PATCH", updatedProfile);
+        if (!response.ok) {
+            throw new Error("Failed to update vendor profile");
+        }
+        return response.json();
+    } catch (error) {
+        console.error("Error updating vendor profile:", error);
+        throw error;
+    }
+}
