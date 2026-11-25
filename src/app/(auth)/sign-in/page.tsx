@@ -78,12 +78,12 @@ export default function SignInPage() {
     console.log(data);
 
     if(data?.user){
+      router.push(`/dashboard/${data?.user?.role}`);  
       toast.add({
         title: "Signed in",
         description: "You have been signed in successfully.",
         type: "success",
       });    
-      router.push(`/dashboard/${data?.user?.role}`);  
     }else{
       toast.add({
         title: "Error",
