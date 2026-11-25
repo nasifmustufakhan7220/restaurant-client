@@ -67,3 +67,17 @@ export const getPremiumVendor = async (id: string) => {
     return null;
   }
 }
+
+
+export const getVendorProfile = async (id: string) => {
+  try {
+    const res = await authFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/${id}/profile`);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch vendor profile: ${res.status}`);
+    }
+    return res.json();
+  } catch (error) {
+    console.error("Error fetching vendor profile:", error);
+    return null;
+  }
+}

@@ -86,6 +86,7 @@ export default function SignUpPage() {
       email: objectData.email,
       password: objectData.password,
       role: objectData.role as Role,
+      image: ""
     });
 
     if (data?.user) {

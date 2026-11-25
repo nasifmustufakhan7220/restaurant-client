@@ -56,3 +56,16 @@ export const updateCustomerOrderStatus = async (orderId: string, status: string)
     console.error("Error updating customer order status:", error);
   }
 }
+
+export const updateVendorProfile = async(id:string, data:{ name: string; image: string })=>{
+  try{
+    const res = await authPost(`${process.env.NEXT_PUBLIC_API_BASE_URL}/vendor/${id}/profile`, "PATCH", data);
+    if(!res.ok){
+      throw new Error(`Failed to update vendor profile: ${res.status}`);
+    }
+    return res.json();
+  }catch(error){
+    console.error("Error updating vendor profile:", error);
+    return null;
+  }
+}

@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import FirstCheckout from "./_component/FirstCheckout";
+import CheckoutSkeleton from "./_component/CeckoutPageSkeleton";
 
 
 export default async function CheckoutPage({
@@ -11,7 +12,7 @@ export default async function CheckoutPage({
 
   return (
     <div>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<CheckoutSkeleton/>}>
             <FirstCheckout searchParams={searchParams} />
         </Suspense>
     </div>

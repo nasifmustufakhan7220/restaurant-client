@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import FirstProfilePage from './_components/FirstProfilePage';
 
 const VendorProfilePage = () => {
     return (
         <div>
-            <h1>Profile</h1>
-            <FirstProfilePage/>
+            <Suspense fallback={<div>Loading...</div>}>
+                <FirstProfilePage/>
+            </Suspense>
         </div>
     );
 };
