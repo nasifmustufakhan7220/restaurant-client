@@ -291,18 +291,22 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
                           }
                         />
                         <DropdownMenuContent className="w-56 mt-7" align="end">
+                          <Link href={`/dashboard/${session?.user?.role}`}>
                           <DropdownMenuItem>
                             <UserIcon />
                             Profile
                           </DropdownMenuItem>
+                          </Link>
                           <DropdownMenuItem>
                             <CreditCardIcon />
                             Billing
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          <Link href={`/dashboard/${session?.user?.role}/profile`}>
+                            <DropdownMenuItem>
                             <SettingsIcon />
                             Settings
                           </DropdownMenuItem>
+                          </Link>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             variant="destructive"
