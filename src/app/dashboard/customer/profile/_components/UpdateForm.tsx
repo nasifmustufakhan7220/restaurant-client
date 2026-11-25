@@ -41,7 +41,7 @@ const ProfileAvatar = ({
     {image ? (
       <Image
         src={image}
-        alt={name}
+        alt={""}
         fill
         sizes="128px"
         className="object-cover"
@@ -88,7 +88,7 @@ const UpdateForm = ({
   name: string;
   user: string;
 }) => {
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState<string>(user || "");
   const router = useRouter();
 
   const profile: CustomerProfile = {
@@ -115,7 +115,7 @@ const UpdateForm = ({
 
     const result = await updateVendorProfile(id, updatedProfile);
 
-    if(result.modifiedCount > 0 && result.matchedCount > 0){
+    if(result?.modifiedCount > 0 && result?.matchedCount > 0){
         toast.add({
             title: "Success",
             description: "Profile updated successfully.",
@@ -178,7 +178,7 @@ const UpdateForm = ({
 
             {/* relative দেওয়া হয়েছে যাতে ভিতরের ✕ বাটন এই বক্সের ভিতরেই থাকে */}
             <div className="relative w-full min-w-0 flex-1">
-              <ImageUpdateForProfile onImageChange={setImageUrl} />
+              <ImageUpdateForProfile onImageChange={setImageUrl} defaultImage={profile.image} />
 
               <p className="mt-2 text-xs text-gray-500">
                 PNG or JPG. This is optional.

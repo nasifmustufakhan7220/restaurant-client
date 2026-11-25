@@ -28,12 +28,13 @@ const FirstOverViewVendor = async () => {
   const result:MenuItemData[] = await getMenuItems(session?.user?.id as string);
   const acceptOrders:Order[]  = await getOrders(session?.user?.email as string);
   const premium = await getPremiumVendor(session?.user?.id as string);
+  console.log("premium:", premium);
   const statCards: StatCardData[] = [
     { label: "Menu Items", value: result.length, icon: UtensilsCrossed },
     { label: "Active Items", value: result.filter((item) => item.status === "Approved").length, icon: BadgeCheck },
     { label: "Pending Orders", value: result.filter((item) => item.status === "Pending").length, icon: Clock3 },
     { label: "Accepted Orders", value: acceptOrders.filter(accept=> accept.orderStatus === "Accepted").length, icon: CheckCircle2 },
-    { label: "Plan", value: premium.premium === true ? "Premium User" : "Free User", icon: Crown },
+    { label: "Plan", value: premium?.premium === true ? "Premium User" : "Free User", icon: Crown },
   ];
 
   const weeklyOrderBars: ChartBar[] = [

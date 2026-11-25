@@ -61,25 +61,25 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
     { name: "Browse", src: "/browse", alt: "Browse" },
   ];
 
-  if(session?.user){
+  if (session?.user) {
     navLinks.push({
       name: "Dashboard",
       src: `/dashboard/${session?.user?.role}`,
       alt: "Dashboard",
-    },)
+    });
   }
 
   useEffect(() => {
-  const id = session?.user?.id;
-  if (!id) return;
+    const id = session?.user?.id;
+    if (!id) return;
 
-  const fetchUser = async () => {
-    const u = await vendorOrCustomer(id);
-    setUserData(u);
-  };
+    const fetchUser = async () => {
+      const u = await vendorOrCustomer(id);
+      setUserData(u);
+    };
 
-  fetchUser();
-}, [session?.user?.id]);
+    fetchUser();
+  }, [session?.user?.id]);
 
   console.log("userData in Navbar:", userData);
 
@@ -204,7 +204,11 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
                         <Image
                           // 🎨 DESIGN: hover-এ লাল ring
                           className="cursor-pointer rounded-full ring-2 ring-transparent transition hover:ring-primary"
-                          src={userData?.image || session?.user?.image || "https://github.com/shadcn.png"}
+                          src={
+                            userData?.image ||
+                            session?.user?.image ||
+                            "https://github.com/shadcn.png"
+                          }
                           alt="Open"
                           width={32}
                           height={32}
@@ -281,41 +285,48 @@ export default function Navbar({ variant = "home" }: NavbarProps) {
                         <DropdownMenuTrigger
                           render={
                             <Image
-                              // 🎨 DESIGN: hover-এ লাল ring
-                              className="cursor-pointer rounded-full ring-2 ring-transparent transition hover:ring-primary"
-                              src={userData?.image || session?.user?.image || "https://github.com/shadcn.png"}
-                              alt="Open"
+                              className="size-8 cursor-pointer rounded-full object-cover ring-2 ring-transparent transition hover:ring-primary"
+                              src={
+                                userData?.image ||
+                                session?.user?.image ||
+                                "https://github.com/shadcn.png"
+                              }
+                              alt="Profile"
                               width={32}
                               height={32}
                             />
                           }
                         />
-                        <DropdownMenuContent className="w-56 mt-7 p-6" align="end">
+                        <DropdownMenuContent
+                          className="w-56 mt-7 p-6"
+                          align="end"
+                        >
                           <DropdownMenuItem className="flex">
                             <UserIcon />
-                            {session?.user?.name.slice(0, 10)}
-                            
+                            {userData?.name?.slice(0, 10)}
                           </DropdownMenuItem>
                           <DropdownMenuItem className="flex">
-                            <MailIcon/>
-                            
-                          {session?.user?.email.slice(0,15)}
+                            <MailIcon />
+
+                            {session?.user?.email.slice(0, 15)}
                           </DropdownMenuItem>
                           <Link href={`/dashboard/${session?.user?.role}`}>
-                          <DropdownMenuItem>
-                            <UserCog />
-                            Profile
-                          </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <UserCog />
+                              Profile
+                            </DropdownMenuItem>
                           </Link>
                           <DropdownMenuItem>
                             <CreditCardIcon />
                             Billing
                           </DropdownMenuItem>
-                          <Link href={`/dashboard/${session?.user?.role}/profile`}>
+                          <Link
+                            href={`/dashboard/${session?.user?.role}/profile`}
+                          >
                             <DropdownMenuItem>
-                            <SettingsIcon />
-                            Settings
-                          </DropdownMenuItem>
+                              <SettingsIcon />
+                              Settings
+                            </DropdownMenuItem>
                           </Link>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem

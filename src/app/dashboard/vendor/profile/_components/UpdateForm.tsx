@@ -6,7 +6,6 @@ import Image from "next/image";
 import { updateVendorProfile } from "@/lib/actions/menu";
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
-import { useRouter } from "next/navigation";
 import ImageUpdateForProfile from "@/app/dashboard/customer/profile/_components/ImageUpdateForProfile";
 type VendorProfile = {
   name: string;
@@ -85,23 +84,22 @@ const inputStyles =
 type updateFormProps = {
   premium: boolean;
   image: {
-    image: string;
+    name?: string;
+    image?: string;
   };
 };
 
 const UpdateForm = ({ premium, image }: updateFormProps) => {
-  console.log("image:", image.image);
   const { data: session, isPending} = useSession();
   // CHANGED: string[] এর বদলে এখন একটা string
-  const [imageUrl, setImageUrl] = useState<string>("");
-  const router = useRouter();
+  const [imageUrl, setImageUrl] = useState<string>(image?.image || "");
   if(isPending){
     return;
   }
   const profile: VendorProfile = {
-    name: session?.user?.name as string,
+    name: (image?.name) as string,
     email: session?.user?.email as string,
-    image: image.image ? image.image : "https://github.com/shadcn.png",
+    image: image?.image ? image.image : "https://github.com/shadcn.png",
     role: session?.user.role as string,
     businessName: "Pizza Hub",
     subscriptionPlan: premium ? "premium" : "free",
@@ -117,16 +115,17 @@ const UpdateForm = ({ premium, image }: updateFormProps) => {
     const updatedObject = Object.fromEntries(formData.entries());
     const updatedObj ={
         name: updatedObject.name as string,
-        image: imageUrl,
+        image: imageUrl || profile.image || "",
     }
     const result = await updateVendorProfile(session?.user?.id as string, updatedObj);
-    if(result.modifiedCount > 0 && result.matchedCount > 0){
+
+    if(result?.modifiedCount > 0 && result?.matchedCount > 0){
+        window.location.reload();
         toast.add({
             title: "Success",
             description: "Profile updated successfully.",
             type: "success",
         });
-        router.refresh();
     };
   };
 
@@ -212,7 +211,7 @@ const UpdateForm = ({ premium, image }: updateFormProps) => {
               />
 
               <div className="w-full min-w-0 flex-1">
-                <ImageUpdateForProfile onImageChange={setImageUrl} />
+                <ImageUpdateForProfile onImageChange={setImageUrl} defaultImage={profile.image} />
               </div>
             </div>
           </div>

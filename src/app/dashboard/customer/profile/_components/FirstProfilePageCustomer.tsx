@@ -15,7 +15,7 @@ const CustomerProfilePage = async () => {
         <p className="mt-1 text-text-secondary">Update your name and photo.</p>
       </div>
 
-      <UpdateForm id={session?.user.id as string} email={session?.user.email as string} name={session?.user.name as string} user={user.image} />
+      <UpdateForm id={session?.user.id as string} email={session?.user.email as string} name={user.name as string} user={user.image} />
     </div>
   );
 };

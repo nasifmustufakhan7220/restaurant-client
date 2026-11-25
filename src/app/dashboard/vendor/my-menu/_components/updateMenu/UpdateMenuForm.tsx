@@ -85,9 +85,24 @@ const UpdateMenuForm = ({ id }: { id: string }) => {
 
   if (!defaultData) {
     return (
-      <div className="flex h-96 items-center justify-center">
-        <p className="text-lg font-semibold text-foreground">Loading...</p>
-      </div>
+       <div className="flex h-96 w-full items-center justify-center">
+            {" "}
+            <svg
+              className="animate-spin h-10 w-10 text-gray-500"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+            </svg>
+          </div>
     );
   }
   return (
