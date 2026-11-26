@@ -2,23 +2,52 @@ import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
 
-// Reuse ONE MongoClient across serverless invocations (cached on globalThis).
-// This avoids "Topology is closed" and pool exhaustion on Vercel.
-const globalForMongo = globalThis as unknown as { _mongoClient?: MongoClient };
-const client =
-  globalForMongo._mongoClient ??
-  new MongoClient(process.env.MONGODB_CLIENT_URL as string, {
-    maxPoolSize: 5,
-    serverSelectionTimeoutMS: 5000,
+const uri = process.env.MONGODB_CLIENT_URL as string;
+
+type MongoCache = { promise: Promise<MongoClient> | null };
+
+const cached =
+  (globalThis as unknown as { _mongoClient?: MongoCache })._mongoClient ??
+  ((globalThis as unknown as { _mongoClient?: MongoCache })._mongoClient = {
+    promise: null,
   });
 
-if (!globalForMongo._mongoClient) {
-  globalForMongo._mongoClient = client;
+async function getClient(): Promise<MongoClient> {
+  if (!cached.promise) {
+    const client = new MongoClient(uri, {
+      maxPoolSize: 5,
+      serverSelectionTimeoutMS: 5000,
+    });
+    cached.promise = client.connect().catch((err) => {
+      cached.promise = null; // allow retry on next request
+      throw err;
+    });
+  }
+
+  const client = await cached.promise;
+
+  // If a previous invocation closed this topology, discard and reconnect.
+  if (
+    (client as unknown as { topology?: { isClosed?: () => boolean } })
+      .topology?.isClosed?.()
+  ) {
+    cached.promise = null;
+    return getClient();
+  }
+
+  return client;
 }
 
+const client = await getClient();
 const db = client.db("pizza-hub");
 
 export const auth = betterAuth({
+  baseURL: process.env.BETTER_AUTH_URL,
+  trustedOrigins: [
+    process.env.BETTER_AUTH_URL,
+    process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
+  ].filter(Boolean) as string[],
+
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 6,
@@ -49,9 +78,7 @@ export const auth = betterAuth({
     user: {
       create: {
         before: async (user) => {
-          console.log("Hook received role:", user.role);
           const safeRole = user.role === "vendor" ? "vendor" : "customer";
-          console.log("Safe role:", safeRole);
           return {
             data: {
               ...user,
@@ -63,7 +90,6 @@ export const auth = betterAuth({
       },
     },
   },
-  // Cache sessions in cookies so not every request hits MongoDB.
   session: {
     cookieCache: {
       enabled: true,
