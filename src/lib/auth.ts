@@ -16,7 +16,7 @@ async function getClient(): Promise<MongoClient> {
   if (!cached.promise) {
     const client = new MongoClient(uri, {
       maxPoolSize: 5,
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 10000,
     });
     cached.promise = client.connect().catch((err) => {
       cached.promise = null; // allow retry on next request
